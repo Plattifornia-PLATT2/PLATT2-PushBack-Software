@@ -15,6 +15,10 @@ OpticalTrackingSensor::OpticalTrackingSensor(double xOffset, double yOffset){
     xPos = 0;
     yPos = 0;
     heading = 0;
+    readTask = std::make_unique<pros::Task>(
+            taskTrampoline,
+            this
+        );
 }
 
 double OpticalTrackingSensor::getXPosition(){
@@ -52,7 +56,7 @@ void OpticalTrackingSensor::readData() const{
         std::string hPosStr = fullRead.substr(hIndexFront+2, hIndexBack-(hIndexFront+2));
 
 
-        std::cout << xPosStr << yPosStr << hPosStr << std::endl;
+        //std::cout << xPosStr << yPosStr << hPosStr << std::endl;
 
         pros::screen::print(pros::E_TEXT_MEDIUM_CENTER, 1, "X Pos: %s", xPosStr);
         pros::screen::print(pros::E_TEXT_MEDIUM_CENTER, 2, "Y Pos: %s", yPosStr);

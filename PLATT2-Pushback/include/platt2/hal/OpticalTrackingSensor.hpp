@@ -27,6 +27,11 @@ private:
     double yPos;
 
     double heading;
+
+    std::unique_ptr<pros::Task> readTask;
+
+    static void taskTrampoline(void* param);
+
 public:
     OpticalTrackingSensor(double xOffset, double yOffset);
 

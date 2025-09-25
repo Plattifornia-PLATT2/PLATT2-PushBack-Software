@@ -15,7 +15,7 @@ void MotorGroup::setVelocity(double velocity){
         if(motor) motor->move_velocity(velocity);
 }
 
-void MotorGroup::addMotor(std::unique_ptr<pros::Motor> motor){
+void MotorGroup::addMotor(std::unique_ptr<pros::Motor> &motor){
     motors.push_back(std::move(motor));
 }
 

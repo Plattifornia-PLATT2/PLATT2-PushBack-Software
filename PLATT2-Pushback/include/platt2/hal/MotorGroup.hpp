@@ -21,7 +21,7 @@ class MotorGroup{
 
     void setVelocity(double velocity);
 
-    void addMotor(std::unique_ptr<pros::Motor> motor);
+    void addMotor(std::unique_ptr<pros::Motor> &motor);
 
     void setMotorGearing(pros::MotorGear gears);
 
