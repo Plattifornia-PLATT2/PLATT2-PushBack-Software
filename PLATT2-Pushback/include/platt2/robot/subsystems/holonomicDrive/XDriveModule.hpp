@@ -26,7 +26,7 @@ namespace holonomicDrive{
 
         double get_rpm();
 
-        XDriveModule(std::unique_ptr<pros::Motor> motor_l, std::unique_ptr<pros::Motor> motor_r, double angleFromZero, double wheel_radius);
+        XDriveModule(std::unique_ptr<pros::Motor>& motor_l, std::unique_ptr<pros::Motor>& motor_r, double angleFromZero, double wheel_radius);
     };
 }
 }

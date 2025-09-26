@@ -26,14 +26,13 @@ namespace platt2
             RobotConfig current_config;
             AutonConfig current_auton_route;
 
-            pros::v5::Controller master = pros::v5::Controller(pros::E_CONTROLLER_MASTER);
             public:
             
             void autonControl();
 
             void driverControl();
 
-            Robot();
+            Robot(std::unique_ptr<subsystems::holonomicDrive::XDrive> xdrive_subsystem);
 
         };
     };

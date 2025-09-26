@@ -24,7 +24,7 @@ void XDriveModule::move_vector(MovementVector v){
     module_motors.setVoltage(translation + rotation);
 }
 
-XDriveModule::XDriveModule(std::unique_ptr<pros::Motor> motor_l, std::unique_ptr<pros::Motor> motor_r, double angleFromZero, double wheel_radius){
+XDriveModule::XDriveModule(std::unique_ptr<pros::Motor>& motor_l, std::unique_ptr<pros::Motor>& motor_r, double angleFromZero, double wheel_radius){
     module_motors.addMotor(motor_l);
     module_motors.addMotor(motor_r);
     this->angleFromZero = angleFromZero;
