@@ -32,7 +32,7 @@ namespace platt2
 
             void driverControl();
 
-            Robot(std::unique_ptr<subsystems::holonomicDrive::XDrive> xdrive_subsystem);
+            Robot(std::unique_ptr<subsystems::holonomicDrive::XDrive> xdrive_subsystem, std::unique_ptr<subsystems::odometry::Odometry> odometry_subsystem);
 
         };
     };

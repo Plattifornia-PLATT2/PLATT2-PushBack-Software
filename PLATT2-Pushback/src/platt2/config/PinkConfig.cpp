@@ -2,6 +2,7 @@
 #include "platt2/robot/Robot.hpp"
 #include "platt2/robot/subsystems/holonomicDrive/XDrive.hpp"
 #include "platt2/robot/subsystems/holonomicDrive/XDriveModule.hpp"
+#include "platt2/robot/subsystems/odometry/Odometry.hpp"
 #include "pros/motors.hpp"
 #include <memory>
 #include <vector>
@@ -44,7 +45,12 @@ std::shared_ptr<robot::Robot> PinkConfig::buildRobot(){
 
     std::unique_ptr<platt2::robot::subsystems::holonomicDrive::XDrive> XDrive_subsystem = std::make_unique<platt2::robot::subsystems::holonomicDrive::XDrive>(platt2::robot::subsystems::holonomicDrive::XDrive(std::move(modules)));
 
-    std::shared_ptr<robot::Robot> robot{std::make_shared<robot::Robot>(std::move(XDrive_subsystem))};
+    // odom subsystem
+    std::unique_ptr<robot::subsystems::odometry::Odometry> odom_subsystem = std::make_unique<robot::subsystems::odometry::Odometry>();
+
+    std::shared_ptr<robot::Robot> robot{std::make_shared<robot::Robot>(std::move(XDrive_subsystem), std::move(odom_subsystem))
+
+    };
 
     return robot;
 

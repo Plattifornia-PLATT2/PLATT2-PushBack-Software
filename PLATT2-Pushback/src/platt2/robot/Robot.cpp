@@ -5,6 +5,7 @@
 #include "subsystems/holonomicDrive/IHolonomicDrive.hpp"
 #include "subsystems/holonomicDrive/XDrive.hpp"
 #include "subsystems/holonomicDrive/XDriveModule.hpp"
+#include "subsystems/odometry/Odometry.hpp"
 #include <algorithm>
 #include <memory>
 
@@ -12,7 +13,10 @@ namespace platt2{
 
 namespace robot{
 
-    Robot::Robot(std::unique_ptr<subsystems::holonomicDrive::XDrive> xdrive_subsystem)
+    Robot::Robot(
+        std::unique_ptr<subsystems::holonomicDrive::XDrive> xdrive_subsystem,
+        std::unique_ptr<subsystems::odometry::Odometry> odometry_subsystem
+    )
     {
         current_alliance = NO_ALLIANCE;
         current_auton_route = NO_AUTON;
