@@ -15,10 +15,6 @@ OpticalTrackingSensor::OpticalTrackingSensor(double xOffset, double yOffset){
     xPos = 0;
     yPos = 0;
     heading = 0;
-    readTask = std::make_unique<pros::Task>(
-            taskTrampoline,
-            this
-        );
 }
 
 double OpticalTrackingSensor::getXPosition(){

@@ -12,9 +12,12 @@ namespace subsystems{
 namespace holonomicDrive{
 
     class IHolonomic {
-        virtual void moveVector(MovementVector v);
+        public:
+        virtual ~IHolonomic() = default;
 
-        virtual void turnToHeading(double heading); 
+        virtual void moveVector(MovementVector v) = 0;
+
+        virtual void turnToHeading(double heading) = 0; 
     };
 
 

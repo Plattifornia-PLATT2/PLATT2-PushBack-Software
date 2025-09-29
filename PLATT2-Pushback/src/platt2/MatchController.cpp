@@ -6,7 +6,7 @@
 namespace platt2{
 
 void MatchController::init(){
-    std::unique_ptr<config::PinkConfig> pink{};
+    std::unique_ptr<config::PinkConfig> pink{std::make_unique<config::PinkConfig>()};
     config = std::move(pink);
     robot = config->buildRobot();
 }
