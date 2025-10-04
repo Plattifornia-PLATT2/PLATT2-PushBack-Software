@@ -17,7 +17,7 @@ namespace holonomicDrive{
 
         hal::MotorGroup module_motors;
         
-        double k_rot;
+        double k_rot = 1;
         double angleFromZero;
         double wheel_radius;
 

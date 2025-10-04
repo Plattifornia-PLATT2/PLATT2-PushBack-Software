@@ -12,7 +12,7 @@ void MatchController::init(){
 }
 
 void MatchController::driveControl(){
-
+    robot->driverControl();
 }
 
 void MatchController::autonControl(){
