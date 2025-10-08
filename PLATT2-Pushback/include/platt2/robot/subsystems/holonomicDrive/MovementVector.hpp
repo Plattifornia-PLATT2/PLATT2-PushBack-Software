@@ -9,19 +9,13 @@ namespace subsystems{
 
 namespace holonomicDrive{
 
-    struct MovementVector 
-    {
-        public:
-
-        double travel_angle;
-
-        double linear_speed;
-
-        double target_heading;
-
-        double current_heading;
-
-    };
+    struct MovementVector {
+    double travel_angle;
+    double linear_speed;
+    double target_heading;
+    double current_heading;
+    double normalization_scalar = 1.0;  // added
+};
 }
 }
 }

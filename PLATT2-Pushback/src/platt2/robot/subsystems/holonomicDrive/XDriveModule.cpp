@@ -13,13 +13,19 @@ namespace subsystems{
 namespace holonomicDrive{
  
 void XDriveModule::move_vector(MovementVector v){
+    // Convert joystick vector to X/Y components
     double v_x = v.linear_speed * std::cos(v.travel_angle);
     double v_y = v.linear_speed * std::sin(v.travel_angle);
 
-    double translation = v_x * std::cos(angleFromZero) + v_y * std::sin(angleFromZero);
-    double rotation = v.target_heading/127;
+    // Project onto this module’s drive axis
+    double translation = (v_x * std::cos(angleFromZero) +
+                          v_y * std::sin(angleFromZero)) * v.normalization_scalar;
 
+    // Apply rotation
+    double rotation = v.target_heading / 127.0;
     double combined = (translation + rotation) * 12000.0;
+
+    // Drive the motor(s)
     module_motors.setVoltage(combined);
 }
 
@@ -30,4 +36,7 @@ XDriveModule::XDriveModule(std::unique_ptr<pros::Motor>& motor_l, std::unique_pt
     this->wheel_radius = wheel_radius;
 }
 
+double XDriveModule::getAngleFromZero(){
+    return angleFromZero;
+}
 }}}} // namespaces

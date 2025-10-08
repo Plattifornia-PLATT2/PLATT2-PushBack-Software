@@ -25,6 +25,7 @@ namespace holonomicDrive{
         void move_vector(MovementVector v);
 
         double get_rpm();
+        double getAngleFromZero();
 
         XDriveModule(std::unique_ptr<pros::Motor>& motor_l, std::unique_ptr<pros::Motor>& motor_r, double angleFromZero, double wheel_radius);
     };
