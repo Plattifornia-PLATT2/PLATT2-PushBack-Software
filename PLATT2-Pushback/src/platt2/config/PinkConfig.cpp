@@ -1,5 +1,6 @@
 #include "platt2/config/PinkConfig.hpp"
 #include "platt2/robot/Robot.hpp"
+#include "platt2/robot/pid/pid.hpp"
 #include "platt2/robot/subsystems/holonomicDrive/XDrive.hpp"
 #include "platt2/robot/subsystems/holonomicDrive/XDriveModule.hpp"
 #include "platt2/robot/subsystems/odometry/Odometry.hpp"
@@ -49,10 +50,13 @@ std::shared_ptr<robot::Robot> PinkConfig::buildRobot(){
     // odom subsystem
     std::unique_ptr<robot::subsystems::odometry::Odometry> odom_subsystem = std::make_unique<robot::subsystems::odometry::Odometry>();
 
-    std::shared_ptr<robot::Robot> robot{std::make_shared<robot::Robot>(XDrive_subsystem, odom_subsystem)
+    //holonomic control system
+    std::unique_ptr<robot::pid::PID>position_pid = std::make_unique<robot::pid::PID>(position_dt, position_max, position_min, position_Kp, position_Kd, position_Ki);
+    std::unique_ptr<robot::pid::PID>heading_pid = std::make_unique<robot::pid::PID>(heading_dt, heading_max, heading_min, heading_Kp, heading_Kd, heading_Ki);
+    std::unique_ptr<robot::subsystems::holonomicDrive::HolonomicControl> holonomic_contol_subsystem = std::make_unique<robot::subsystems::holonomicDrive::HolonomicControl>(*XDrive_subsystem, *odom_subsystem, std::move(position_pid), std::move(heading_pid));
 
-    // drive control subsystem
-    
+    // build robot object
+    std::shared_ptr<robot::Robot> robot{std::make_shared<robot::Robot>(XDrive_subsystem, odom_subsystem, holonomic_contol_subsystem)
     };
 
     return robot;
