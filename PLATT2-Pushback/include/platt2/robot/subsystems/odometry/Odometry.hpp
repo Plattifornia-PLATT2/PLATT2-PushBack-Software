@@ -21,7 +21,9 @@ namespace odometry{
 
         public:
         OdometryPosition getPos();
-
+        double getX();
+        double getY();
+        double getHeading();
         Odometry();
     };
 

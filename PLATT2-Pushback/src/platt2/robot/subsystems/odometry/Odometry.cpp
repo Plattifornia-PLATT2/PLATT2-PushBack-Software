@@ -20,6 +20,16 @@ namespace odometry{
         return curPos;
     }
 
+    double Odometry::getX(){
+        return otos.getHeading();
+    }
+    double Odometry::getY(){
+        return otos.getYPosition();
+    }
+    double Odometry::getHeading(){
+        return otos.getHeading();
+    }
+
     Odometry::Odometry():
     otos(0,0)
     {

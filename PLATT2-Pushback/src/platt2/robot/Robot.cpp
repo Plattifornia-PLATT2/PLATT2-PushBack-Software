@@ -18,7 +18,8 @@ namespace robot{
 
     Robot::Robot(
         std::unique_ptr<subsystems::holonomicDrive::XDrive>& xdrive_subsystem,
-        std::unique_ptr<subsystems::odometry::Odometry>& odometry_subsystem
+        std::unique_ptr<subsystems::odometry::Odometry>& odometry_subsystem,
+        std::unique_ptr<subsystems::holonomicDrive::HolonomicControl>& holonomic_controller
     )
     {
         current_alliance = NO_ALLIANCE;

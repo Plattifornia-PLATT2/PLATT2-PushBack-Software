@@ -10,6 +10,7 @@
 #include "platt2/EAllianceConfig.hpp"
 #include "platt2/EAutonConfig.hpp"
 #include "platt2/ERobotConfig.hpp"
+#include "platt2/robot/subsystems/holonomicDrive/HolonomicControl.hpp"
 #include <memory>
 
 namespace platt2
@@ -22,6 +23,7 @@ namespace platt2
 
             std::unique_ptr<subsystems::odometry::Odometry> odom_subsystem;
             std::unique_ptr<subsystems::holonomicDrive::IHolonomic>  holonomicDrive_subsystem;
+            std::unique_ptr<subsystems::holonomicDrive::HolonomicControl> holonomic_controller;
             AllianceConfig current_alliance;
             RobotConfig current_config;
             AutonConfig current_auton_route;
@@ -32,7 +34,9 @@ namespace platt2
 
             void driverControl();
 
-            Robot(std::unique_ptr<subsystems::holonomicDrive::XDrive>& xdrive_subsystem, std::unique_ptr<subsystems::odometry::Odometry>& odometry_subsystem);
+            Robot(std::unique_ptr<subsystems::holonomicDrive::XDrive>& xdrive_subsystem, 
+                std::unique_ptr<subsystems::odometry::Odometry>& odometry_subsystem, 
+                std::unique_ptr<subsystems::holonomicDrive::HolonomicControl>& holonomic_controller);
 
         };
     };
