@@ -8,6 +8,7 @@
 #include "subsystems/holonomicDrive/IHolonomicDrive.hpp"
 #include "subsystems/holonomicDrive/XDrive.hpp"
 #include "subsystems/holonomicDrive/XDriveModule.hpp"
+#include "subsystems/intake/IntakeSubsystem.hpp"
 #include "subsystems/odometry/Odometry.hpp"
 #include <algorithm>
 #include <memory>
@@ -19,7 +20,8 @@ namespace robot{
     Robot::Robot(
         std::unique_ptr<subsystems::holonomicDrive::XDrive>& xdrive_subsystem,
         std::unique_ptr<subsystems::odometry::Odometry>& odometry_subsystem,
-        std::unique_ptr<subsystems::holonomicDrive::HolonomicControl>& holonomic_controller
+        std::unique_ptr<subsystems::holonomicDrive::HolonomicControl>& holonomic_controller,
+        std::unique_ptr<subsystems::intake::IntakeSubsystem>& intake_subsystem
     )
     {
         current_alliance = NO_ALLIANCE;
@@ -28,6 +30,7 @@ namespace robot{
 
         holonomicDrive_subsystem = std::move(xdrive_subsystem);
         odom_subsystem = std::move(odometry_subsystem);
+        this->intake_subsystem = std::move(intake_subsystem);
     }
 
     void Robot::driverControl(){
