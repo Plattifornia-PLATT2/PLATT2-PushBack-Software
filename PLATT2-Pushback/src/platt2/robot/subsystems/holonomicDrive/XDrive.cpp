@@ -1,6 +1,5 @@
 #include "platt2/robot/subsystems/holonomicDrive/XDrive.hpp"
 #include "MovementVector.hpp"
-#include "platt2/helperFunctions.h"
 #include <algorithm>
 #include "math.h"
 
@@ -31,15 +30,12 @@ namespace holonomicDrive{
         v.normalization_scalar = s/v.r;
 
         for (auto& module : drive_modules){
-            module->move_vector(v);}
-        }
-
-    void XDrive::turnToHeading(double heading){
-        for (auto& module : drive_modules) {
-                
+            module->move_vector(v);
         }
     }
+
+}
      
 } // class
 
-}}} // namespaces
+}} // namespaces

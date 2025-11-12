@@ -44,10 +44,9 @@ namespace robot{
         
         // Create movement vector
         subsystems::holonomicDrive::MovementVector movement;
-        movement.travel_angle = atan2(leftY, leftX);
-        movement.linear_speed = sqrt(leftX*leftX + leftY*leftY) / 127.0;
-        movement.target_heading = rightX;
-        movement.current_heading = 0;
+        movement.theta = atan2(leftY, leftX);
+        movement.r = sqrt(leftX*leftX + leftY*leftY) / 127.0;
+        movement.w = rightX;
         
         // Send to subsystem
         holonomicDrive_subsystem->moveVector(movement);

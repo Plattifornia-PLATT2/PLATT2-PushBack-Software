@@ -1,5 +1,6 @@
 #include "platt2/robot/subsystems/holonomicDrive/HolonomicControl.hpp"
 #include <memory>
+#include <numbers>
 #include <utility>
 
 #include "platt2/helperFunctions.h"
@@ -25,7 +26,7 @@ void HolonomicControl::moveToPoint(double x_target, double y_target, double targ
     //rotation_output = std::clamp(rotation_output, -1.0, 1.0);
 //
     //drivetrain.moveVector({travel_angle, linear_speed, target_heading, odometry.getHeading(), rotation_output});
-    MovementVector vector;
+    MovementVector motionVector;
     polor p;
     bool arrived = false;
     double x_error;
@@ -41,11 +42,16 @@ void HolonomicControl::moveToPoint(double x_target, double y_target, double targ
 
         angle_error = target_heading - odometry.getHeading();
 
-        vector.r = positionPID->calculate(0, p.r);
-        vector.theta = p.theta;
-        vector.w = headingPID->calculate(0, angle_error);
+        //
+        if(angle_error > std::numbers::pi or angle_error < -std::numbers::pi){
+            angle_error = -1 * sgn(angle_error) * (2*std::numbers::pi - std::abs(angle_error));
+        }
 
-        drivetrain.moveVector(vector);
+        motionVector.r = positionPID->calculate(0, p.r);
+        motionVector.theta = p.theta;
+        motionVector.w = headingPID->calculate(0, angle_error);
+        
+        drivetrain.moveVector(motionVector);
     }
 }
 
