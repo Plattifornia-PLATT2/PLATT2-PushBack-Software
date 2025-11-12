@@ -17,7 +17,6 @@ namespace holonomicDrive{
 
         virtual void moveVector(MovementVector v) = 0;
 
-        virtual void turnToHeading(double heading) = 0; 
     };
 
 

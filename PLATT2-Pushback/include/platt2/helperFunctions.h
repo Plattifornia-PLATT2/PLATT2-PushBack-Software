@@ -16,11 +16,11 @@ struct polor {
 
 };
 
-int sgn(double val) {
+inline int sgn(double val) {
     return ((0) < val) - (val < (0));
 }
 
-cart PtoC(double r, double theta){
+inline cart PtoC(double r, double theta){
     
     cart p;
     
@@ -31,7 +31,7 @@ cart PtoC(double r, double theta){
 
 }
 
-polor CtoP(double x, double y)  {
+inline polor CtoP(double x, double y)  {
 
     polor p;
 

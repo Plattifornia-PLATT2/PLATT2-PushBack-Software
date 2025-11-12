@@ -4,6 +4,7 @@
 #include "platt2/robot/subsystems/holonomicDrive/XDrive.hpp"
 #include "platt2/robot/subsystems/odometry/Odometry.hpp"
 #include "platt2/robot/pid/pid.hpp"
+#include "platt2/helperFunctions.h"
 #include <memory>
 
 
