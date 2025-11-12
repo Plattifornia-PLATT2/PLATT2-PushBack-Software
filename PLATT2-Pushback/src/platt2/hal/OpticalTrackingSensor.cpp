@@ -2,7 +2,7 @@
 #include "pros/rtos.hpp"
 #include "pros/screen.h"
 #include "pros/screen.hpp"
-#include <cstdint>
+//#include <cstdint>
 #include <sys/types.h>
 
 namespace platt2{

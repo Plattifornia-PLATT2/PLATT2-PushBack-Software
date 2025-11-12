@@ -10,11 +10,10 @@ namespace subsystems{
 namespace holonomicDrive{
 
     struct MovementVector {
-    double travel_angle;
-    double linear_speed;
-    double target_heading;
-    double current_heading;
-    double normalization_scalar = 1.0;  // added
+    double r;
+    double theta;
+    double w;
+    double normalization_scalar;  
 };
 }
 }

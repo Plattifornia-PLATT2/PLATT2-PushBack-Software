@@ -1,7 +1,7 @@
 #include "platt2/robot/subsystems/odometry/Odometry.hpp"
 #include "OdometryPosition.hpp"
-#include "pros/rtos.hpp"
-#include <memory>
+//#include "pros/rtos.hpp"
+//#include <memory>
 
 namespace platt2{
 
