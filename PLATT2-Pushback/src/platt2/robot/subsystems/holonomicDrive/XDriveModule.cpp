@@ -3,6 +3,7 @@
 #include "platt2/helperFunctions.h"
 #include <cmath>
 
+
 namespace platt2{
 
 namespace robot{
@@ -12,14 +13,15 @@ namespace subsystems{
 namespace holonomicDrive{
  
 void XDriveModule::move_vector(MovementVector v){
-    
+
 
     double p = -(cos(v.theta+getPhi())/cos(getTheta())); // should be expanded for readability
 
-    double m = ((p/v.normalization_scalar)*(1-fabs(v.w))) + (sgn(cos(v.theta)*sin(v.theta))*v.theta); // should be expanded for readability
+    double m = ((p/v.normalization_scalar)*(1-std::abs(v.w))); // should be expanded for readability // second part of equaution is very jank. better soultion should be looked into
     
-    module_motors.setVoltage(m);
-    
+    double rot = sgn(sin(getTheta()))*v.w;
+
+    module_motors.setVelocity((m+rot)*600);
     
     //old code may be removed when new code is verified
 

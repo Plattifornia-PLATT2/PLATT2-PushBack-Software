@@ -3,6 +3,7 @@
 #include <algorithm>
 #include "math.h"
 
+
 namespace platt2{
 
 namespace robot{
@@ -19,14 +20,19 @@ namespace holonomicDrive{
                
         double projection;
         double s;
-    
+        double test;
+
+        std::vector<double> pV;
+
         for (auto& module : drive_modules) {
             
-            projection = -(cos(v.theta+module->getPhi())/cos(module->getTheta()));
-    
-            s = std::max(s, fabs(projection));
+            projection = -cos(v.theta+(module->getPhi()))/cos((module->getTheta()));
+            
+            pV.push_back(std::abs(projection));
         }
 
+        s = *std::max_element(pV.begin(), pV.end());
+       
         v.normalization_scalar = s/v.r;
 
         for (auto& module : drive_modules){

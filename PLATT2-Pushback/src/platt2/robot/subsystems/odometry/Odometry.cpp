@@ -27,7 +27,8 @@ namespace odometry{
         return otos.getYPosition();
     }
     double Odometry::getHeading(){
-        return otos.getHeading();
+        //return otos.getHeading();
+        return 0.0;
     }
 
     Odometry::Odometry():

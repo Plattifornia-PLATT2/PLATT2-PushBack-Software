@@ -44,7 +44,7 @@ void HolonomicControl::moveToPoint(double x_target, double y_target, double targ
         if(angle_error > std::numbers::pi or angle_error < -std::numbers::pi){
             angle_error = -1 * sgn(angle_error) * (2*std::numbers::pi - std::abs(angle_error));
         }
-
+        
         motionVector.r = positionPID->calculate(0, p.r);
         motionVector.theta = p.theta;
         motionVector.w = headingPID->calculate(0, angle_error);

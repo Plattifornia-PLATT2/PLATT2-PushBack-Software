@@ -5,13 +5,15 @@
 #include "pros/misc.h"
 #include "pros/misc.hpp"
 #include "pros/rtos.hpp"
+#include "pros/screen.h"
+#include "pros/screen.hpp"
 #include "subsystems/holonomicDrive/IHolonomicDrive.hpp"
 #include "subsystems/holonomicDrive/XDrive.hpp"
-#include "subsystems/holonomicDrive/XDriveModule.hpp"
 #include "subsystems/intake/IntakeSubsystem.hpp"
 #include "subsystems/odometry/Odometry.hpp"
 #include <algorithm>
 #include <memory>
+#include <utility>
 
 namespace platt2{
 
@@ -38,16 +40,17 @@ namespace robot{
         pros::Controller controller{pros::Controller(pros::E_CONTROLLER_MASTER)};
 
         while(true){
-        int leftX = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_X);
-        int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
-        int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
+        double leftX = double(controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_X));
+        double leftY = double(controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y));
+        double rightX = double(controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X));
         
         // Create movement vector
         subsystems::holonomicDrive::MovementVector movement;
-        movement.theta = atan2(leftY, leftX);
-        movement.r = sqrt(leftX*leftX + leftY*leftY) / 127.0;
-        movement.w = rightX;
         
+        movement.theta = atan2(leftY, leftX)-(odom_subsystem->getHeading());
+        movement.r = std::clamp(sqrt(leftX*leftX + leftY*leftY)/127, -1.0,1.0);
+        movement.w = rightX/127;
+
         // Send to subsystem
         holonomicDrive_subsystem->moveVector(movement);
         pros::delay(20);

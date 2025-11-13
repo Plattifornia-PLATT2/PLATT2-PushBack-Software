@@ -13,7 +13,7 @@ namespace holonomicDrive{
     double r;
     double theta;
     double w;
-    double normalization_scalar;  
+    double normalization_scalar = 1;  
 };
 }
 }
