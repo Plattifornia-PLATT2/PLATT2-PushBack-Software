@@ -17,7 +17,7 @@ void XDriveModule::move_vector(MovementVector v){
 
     double p = -(cos(v.theta+getPhi())/cos(getTheta())); // should be expanded for readability
 
-    double m = ((p/v.normalization_scalar)*(1-std::abs(v.w))); // should be expanded for readability // second part of equaution is very jank. better soultion should be looked into
+    double m = ((p/v.normalization_scalar)*(1-std::abs(v.w))); // should be expanded for readability
     
     double rot = sgn(sin(getTheta()))*v.w;
 

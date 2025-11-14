@@ -2,6 +2,8 @@
 #define HELPERFUNCTIONS_H
 
 #include <cmath>
+#include <numeric>
+#include <vector>
 struct cart {
 
     double x;
@@ -9,7 +11,7 @@ struct cart {
 
 };
 
-struct polor {
+struct polar {
 
     double theta;
     double r;
@@ -31,14 +33,24 @@ inline cart PtoC(double r, double theta){
 
 }
 
-inline polor CtoP(double x, double y)  {
+inline polar CtoP(double x, double y)  {
 
-    polor p;
+    polar p;
 
     p.r = sqrtf(pow(x, 2)+pow(y, 2));
     p.theta = atan2f(y, x);
 
     return p;
+
+}
+
+
+inline double rollAverage(double var, std::vector<double> data){
+
+    data.emplace_back(var);
+    data.erase(data.begin());
+
+    return (std::accumulate(data.begin(),data.end(), (double)0)/data.size());
 
 }
 
