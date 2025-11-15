@@ -38,12 +38,12 @@ class PinkConfig : public IConfig {
     static constexpr double position_Kd{1};
     static constexpr double position_Ki{1};
 
-    static constexpr double heading_dt{1};
+    static constexpr double heading_dt{0.01};
     static constexpr double heading_max{1};
-    static constexpr double heading_min{1};
-    static constexpr double heading_Kp{1};
-    static constexpr double heading_Kd{1};
-    static constexpr double heading_Ki{1};
+    static constexpr double heading_min{-1};
+    static constexpr double heading_Kp{0.01};
+    static constexpr double heading_Kd{0};
+    static constexpr double heading_Ki{0};
 
     public:
 

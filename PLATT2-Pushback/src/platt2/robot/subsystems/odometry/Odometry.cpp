@@ -3,6 +3,8 @@
 //#include "pros/rtos.hpp"
 //#include <memory>
 
+
+
 namespace platt2{
 
 namespace robot{
@@ -21,14 +23,13 @@ namespace odometry{
     }
 
     double Odometry::getX(){
-        return otos.getXPosition();
+       return otos.getXPosition();
     }
     double Odometry::getY(){
         return otos.getYPosition();
     }
     double Odometry::getHeading(){
-        //return otos.getHeading();
-        return 0.0;
+        return otos.getHeading();
     }
 
     Odometry::Odometry():

@@ -3,6 +3,8 @@
 #include "pros/screen.h"
 #include "pros/screen.hpp"
 //#include <cstdint>
+#include <exception>
+#include <math.h>
 #include <sys/types.h>
 
 namespace platt2{
@@ -57,6 +59,24 @@ void OpticalTrackingSensor::readData(){
         int hIndexFront = fullRead.find("H");
         int hIndexBack = fullRead.find(";", hIndexFront+1);
         std::string hPosStr = fullRead.substr(hIndexFront+2, hIndexBack-(hIndexFront+2));
+
+        try{
+        xPos = std::stod(xPosStr);
+        }
+        catch( std::exception e){
+
+        }
+        try{
+        yPos = std::stod(yPosStr);
+        } catch (std::exception e){
+
+        }
+        try{
+        heading = (std::stod(hPosStr)*M_PI/180);
+        } catch (std::exception e) {
+
+        }
+
 
 
         //std::cout << xPosStr << yPosStr << hPosStr << std::endl;

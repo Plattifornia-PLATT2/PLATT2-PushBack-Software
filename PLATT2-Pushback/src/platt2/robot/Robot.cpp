@@ -20,9 +20,9 @@ namespace platt2{
 namespace robot{
 
     Robot::Robot(
-        std::unique_ptr<subsystems::holonomicDrive::XDrive>& xdrive_subsystem,
-        std::unique_ptr<subsystems::odometry::Odometry>& odometry_subsystem,
-        std::unique_ptr<subsystems::holonomicDrive::HolonomicControl>& holonomic_controller,
+        std::shared_ptr<subsystems::holonomicDrive::XDrive>& xdrive_subsystem,
+        std::shared_ptr<subsystems::odometry::Odometry>& odometry_subsystem,
+        std::shared_ptr<subsystems::holonomicDrive::HolonomicControl>& holonomic_controller,
         std::unique_ptr<subsystems::intake::IntakeSubsystem>& intake_subsystem
     )
     {
@@ -30,8 +30,8 @@ namespace robot{
         current_auton_route = NO_AUTON;
         current_config = NO_ROBOT;
 
-        holonomicDrive_subsystem = std::move(xdrive_subsystem);
-        odom_subsystem = std::move(odometry_subsystem);
+        holonomicDrive_subsystem = xdrive_subsystem;
+        odom_subsystem = odometry_subsystem;
         this->intake_subsystem = std::move(intake_subsystem);
     }
 
@@ -55,6 +55,12 @@ namespace robot{
         holonomicDrive_subsystem->moveVector(movement);
         pros::delay(20);
         }
+    }
+
+    void Robot::autonControl(){
+
+        std::cout<<"penis";
+        holonomic_controller->moveToPoint(0, 0, 90);
     }
 
 }

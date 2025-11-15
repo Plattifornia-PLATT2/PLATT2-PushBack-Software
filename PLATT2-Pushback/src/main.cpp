@@ -14,7 +14,9 @@ void disabled() {}
 void competition_initialize() {}
 
 
-void autonomous() {}
+void autonomous() {
+	matchController.autonControl();
+}
 
 
 void opcontrol() {

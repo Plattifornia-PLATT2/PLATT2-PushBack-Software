@@ -52,17 +52,17 @@ std::shared_ptr<robot::Robot> PinkConfig::buildRobot(){
     modules.push_back(std::move(left_rear_module));
     modules.push_back(std::move(right_rear_module));
 
-    std::unique_ptr<platt2::robot::subsystems::holonomicDrive::XDrive> XDrive_subsystem = std::make_unique<platt2::robot::subsystems::holonomicDrive::XDrive>(std::move(modules));
+    std::shared_ptr<platt2::robot::subsystems::holonomicDrive::XDrive> XDrive_subsystem = std::make_shared<platt2::robot::subsystems::holonomicDrive::XDrive>(std::move(modules));
 
     // odom subsystem
-    std::unique_ptr<robot::subsystems::odometry::Odometry> odom_subsystem = std::make_unique<robot::subsystems::odometry::Odometry>();
+    std::shared_ptr<robot::subsystems::odometry::Odometry> odom_subsystem = std::make_shared<robot::subsystems::odometry::Odometry>();
 
     // intake subsystem
     std::unique_ptr<robot::subsystems::intake::IntakeSubsystem> intake_subsystem = std::make_unique<robot::subsystems::intake::IntakeSubsystem>(std::move(front_intake_motor), std::move(middle_intake_motor), std::move(rear_intake_motor), std::move(upper_conveyor_motor));
     //holonomic control system
     std::unique_ptr<robot::pid::PID>position_pid = std::make_unique<robot::pid::PID>(position_dt, position_max, position_min, position_Kp, position_Kd, position_Ki);
     std::unique_ptr<robot::pid::PID>heading_pid = std::make_unique<robot::pid::PID>(heading_dt, heading_max, heading_min, heading_Kp, heading_Kd, heading_Ki);
-    std::unique_ptr<robot::subsystems::holonomicDrive::HolonomicControl> holonomic_contol_subsystem = std::make_unique<robot::subsystems::holonomicDrive::HolonomicControl>(*XDrive_subsystem, *odom_subsystem, std::move(position_pid), std::move(heading_pid));
+    std::shared_ptr<robot::subsystems::holonomicDrive::HolonomicControl> holonomic_contol_subsystem = std::make_shared<robot::subsystems::holonomicDrive::HolonomicControl>(XDrive_subsystem, odom_subsystem, std::move(position_pid), std::move(heading_pid));
 
     // build robot object
     std::shared_ptr<robot::Robot> robot{std::make_shared<robot::Robot>(XDrive_subsystem, odom_subsystem, holonomic_contol_subsystem, intake_subsystem)};

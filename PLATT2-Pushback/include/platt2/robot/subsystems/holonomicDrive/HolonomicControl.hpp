@@ -16,14 +16,14 @@ namespace holonomicDrive{
 
 class HolonomicControl{
 public:
-    HolonomicControl(XDrive& drive, odometry::Odometry& odom, std::unique_ptr<robot::pid::PID> posPID, std::unique_ptr<robot::pid::PID> headingPID);
+    HolonomicControl(std::shared_ptr<XDrive> drive, std::shared_ptr<odometry::Odometry> odom, std::unique_ptr<robot::pid::PID> posPID, std::unique_ptr<robot::pid::PID> headingPID);
 
     void moveToPoint(double x_target, double y_target, double heading_target);
     bool atTarget(double x_target, double y_target, double heading_target);
 
 private:
-    XDrive& drivetrain;
-    odometry::Odometry& odometry;
+    std::shared_ptr<XDrive> drivetrain;
+    std::shared_ptr<odometry::Odometry> odometry;
     std::unique_ptr<pid::PID> positionPID;
     std::unique_ptr<pid::PID> headingPID;
 };

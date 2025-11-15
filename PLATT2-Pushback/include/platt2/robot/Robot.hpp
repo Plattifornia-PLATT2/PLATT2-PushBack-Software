@@ -23,9 +23,9 @@ namespace platt2
             private:
 
             // Subsystems
-            std::unique_ptr<subsystems::odometry::Odometry> odom_subsystem;
-            std::unique_ptr<subsystems::holonomicDrive::IHolonomic>  holonomicDrive_subsystem;
-            std::unique_ptr<subsystems::holonomicDrive::HolonomicControl> holonomic_controller;
+            std::shared_ptr<subsystems::odometry::Odometry> odom_subsystem;
+            std::shared_ptr<subsystems::holonomicDrive::IHolonomic>  holonomicDrive_subsystem;
+            std::shared_ptr<subsystems::holonomicDrive::HolonomicControl> holonomic_controller;
             std::unique_ptr<subsystems::intake::IntakeSubsystem> intake_subsystem;
 
             // Config Enums
@@ -39,9 +39,9 @@ namespace platt2
 
             void driverControl();
 
-            Robot(std::unique_ptr<subsystems::holonomicDrive::XDrive>& xdrive_subsystem, 
-                std::unique_ptr<subsystems::odometry::Odometry>& odometry_subsystem, 
-                std::unique_ptr<subsystems::holonomicDrive::HolonomicControl>& holonomic_controller,
+            Robot(std::shared_ptr<subsystems::holonomicDrive::XDrive>& xdrive_subsystem, 
+                std::shared_ptr<subsystems::odometry::Odometry>& odometry_subsystem, 
+                std::shared_ptr<subsystems::holonomicDrive::HolonomicControl>& holonomic_controller,
                 std::unique_ptr<subsystems::intake::IntakeSubsystem>& intake_subsystem
             );
 
