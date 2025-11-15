@@ -9,12 +9,19 @@ namespace platt2{
 
 namespace hal{
 
-OpticalTrackingSensor::OpticalTrackingSensor(double xOffset, double yOffset){
+static void taskThunk(void *p) {
+    reinterpret_cast<OpticalTrackingSensor*>(p)->readData();
+}
+
+OpticalTrackingSensor::OpticalTrackingSensor(double xOffset, double yOffset):
+ m_otosTask(taskThunk, this)
+{
     this->xOffset = xOffset;
     this->yOffset = yOffset;
     xPos = 0;
     yPos = 0;
     heading = 0;
+    std::cout<<"Lol";
 }
 
 double OpticalTrackingSensor::getXPosition(){
@@ -29,7 +36,7 @@ double OpticalTrackingSensor::getHeading(){
     return heading;
 }
 
-void OpticalTrackingSensor::readData() const{
+void OpticalTrackingSensor::readData(){
 
     while(true){
         std::string fullRead {};
@@ -38,7 +45,7 @@ void OpticalTrackingSensor::readData() const{
             char byteRead = static_cast<char>(m_serialInterface.read_byte());
             fullRead.push_back(byteRead);
         }
-
+        
         int xIndexFront = fullRead.find("X");
         int xIndexBack = fullRead.find(";", xIndexFront+1);
         std::string xPosStr = fullRead.substr(xIndexFront+2, xIndexBack-(xIndexFront+2));
@@ -53,11 +60,11 @@ void OpticalTrackingSensor::readData() const{
 
 
         //std::cout << xPosStr << yPosStr << hPosStr << std::endl;
-
+        pros::screen::erase();
         pros::screen::print(pros::E_TEXT_MEDIUM_CENTER, 1, "X Pos: %s", xPosStr);
         pros::screen::print(pros::E_TEXT_MEDIUM_CENTER, 2, "Y Pos: %s", yPosStr);
         pros::screen::print(pros::E_TEXT_MEDIUM_CENTER, 3, "Heading: %s", hPosStr);
-
+        
 
         pros::delay(10);
     }

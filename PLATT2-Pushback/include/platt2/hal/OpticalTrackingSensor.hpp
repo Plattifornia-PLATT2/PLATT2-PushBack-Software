@@ -18,6 +18,8 @@ private:
 
     pros::Serial m_serialInterface = pros::Serial(19, BAUD_RATE);
 
+    pros::Task m_otosTask;
+
     double xOffset;
 
     double yOffset;
@@ -31,7 +33,7 @@ private:
 public:
     OpticalTrackingSensor(double xOffset, double yOffset);
 
-    void readData() const;
+    void readData();
 
     double getXPosition();
 
