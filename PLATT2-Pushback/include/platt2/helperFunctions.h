@@ -18,6 +18,11 @@ struct polar {
 
 };
 
+struct avg {
+    double average;
+    std::vector<double> data;
+};
+
 inline int sgn(double val) {
     return ((0) < val) - (val < (0));
 }
@@ -45,12 +50,17 @@ inline polar CtoP(double x, double y)  {
 }
 
 
-inline double rollAverage(double var, std::vector<double> data){
+inline avg rollAverage(double var, std::vector<double> data){
 
     data.emplace_back(var);
     data.erase(data.begin());
 
-    return (std::accumulate(data.begin(),data.end(), (double)0)/data.size());
+    avg result;
+    
+    result.data = data;
+    result.average = std::accumulate(data.begin(),data.end(), (double)0)/data.size();
+
+    return result;
 
 }
 

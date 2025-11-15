@@ -28,10 +28,12 @@ void HolonomicControl::moveToPoint(double x_target, double y_target, double targ
     std::vector<double> rArray(100,1);
     std::vector<double> wArray(100,1);
 
-    double rAve;
-    double wAve;
+    avg rAve;
+    avg wAve;
 
     while (true){
+        //std::cout<<motionVector.w<<std::endl;
+
         x_error = x_target - odometry->getX();
         y_error = y_target - odometry->getY();
 
@@ -39,7 +41,7 @@ void HolonomicControl::moveToPoint(double x_target, double y_target, double targ
 
         angle_error = target_heading - odometry->getHeading();
 
-        if(angle_error > std::numbers::pi or angle_error < -std::numbers::pi){
+        if(angle_error > std::numbers::pi || angle_error < -std::numbers::pi){
             angle_error = -1 * sgn(angle_error) * (2*std::numbers::pi - std::abs(angle_error));
         }
         
@@ -49,13 +51,21 @@ void HolonomicControl::moveToPoint(double x_target, double y_target, double targ
 
         rAve = rollAverage(std::abs(motionVector.r), rArray);
         wAve = rollAverage(std::abs(motionVector.w), wArray);
+        rArray = rAve.data;
+        wArray = wAve.data;
 
-        if (rAve < 0.05 and wAve < 0.05){break;}
+        std::cout<<"rAve: "<<rAve.average<<" wAve: "<<wAve.average<<std::endl;
+        if (rAve.average < 0.05 && wAve.average < 0.20){break;}
         
-        //drivetrain->moveVector(motionVector);
-
+        drivetrain->moveVector(motionVector);
+        std::cout<<"Moving vector with w: "<<motionVector.w<<std::endl; 
         pros::delay(10);
     }
+    std::cout<<"I got to loop end"<<std::endl;
+    motionVector.r = 0;
+    motionVector.w = 0;
+    motionVector.theta = 0;
+    drivetrain->moveVector(motionVector);
 
 }
 

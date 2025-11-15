@@ -17,7 +17,7 @@ namespace holonomicDrive{
     }
 
     void XDrive::moveVector(MovementVector v){
-               
+
         double projection;
         double s;
         double test;
