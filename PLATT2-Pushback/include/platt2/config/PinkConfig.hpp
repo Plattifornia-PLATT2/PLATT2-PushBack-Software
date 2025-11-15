@@ -39,9 +39,9 @@ class PinkConfig : public IConfig {
     static constexpr double position_Ki{1};
 
     static constexpr double heading_dt{0.01};
-    static constexpr double heading_max{1};
-    static constexpr double heading_min{-1};
-    static constexpr double heading_Kp{0.01};
+    static constexpr double heading_max{0.4};
+    static constexpr double heading_min{-0.4};
+    static constexpr double heading_Kp{0.5};
     static constexpr double heading_Kd{0};
     static constexpr double heading_Ki{0};
 

@@ -32,6 +32,7 @@ namespace robot{
 
         holonomicDrive_subsystem = xdrive_subsystem;
         odom_subsystem = odometry_subsystem;
+        this->holonomic_controller = holonomic_controller;
         this->intake_subsystem = std::move(intake_subsystem);
     }
 
@@ -58,9 +59,8 @@ namespace robot{
     }
 
     void Robot::autonControl(){
-
-        std::cout<<"penis";
-        holonomic_controller->moveToPoint(0, 0, 90);
+    std::cout<<"auton starting"<<std::endl;
+    holonomic_controller->moveToPoint(0, 0, 90);
     }
 
 }
