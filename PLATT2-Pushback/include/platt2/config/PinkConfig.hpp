@@ -17,6 +17,7 @@
 
 #include <memory>
 #include <vector>
+#include <cmath>
 
 namespace platt2{
 
