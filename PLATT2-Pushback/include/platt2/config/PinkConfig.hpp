@@ -31,18 +31,18 @@ class PinkConfig : public IConfig {
     static constexpr int UPPER_CONVEYOR_MOTOR_PORT{13};
     static constexpr pros::MotorGears INTAKE_GEARSET{pros::MotorGears::blue};
 
-    static constexpr double position_dt{1};
-    static constexpr double position_max{1};
-    static constexpr double position_min{1};
-    static constexpr double position_Kp{1};
-    static constexpr double position_Kd{1};
-    static constexpr double position_Ki{1};
+    static constexpr double position_dt{0.01};
+    static constexpr double position_max{0.4};
+    static constexpr double position_min{-0.4};
+    static constexpr double position_Kp{0.8};
+    static constexpr double position_Kd{0.005};
+    static constexpr double position_Ki{0};
 
     static constexpr double heading_dt{0.01};
-    static constexpr double heading_max{0.4};
-    static constexpr double heading_min{-0.4};
-    static constexpr double heading_Kp{0.5};
-    static constexpr double heading_Kd{0};
+    static constexpr double heading_max{0.05};
+    static constexpr double heading_min{-0.05};
+    static constexpr double heading_Kp{0.3};
+    static constexpr double heading_Kd{0.0};
     static constexpr double heading_Ki{0};
 
     public:

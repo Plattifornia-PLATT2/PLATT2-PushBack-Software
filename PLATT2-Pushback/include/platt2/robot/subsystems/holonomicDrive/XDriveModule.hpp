@@ -17,10 +17,8 @@ namespace holonomicDrive{
 
         hal::MotorGroup module_motors;
         
-        double k_rot = 1;
         double theta;
         double phi;
-        double wheel_radius;
 
         public:
         void move_vector(MovementVector v);
@@ -30,7 +28,7 @@ namespace holonomicDrive{
         //double get_rpm();
         //double getAngleFromZero();
 
-        XDriveModule(std::unique_ptr<pros::Motor>& motor_l, std::unique_ptr<pros::Motor>& motor_r, double theta, double phi, double wheel_radius);
+        XDriveModule(std::unique_ptr<pros::Motor>& motor_l, std::unique_ptr<pros::Motor>& motor_r, double theta, double phi);
         // theta refers to the angle between N the turning center and the center of the wheel
         // phi refers to the angle between N the turning center and the direction the wheel is faceing 
     };

@@ -41,26 +41,29 @@ namespace robot{
         pros::Controller controller{pros::Controller(pros::E_CONTROLLER_MASTER)};
 
         while(true){
-        double leftX = double(controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_X));
-        double leftY = double(controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y));
-        double rightX = double(controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X));
-        
-        // Create movement vector
-        subsystems::holonomicDrive::MovementVector movement;
-        
-        movement.theta = atan2(leftY, leftX)-(odom_subsystem->getHeading());
-        movement.r = std::clamp(sqrt(leftX*leftX + leftY*leftY)/127, -1.0,1.0);
-        movement.w = rightX/127;
+            
+            double leftX = double(controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_X));
+            double leftY = double(controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y));
+            double rightX = double(controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X));
+            
+            // Create movement vector
+            subsystems::holonomicDrive::MovementVector movement;   
 
-        // Send to subsystem
-        holonomicDrive_subsystem->moveVector(movement);
-        pros::delay(20);
+            movement.theta = atan2(leftY, leftX)-((odom_subsystem->getHeading())-(M_PI/2));
+            movement.r = std::clamp(sqrt(leftX*leftX + leftY*leftY)/127, -1.0,1.0);
+            movement.w = 0.1;
+            //movement.w = rightX/127;
+
+            // Send to subsystem
+            holonomicDrive_subsystem->moveVector(movement);
+            pros::delay(10);
         }
     }
 
     void Robot::autonControl(){
     std::cout<<"auton starting"<<std::endl;
-    holonomic_controller->moveToPoint(0, 0, 90);
+    holonomic_controller->moveToPoint(012, 24, 0);
+    //holonomic_controller->staticTest();
     }
 
 }

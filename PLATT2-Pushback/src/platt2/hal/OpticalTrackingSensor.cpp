@@ -40,8 +40,12 @@ double OpticalTrackingSensor::getHeading(){
 
 void OpticalTrackingSensor::readData(){
 
+    double tempHeading;
+    std::string fullRead = "";
     while(true){
-        std::string fullRead {};
+
+        fullRead = "";
+
         
         while(m_serialInterface.get_read_avail()){
             char byteRead = static_cast<char>(m_serialInterface.read_byte());
@@ -72,10 +76,17 @@ void OpticalTrackingSensor::readData(){
 
         }
         try{
-        heading = (std::stod(hPosStr)*M_PI/180);
+
+        tempHeading = (std::stod(hPosStr)*M_PI/180)+(M_PI/2);
+        if (tempHeading<0){
+            tempHeading = tempHeading+(2*M_PI);
+        }
+        heading = tempHeading;
+
         } catch (std::exception e) {
 
         }
+
 
 
 
@@ -83,10 +94,10 @@ void OpticalTrackingSensor::readData(){
         pros::screen::erase();
         pros::screen::print(pros::E_TEXT_MEDIUM_CENTER, 1, "X Pos: %s", xPosStr);
         pros::screen::print(pros::E_TEXT_MEDIUM_CENTER, 2, "Y Pos: %s", yPosStr);
-        pros::screen::print(pros::E_TEXT_MEDIUM_CENTER, 3, "Heading: %s", hPosStr);
-        
+        pros::screen::print(pros::E_TEXT_MEDIUM_CENTER, 3, "Heading: %f", heading*180/M_PI);
 
         pros::delay(10);
+        
     }
 }
 } // namespace hal
