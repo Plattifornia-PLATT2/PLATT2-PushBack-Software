@@ -42,7 +42,10 @@ namespace platt2
             Robot(std::shared_ptr<subsystems::holonomicDrive::XDrive>& xdrive_subsystem, 
                 std::shared_ptr<subsystems::odometry::Odometry>& odometry_subsystem, 
                 std::shared_ptr<subsystems::holonomicDrive::HolonomicControl>& holonomic_controller,
-                std::unique_ptr<subsystems::intake::IntakeSubsystem>& intake_subsystem
+                std::unique_ptr<subsystems::intake::IntakeSubsystem>& intake_subsystem,
+                platt2::robot::AllianceConfig alliance_config,
+                platt2::robot::RobotConfig robot_config,
+                platt2::robot::AutonConfig auton_config
             );
 
         };

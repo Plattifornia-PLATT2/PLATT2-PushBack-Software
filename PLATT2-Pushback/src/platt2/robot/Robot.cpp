@@ -23,17 +23,18 @@ namespace robot{
         std::shared_ptr<subsystems::holonomicDrive::XDrive>& xdrive_subsystem,
         std::shared_ptr<subsystems::odometry::Odometry>& odometry_subsystem,
         std::shared_ptr<subsystems::holonomicDrive::HolonomicControl>& holonomic_controller,
-        std::unique_ptr<subsystems::intake::IntakeSubsystem>& intake_subsystem
-    )
+        std::unique_ptr<subsystems::intake::IntakeSubsystem>& intake_subsystem,
+        platt2::robot::AllianceConfig alliance_config,
+        platt2::robot::RobotConfig robot_config,
+        platt2::robot::AutonConfig auton_config
+    ) : holonomicDrive_subsystem{xdrive_subsystem},
+        odom_subsystem{odometry_subsystem},
+        holonomic_controller{holonomic_controller},
+        intake_subsystem{std::move(intake_subsystem)}   
     {
         current_alliance = NO_ALLIANCE;
         current_auton_route = NO_AUTON;
         current_config = NO_ROBOT;
-
-        holonomicDrive_subsystem = xdrive_subsystem;
-        odom_subsystem = odometry_subsystem;
-        this->holonomic_controller = holonomic_controller;
-        this->intake_subsystem = std::move(intake_subsystem);
     }
 
     void Robot::driverControl(){

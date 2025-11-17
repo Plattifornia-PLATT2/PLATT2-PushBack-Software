@@ -23,7 +23,6 @@ OpticalTrackingSensor::OpticalTrackingSensor(double xOffset, double yOffset):
     xPos = 0;
     yPos = 0;
     heading = 0;
-    std::cout<<"Lol";
 }
 
 double OpticalTrackingSensor::getXPosition(){
@@ -45,24 +44,29 @@ void OpticalTrackingSensor::readData(){
     while(true){
 
         fullRead = "";
-
+        std::string xPosStr = "";
+        std::string yPosStr = "";
+        std::string hPosStr = "";
         
         while(m_serialInterface.get_read_avail()){
             char byteRead = static_cast<char>(m_serialInterface.read_byte());
             fullRead.push_back(byteRead);
         }
-        
+        if(fullRead.find('/') != std::string::npos){
+                fullRead = fullRead.substr(fullRead.find('/'));
+        if(fullRead.size() > 0){
         int xIndexFront = fullRead.find("X");
         int xIndexBack = fullRead.find(";", xIndexFront+1);
-        std::string xPosStr = fullRead.substr(xIndexFront+2, xIndexBack-(xIndexFront+2));
+        xPosStr = fullRead.substr(xIndexFront+2, xIndexBack-(xIndexFront+2));
 
         int yIndexFront = fullRead.find("Y");
         int yIndexBack = fullRead.find(";", yIndexFront+1);
-        std::string yPosStr = fullRead.substr(yIndexFront+2, yIndexBack-(yIndexFront+2));
+        yPosStr = fullRead.substr(yIndexFront+2, yIndexBack-(yIndexFront+2));
 
         int hIndexFront = fullRead.find("H");
         int hIndexBack = fullRead.find(";", hIndexFront+1);
-        std::string hPosStr = fullRead.substr(hIndexFront+2, hIndexBack-(hIndexFront+2));
+        hPosStr = fullRead.substr(hIndexFront+2, hIndexBack-(hIndexFront+2));
+        }
 
         try{
         xPos = std::stod(xPosStr);
@@ -87,7 +91,9 @@ void OpticalTrackingSensor::readData(){
 
         }
 
-
+    } else {
+        m_serialInterface.flush();
+    }
 
 
         //std::cout << xPosStr << yPosStr << hPosStr << std::endl;

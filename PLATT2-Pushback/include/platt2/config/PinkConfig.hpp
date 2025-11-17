@@ -1,10 +1,23 @@
 #ifndef PINKCONFIG_HPP
 #define PINKCONFIG_HPP
 
-#include "IConfig.hpp"
-#include "pros/abstract_motor.hpp"
+#include "platt2/config/IConfig.hpp"
+#include "platt2/robot/Robot.hpp"
+#include "platt2/robot/pid/pid.hpp"
+#include "platt2/robot/subsystems/holonomicDrive/XDrive.hpp"
+#include "platt2/robot/subsystems/holonomicDrive/XDriveModule.hpp"
+#include "platt2/robot/subsystems/intake/IntakeSubsystem.hpp"
+#include "platt2/robot/subsystems/odometry/Odometry.hpp"
+#include "platt2/EAllianceConfig.hpp"
+#include "platt2/EAutonConfig.hpp"
+#include "platt2/ERobotConfig.hpp"
+
 #include "pros/motors.hpp"
+
+
 #include <memory>
+#include <vector>
+
 namespace platt2{
 
 namespace config{

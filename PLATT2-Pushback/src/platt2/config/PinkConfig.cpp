@@ -1,13 +1,5 @@
 #include "platt2/config/PinkConfig.hpp"
-#include "platt2/robot/Robot.hpp"
-#include "platt2/robot/pid/pid.hpp"
-#include "platt2/robot/subsystems/holonomicDrive/XDrive.hpp"
-#include "platt2/robot/subsystems/holonomicDrive/XDriveModule.hpp"
-#include "platt2/robot/subsystems/intake/IntakeSubsystem.hpp"
-#include "platt2/robot/subsystems/odometry/Odometry.hpp"
-#include "pros/motors.hpp"
-#include <memory>
-#include <vector>
+
 
 namespace platt2{
 namespace config{
@@ -66,7 +58,7 @@ std::shared_ptr<robot::Robot> PinkConfig::buildRobot(){
     std::shared_ptr<robot::subsystems::holonomicDrive::HolonomicControl> holonomic_contol_subsystem = std::make_shared<robot::subsystems::holonomicDrive::HolonomicControl>(XDrive_subsystem, odom_subsystem, std::move(position_pid), std::move(heading_pid));
 
     // build robot object
-    std::shared_ptr<robot::Robot> robot{std::make_shared<robot::Robot>(XDrive_subsystem, odom_subsystem, holonomic_contol_subsystem, intake_subsystem)};
+    std::shared_ptr<robot::Robot> robot{std::make_shared<robot::Robot>(XDrive_subsystem, odom_subsystem, holonomic_contol_subsystem, intake_subsystem, platt2::robot::AllianceConfig::NO_ALLIANCE, platt2::robot::RobotConfig::PINK, platt2::robot::AutonConfig::NO_AUTON)};
 
     return robot;
 
