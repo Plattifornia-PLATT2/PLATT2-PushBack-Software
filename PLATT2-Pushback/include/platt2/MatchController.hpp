@@ -2,12 +2,11 @@
 #define MATCHCONTROLLER_HPP
 
 #include "config/IConfig.hpp"
-#include "config/PinkConfig.hpp"
+//#include "config/PinkConfig.hpp"
 #include "platt2/robot/Robot.hpp"
 #include "platt2/EAllianceConfig.hpp"
 #include "platt2/EAutonConfig.hpp"
 
-#include <algorithm>
 #include <memory>
 namespace platt2{
 

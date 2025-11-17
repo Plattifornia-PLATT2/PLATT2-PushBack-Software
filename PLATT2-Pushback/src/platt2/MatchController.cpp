@@ -1,6 +1,5 @@
 #include "platt2/MatchController.hpp"
 #include "platt2/config/PinkConfig.hpp"
-#include <algorithm>
 #include <memory>
 
 namespace platt2{

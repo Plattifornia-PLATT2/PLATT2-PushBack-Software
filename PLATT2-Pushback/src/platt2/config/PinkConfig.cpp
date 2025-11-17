@@ -6,6 +6,7 @@
 #include "platt2/robot/subsystems/intake/IntakeSubsystem.hpp"
 #include "platt2/robot/subsystems/odometry/Odometry.hpp"
 #include "pros/motors.hpp"
+#include <math.h>
 #include <memory>
 #include <vector>
 
