@@ -1,10 +1,10 @@
 #ifndef ROBOT_HPP
 #define ROBOT_HPP
 
-#include "api.h"
+//#include "api.h"
 #include "platt2/robot/subsystems/odometry/Odometry.hpp"
-#include "pros/misc.h"
-#include "pros/misc.hpp"
+//#include "pros/misc.h"
+//#include "pros/misc.hpp"
 #include "subsystems/holonomicDrive/IHolonomicDrive.hpp"
 #include "subsystems/holonomicDrive/XDrive.hpp"
 #include "platt2/EAllianceConfig.hpp"

@@ -5,7 +5,6 @@
 #include <memory>
 #include <utility>
 #include <vector>
-#include <chrono>
 
 namespace platt2{
 namespace robot{
@@ -30,8 +29,7 @@ void HolonomicControl::moveToPoint(double x_target, double y_target, double targ
     avg wAve;
 
     while (true){
-        auto start = std::chrono::steady_clock::now();
-
+        
         x_error = x_target - odometry->getX();
         y_error = y_target - odometry->getY();
 
@@ -44,7 +42,7 @@ void HolonomicControl::moveToPoint(double x_target, double y_target, double targ
         }
         
         motionVector.r = -1*(positionPID->calculate(0, p.r));
-        motionVector.theta = p.theta;
+        motionVector.theta = p.theta - odometry->getHeading();
         motionVector.w = headingPID->calculate(0, angle_error);
 
         rAve = rollAverage(std::abs(motionVector.r), rArray);
@@ -52,13 +50,13 @@ void HolonomicControl::moveToPoint(double x_target, double y_target, double targ
         rArray = rAve.data;
         wArray = wAve.data;
 
-        //std::cout<<motionVector.r<<std::endl;
         if (rAve.average < 0.05 && wAve.average < 00.05){break;}
         
         drivetrain->moveVector(motionVector);
         pros::delay(10);
 
     } 
+
     std::cout<<"I got to loop end"<<std::endl;
     motionVector.r = 0;
     motionVector.w = 0;
