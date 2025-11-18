@@ -11,6 +11,7 @@
 #include "platt2/EAllianceConfig.hpp"
 #include "platt2/EAutonConfig.hpp"
 #include "platt2/ERobotConfig.hpp"
+#include "platt2/profiles/JonProfile.hpp"
 
 #include "pros/motors.hpp"
 

@@ -10,7 +10,8 @@ namespace intake{
 
     enum IntakeDirection{
         IN = 1,
-        OUT = 2
+        OUT = 2,
+        STOP = 3
     };
 
     /**
@@ -20,7 +21,7 @@ namespace intake{
     class IntakeSubsystem{
 
         private:
-        double intake_speed{100};
+        double intake_speed{400};
     
         std::unique_ptr<pros::Motor> front_intake_motor;
         std::unique_ptr<pros::Motor> rear_intake_motor;

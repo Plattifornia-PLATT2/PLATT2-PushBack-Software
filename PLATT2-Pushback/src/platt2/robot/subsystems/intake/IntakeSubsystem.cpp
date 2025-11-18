@@ -25,6 +25,12 @@ namespace intake{
             rear_intake_motor->move_velocity(-intake_speed);
             upper_conveyor_motor->move_velocity(-intake_speed);   
         }
+        else if (direction == STOP){
+            front_intake_motor->move_velocity(0);
+            middle_intake_motor->move_velocity(0);
+            rear_intake_motor->move_velocity(0);
+            upper_conveyor_motor->move_velocity(0);
+        }
     }
 }
 }

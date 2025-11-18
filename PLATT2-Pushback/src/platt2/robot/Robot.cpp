@@ -5,8 +5,6 @@
 #include "pros/misc.h"
 #include "pros/misc.hpp"
 #include "pros/rtos.hpp"
-//#include "pros/screen.h"
-//#include "pros/screen.hpp"
 #include "subsystems/holonomicDrive/XDrive.hpp"
 #include "subsystems/intake/IntakeSubsystem.hpp"
 #include "subsystems/odometry/Odometry.hpp"
@@ -26,11 +24,13 @@ namespace robot{
         std::unique_ptr<subsystems::intake::IntakeSubsystem>& intake_subsystem,
         platt2::robot::AllianceConfig alliance_config,
         platt2::robot::RobotConfig robot_config,
-        platt2::robot::AutonConfig auton_config
+        platt2::robot::AutonConfig auton_config,
+        std::unique_ptr<profiles::DriverProfile>& driver_profile
     ) : holonomicDrive_subsystem{xdrive_subsystem},
         odom_subsystem{odometry_subsystem},
         holonomic_controller{holonomic_controller},
-        intake_subsystem{std::move(intake_subsystem)}   
+        intake_subsystem{std::move(intake_subsystem)},
+        driver_profile{std::move(driver_profile)}
     {
         current_alliance = NO_ALLIANCE;
         current_auton_route = NO_AUTON;
@@ -57,6 +57,17 @@ namespace robot{
 
             // Send to subsystem
             holonomicDrive_subsystem->moveVector(movement);
+
+            if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1)){
+                intake_subsystem->move_intake(subsystems::intake::IntakeDirection::IN);
+            }
+            else if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L2)){
+                intake_subsystem->move_intake(subsystems::intake::IntakeDirection::OUT);
+            }
+            else{
+                intake_subsystem->move_intake(subsystems::intake::IntakeDirection::STOP);
+            }
+
             pros::delay(10);
         }
     }

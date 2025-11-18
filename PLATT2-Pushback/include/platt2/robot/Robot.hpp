@@ -2,6 +2,7 @@
 #define ROBOT_HPP
 
 //#include "api.h"
+#include "platt2/profiles/DriverProfile.hpp"
 #include "platt2/robot/subsystems/odometry/Odometry.hpp"
 //#include "pros/misc.h"
 //#include "pros/misc.hpp"
@@ -33,6 +34,9 @@ namespace platt2
             RobotConfig current_config;
             AutonConfig current_auton_route;
 
+            // Driver Profile
+            std::unique_ptr<profiles::DriverProfile> driver_profile;
+
             public:
             
             void autonControl();
@@ -45,7 +49,8 @@ namespace platt2
                 std::unique_ptr<subsystems::intake::IntakeSubsystem>& intake_subsystem,
                 platt2::robot::AllianceConfig alliance_config,
                 platt2::robot::RobotConfig robot_config,
-                platt2::robot::AutonConfig auton_config
+                platt2::robot::AutonConfig auton_config,
+                std::unique_ptr<profiles::DriverProfile>& driver_profile
             );
 
         };

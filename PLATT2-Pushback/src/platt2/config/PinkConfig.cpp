@@ -52,13 +52,17 @@ std::shared_ptr<robot::Robot> PinkConfig::buildRobot(){
 
     // intake subsystem
     std::unique_ptr<robot::subsystems::intake::IntakeSubsystem> intake_subsystem = std::make_unique<robot::subsystems::intake::IntakeSubsystem>(std::move(front_intake_motor), std::move(middle_intake_motor), std::move(rear_intake_motor), std::move(upper_conveyor_motor));
+
     //holonomic control system
     std::unique_ptr<robot::pid::PID>position_pid = std::make_unique<robot::pid::PID>(position_dt, position_max, position_min, position_Kp, position_Kd, position_Ki);
     std::unique_ptr<robot::pid::PID>heading_pid = std::make_unique<robot::pid::PID>(heading_dt, heading_max, heading_min, heading_Kp, heading_Kd, heading_Ki);
     std::shared_ptr<robot::subsystems::holonomicDrive::HolonomicControl> holonomic_contol_subsystem = std::make_shared<robot::subsystems::holonomicDrive::HolonomicControl>(XDrive_subsystem, odom_subsystem, std::move(position_pid), std::move(heading_pid));
 
+    //build driver profile
+    std::unique_ptr<profiles::DriverProfile> driver_profile = std::make_unique<profiles::JonProfile>();
+
     // build robot object
-    std::shared_ptr<robot::Robot> robot{std::make_shared<robot::Robot>(XDrive_subsystem, odom_subsystem, holonomic_contol_subsystem, intake_subsystem, platt2::robot::AllianceConfig::NO_ALLIANCE, platt2::robot::RobotConfig::PINK, platt2::robot::AutonConfig::NO_AUTON)};
+    std::shared_ptr<robot::Robot> robot{std::make_shared<robot::Robot>(XDrive_subsystem, odom_subsystem, holonomic_contol_subsystem, intake_subsystem, platt2::robot::AllianceConfig::NO_ALLIANCE, platt2::robot::RobotConfig::PINK, platt2::robot::AutonConfig::NO_AUTON, driver_profile)};
 
     return robot;
 
