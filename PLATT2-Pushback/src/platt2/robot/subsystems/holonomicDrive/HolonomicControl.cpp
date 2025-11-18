@@ -42,7 +42,7 @@ void HolonomicControl::moveToPoint(double x_target, double y_target, double targ
         }
         
         motionVector.r = -1*(positionPID->calculate(0, p.r));
-        motionVector.theta = p.theta - odometry->getHeading();
+        motionVector.theta = p.theta - odometry->getHeading()+(M_PI/2);
         motionVector.w = headingPID->calculate(0, angle_error);
 
         rAve = rollAverage(std::abs(motionVector.r), rArray);

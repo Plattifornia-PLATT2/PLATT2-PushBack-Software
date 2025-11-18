@@ -63,7 +63,8 @@ namespace robot{
 
     void Robot::autonControl(){
     std::cout<<"auton starting"<<std::endl;
-    holonomic_controller->moveToPoint(012, 24, 0);
+    holonomic_controller->moveToPoint(0, 24, 90);
+    holonomic_controller->moveToPoint(-24, 24,0);
     //holonomic_controller->staticTest();
     }
 
