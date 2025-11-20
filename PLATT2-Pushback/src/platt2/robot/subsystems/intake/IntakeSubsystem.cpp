@@ -13,23 +13,31 @@ namespace intake{
     }
 
     void IntakeSubsystem::move_intake(IntakeDirection direction){
-        if(direction == IN){
-            front_intake_motor->move_velocity(intake_speed);
-            middle_intake_motor->move_velocity(intake_speed);
-            rear_intake_motor->move_velocity(intake_speed);
-            upper_conveyor_motor->move_velocity(intake_speed);
-        }
-        else if (direction == OUT){
-            front_intake_motor->move_velocity(-intake_speed);
-            middle_intake_motor->move_velocity(-intake_speed);
-            rear_intake_motor->move_velocity(-intake_speed);
-            upper_conveyor_motor->move_velocity(-intake_speed);   
-        }
-        else if (direction == STOP){
-            front_intake_motor->move_velocity(0);
-            middle_intake_motor->move_velocity(0);
-            rear_intake_motor->move_velocity(0);
-            upper_conveyor_motor->move_velocity(0);
+        switch(direction){
+            case IN:{
+                front_intake_motor->move_velocity(intake_speed);
+                middle_intake_motor->move_velocity(intake_speed);
+                rear_intake_motor->move_velocity(intake_speed);
+                upper_conveyor_motor->move_velocity(intake_speed);
+            }
+            case OUT:{
+                front_intake_motor->move_velocity(-intake_speed);
+                middle_intake_motor->move_velocity(-intake_speed);
+                rear_intake_motor->move_velocity(-intake_speed);
+                upper_conveyor_motor->move_velocity(-intake_speed);   
+            }
+            case OUT_LOW_GOAL:{
+                front_intake_motor->move_velocity(-intake_speed);
+                middle_intake_motor->move_velocity(-intake_speed);
+                rear_intake_motor->move_velocity(intake_speed);
+                upper_conveyor_motor->move_velocity(-intake_speed);   
+            }
+            case STOP:{
+                front_intake_motor->move_velocity(0);
+                middle_intake_motor->move_velocity(0);
+                rear_intake_motor->move_velocity(0);
+                upper_conveyor_motor->move_velocity(0);
+            }
         }
     }
 }

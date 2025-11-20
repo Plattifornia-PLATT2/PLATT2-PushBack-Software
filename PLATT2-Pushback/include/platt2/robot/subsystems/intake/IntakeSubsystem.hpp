@@ -11,7 +11,8 @@ namespace intake{
     enum IntakeDirection{
         IN = 1,
         OUT = 2,
-        STOP = 3
+        STOP = 3,
+        OUT_LOW_GOAL=4
     };
 
     /**

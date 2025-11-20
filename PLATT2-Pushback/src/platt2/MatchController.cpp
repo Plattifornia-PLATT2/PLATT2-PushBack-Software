@@ -15,7 +15,6 @@ void MatchController::driveControl(){
 }
 
 void MatchController::autonControl(){
-    std::cout<<"i want to die"<<std::endl;
    robot->autonControl();
 }
 }
