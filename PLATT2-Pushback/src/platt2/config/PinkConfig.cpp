@@ -1,4 +1,7 @@
 #include "platt2/config/PinkConfig.hpp"
+#include "platt2/profiles/DriverProfile.hpp"
+#include "platt2/profiles/JonProfile.hpp"
+#include <memory>
 
 
 namespace platt2{
@@ -59,8 +62,8 @@ std::shared_ptr<robot::Robot> PinkConfig::buildRobot(){
     std::shared_ptr<robot::subsystems::holonomicDrive::HolonomicControl> holonomic_contol_subsystem = std::make_shared<robot::subsystems::holonomicDrive::HolonomicControl>(XDrive_subsystem, odom_subsystem, std::move(position_pid), std::move(heading_pid));
 
     //build driver profile
-    std::unique_ptr<profiles::DriverProfile> driver_profile = std::make_unique<profiles::JonProfile>();
-
+    std::unique_ptr<profiles::JonProfile> jon_profile = std::make_unique<profiles::JonProfile>();
+    std::unique_ptr<profiles::DriverProfile> driver_profile = std::move(jon_profile);
     // build robot object
     std::shared_ptr<robot::Robot> robot{std::make_shared<robot::Robot>(XDrive_subsystem, odom_subsystem, holonomic_contol_subsystem, intake_subsystem, platt2::robot::AllianceConfig::NO_ALLIANCE, platt2::robot::RobotConfig::PINK, platt2::robot::AutonConfig::NO_AUTON, driver_profile)};
 

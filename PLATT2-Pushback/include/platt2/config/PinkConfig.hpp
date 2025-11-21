@@ -42,7 +42,7 @@ class PinkConfig : public IConfig {
 
     static constexpr int FRONT_INTAKE_MOTOR_PORT{10};
     static constexpr int MIDDLE_INTAKE_MOTOR_PORT{11};
-    static constexpr int REAR_INTAKE_MOTOR_PORT{12};
+    static constexpr int REAR_INTAKE_MOTOR_PORT{-12};
     static constexpr int UPPER_CONVEYOR_MOTOR_PORT{13};
     static constexpr pros::MotorGears INTAKE_GEARSET{pros::MotorGears::blue};
 

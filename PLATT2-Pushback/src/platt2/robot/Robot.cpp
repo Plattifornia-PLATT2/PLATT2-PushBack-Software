@@ -42,7 +42,6 @@ namespace robot{
         pros::Controller controller{pros::Controller(pros::E_CONTROLLER_MASTER)};
 
         while(true){
-            
             double leftX = double(controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_X));
             double leftY = double(controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y));
             double rightX = double(controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X));
@@ -53,15 +52,14 @@ namespace robot{
             movement.theta = atan2(leftY, leftX)-((odom_subsystem->getHeading())-(M_PI/2));
             movement.r = std::clamp(sqrt(leftX*leftX + leftY*leftY)/127, -1.0,1.0);
             movement.w = 0.1;
-            //movement.w = rightX/127;
 
             // Send to subsystem
             holonomicDrive_subsystem->moveVector(movement);
 
-            if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1)){
+            if(controller.get_digital(driver_profile->frontIntake_IN)){
                 intake_subsystem->move_intake(subsystems::intake::IntakeDirection::IN);
             }
-            else if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L2)){
+            else if(controller.get_digital(driver_profile->frontIntake_OUT)){
                 intake_subsystem->move_intake(subsystems::intake::IntakeDirection::OUT);
             }
             else{
@@ -73,10 +71,8 @@ namespace robot{
     }
 
     void Robot::autonControl(){
-    std::cout<<"auton starting"<<std::endl;
     holonomic_controller->moveToPoint(0, 24, 90);
     holonomic_controller->moveToPoint(-24, 24,0);
-    //holonomic_controller->staticTest();
     }
 
 }
