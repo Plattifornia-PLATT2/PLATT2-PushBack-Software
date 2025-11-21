@@ -22,7 +22,7 @@ namespace intake{
     class IntakeSubsystem{
 
         private:
-        double intake_speed{400};
+        double intake_speed{600};
     
         std::unique_ptr<pros::Motor> front_intake_motor;
         std::unique_ptr<pros::Motor> rear_intake_motor;

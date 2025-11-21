@@ -19,24 +19,28 @@ namespace intake{
                 middle_intake_motor->move_velocity(intake_speed);
                 rear_intake_motor->move_velocity(intake_speed);
                 upper_conveyor_motor->move_velocity(intake_speed);
+                break;
             }
             case OUT:{
                 front_intake_motor->move_velocity(-intake_speed);
                 middle_intake_motor->move_velocity(-intake_speed);
                 rear_intake_motor->move_velocity(-intake_speed);
-                upper_conveyor_motor->move_velocity(-intake_speed);   
+                upper_conveyor_motor->move_velocity(-intake_speed);
+                break;   
             }
             case OUT_LOW_GOAL:{
                 front_intake_motor->move_velocity(-intake_speed);
                 middle_intake_motor->move_velocity(-intake_speed);
                 rear_intake_motor->move_velocity(intake_speed);
                 upper_conveyor_motor->move_velocity(-intake_speed);   
+                break;
             }
             case STOP:{
                 front_intake_motor->move_velocity(0);
                 middle_intake_motor->move_velocity(0);
                 rear_intake_motor->move_velocity(0);
                 upper_conveyor_motor->move_velocity(0);
+                break;
             }
         }
     }
