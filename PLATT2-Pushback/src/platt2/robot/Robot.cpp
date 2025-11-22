@@ -74,8 +74,7 @@ namespace robot{
     }
 
     void Robot::autonControl(){
-    holonomic_controller->moveToPoint(0, 24, 90);
-    holonomic_controller->moveToPoint(-24, 24,0);
+    auton_routine->run();
     }
 
 }
