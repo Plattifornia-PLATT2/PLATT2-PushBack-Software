@@ -50,7 +50,7 @@ std::shared_ptr<robot::Robot> PurpleConfig::buildRobot(robot::AutonConfig auton,
     std::shared_ptr<robot::subsystems::odometry::Odometry> odom_subsystem = std::make_shared<robot::subsystems::odometry::Odometry>();
 
     // intake subsystem
-    std::unique_ptr<robot::subsystems::intake::IntakeSubsystem> intake_subsystem = std::make_unique<robot::subsystems::intake::IntakeSubsystem>(std::move(front_intake_motor), std::move(middle_intake_motor), std::move(rear_intake_motor), std::move(upper_conveyor_motor));
+    std::shared_ptr<robot::subsystems::intake::IntakeSubsystem> intake_subsystem = std::make_shared<robot::subsystems::intake::IntakeSubsystem>(std::move(front_intake_motor), std::move(middle_intake_motor), std::move(rear_intake_motor), std::move(upper_conveyor_motor));
 
     //holonomic control system
     std::unique_ptr<robot::pid::PID>position_pid = std::make_unique<robot::pid::PID>(position_dt, position_max, position_min, position_Kp, position_Kd, position_Ki);

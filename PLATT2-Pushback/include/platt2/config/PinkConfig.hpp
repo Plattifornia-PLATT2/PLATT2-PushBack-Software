@@ -28,24 +28,32 @@ class PinkConfig : public IConfig {
     private:
     static constexpr pros::MotorGears DRIVE_GEARSET{pros::MotorGears::blue};
 
-    static constexpr int LEFT_FRONT_MODULE_TOP_PORT{1};
-    static constexpr int LEFT_FRONT_MODULE_BOTTOM_PORT{-2};
 
-    static constexpr int RIGHT_FRONT_MODULE_TOP_PORT{-3};
-    static constexpr int RIGHT_FRONT_MODULE_BOTTOM_PORT{4};
+    // ** Drive Ports **
+    static constexpr int LEFT_FRONT_MODULE_TOP_PORT{2};
+    static constexpr int LEFT_FRONT_MODULE_BOTTOM_PORT{-1};
 
-    static constexpr int LEFT_REAR_MODULE_TOP_PORT{5};
-    static constexpr int LEFT_REAR_MODULE_BOTTOM_PORT{-6};
+    static constexpr int RIGHT_FRONT_MODULE_TOP_PORT{-17};
+    static constexpr int RIGHT_FRONT_MODULE_BOTTOM_PORT{18};
 
-    static constexpr int RIGHT_REAR_MODULE_TOP_PORT{-9};
-    static constexpr int RIGHT_REAR_MODULE_BOTTOM_PORT{8};
+    static constexpr int LEFT_REAR_MODULE_TOP_PORT{9};
+    static constexpr int LEFT_REAR_MODULE_BOTTOM_PORT{-10};
 
-    static constexpr int FRONT_INTAKE_MOTOR_PORT{10};
-    static constexpr int MIDDLE_INTAKE_MOTOR_PORT{11};
-    static constexpr int REAR_INTAKE_MOTOR_PORT{-12};
-    static constexpr int UPPER_CONVEYOR_MOTOR_PORT{13};
+    static constexpr int RIGHT_REAR_MODULE_TOP_PORT{-19};
+    static constexpr int RIGHT_REAR_MODULE_BOTTOM_PORT{20};
+
+    // ** Intake Ports **
+    static constexpr int FRONT_INTAKE_MOTOR_PORT{14};
+    static constexpr int MIDDLE_INTAKE_MOTOR_PORT{13};
+    static constexpr int REAR_INTAKE_MOTOR_PORT{-15};
+    static constexpr int UPPER_CONVEYOR_MOTOR_PORT{16};
+    static constexpr int DISTANCE_SENSOR_PORT{17};
     static constexpr pros::MotorGears INTAKE_GEARSET{pros::MotorGears::blue};
 
+    // ** Color Sort Ports **
+    static constexpr int OPTICAL_SENSOR_PORT{18};
+
+    // ** PID Tuning Values **
     static constexpr double position_dt{0.01};
     static constexpr double position_max{0.4};
     static constexpr double position_min{-0.4};

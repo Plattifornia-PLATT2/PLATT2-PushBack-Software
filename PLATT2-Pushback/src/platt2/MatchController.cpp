@@ -31,7 +31,7 @@ void MatchController::init(){
 }
 
 void MatchController::driveControl(){
-   // robot->driverControl();
+   robot->driverControl();
 }
 
 void MatchController::autonControl(){
