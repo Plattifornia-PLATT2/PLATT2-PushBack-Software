@@ -1,5 +1,5 @@
-#ifndef PINKCONFIG_HPP
-#define PINKCONFIG_HPP
+#ifndef PURPLECONFIG_HPP
+#define PURPLECONFIG_HPP
 
 #include "platt2/config/IConfig.hpp"
 #include "platt2/robot/Robot.hpp"
@@ -12,6 +12,8 @@
 #include "platt2/EAutonConfig.hpp"
 #include "platt2/ERobotConfig.hpp"
 #include "platt2/profiles/JonProfile.hpp"
+#include "platt2/profiles/DriverProfile.hpp"
+#include "platt2/profiles/QuinnProfile.hpp"
 
 #include "pros/motors.hpp"
 
@@ -24,7 +26,7 @@ namespace platt2{
 
 namespace config{
 
-class PinkConfig : public IConfig {
+class PurpleConfig : public IConfig {
     private:
     static constexpr pros::MotorGears DRIVE_GEARSET{pros::MotorGears::blue};
 

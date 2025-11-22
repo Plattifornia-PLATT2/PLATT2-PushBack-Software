@@ -1,16 +1,10 @@
-#include "platt2/config/PinkConfig.hpp"
-#include "platt2/EDriverConfig.hpp"
-#include "platt2/profiles/DriverProfile.hpp"
-#include "platt2/profiles/JonProfile.hpp"
-#include "platt2/profiles/QuinnProfile.hpp"
-#include <memory>
-
+#include "platt2/config/PurpleConfig.hpp"
 
 namespace platt2{
 namespace config{
 constexpr double deg_to_rad(double deg) { return deg * M_PI / 180.0; }
 
-std::shared_ptr<robot::Robot> PinkConfig::buildRobot(robot::AutonConfig auton, robot::DriverProfile profile, robot::AllianceConfig alliance){
+std::shared_ptr<robot::Robot> PurpleConfig::buildRobot(robot::AutonConfig auton, robot::DriverProfile profile, robot::AllianceConfig alliance){
 
     //motors
 
@@ -63,8 +57,9 @@ std::shared_ptr<robot::Robot> PinkConfig::buildRobot(robot::AutonConfig auton, r
     std::unique_ptr<robot::pid::PID>heading_pid = std::make_unique<robot::pid::PID>(heading_dt, heading_max, heading_min, heading_Kp, heading_Kd, heading_Ki);
     std::shared_ptr<robot::subsystems::holonomicDrive::HolonomicControl> holonomic_contol_subsystem = std::make_shared<robot::subsystems::holonomicDrive::HolonomicControl>(XDrive_subsystem, odom_subsystem, std::move(position_pid), std::move(heading_pid));
 
-    std::unique_ptr<profiles::DriverProfile> driver_profile;
     //build driver profile
+    std::unique_ptr<profiles::DriverProfile> driver_profile;
+
     if(profile == robot::JON){
         std::unique_ptr<profiles::JonProfile> jon_profile = std::make_unique<profiles::JonProfile>();
         driver_profile = std::move(jon_profile);
@@ -75,7 +70,7 @@ std::shared_ptr<robot::Robot> PinkConfig::buildRobot(robot::AutonConfig auton, r
     }
 
     // build robot object
-    std::shared_ptr<robot::Robot> robot{std::make_shared<robot::Robot>(XDrive_subsystem, odom_subsystem, holonomic_contol_subsystem, intake_subsystem, alliance, platt2::robot::RobotConfig::PINK, auton, driver_profile)};
+    std::shared_ptr<robot::Robot> robot{std::make_shared<robot::Robot>(XDrive_subsystem, odom_subsystem, holonomic_contol_subsystem, intake_subsystem, alliance, platt2::robot::RobotConfig::PURPLE, auton, driver_profile)};
 
     return robot;
 
