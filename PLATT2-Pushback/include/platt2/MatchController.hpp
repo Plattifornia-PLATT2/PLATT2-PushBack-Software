@@ -2,14 +2,18 @@
 #define MATCHCONTROLLER_HPP
 
 #include "config/IConfig.hpp"
-//#include "config/PinkConfig.hpp"
 #include "menu/menu.hpp"
 #include "platt2/robot/Robot.hpp"
 #include "platt2/EAllianceConfig.hpp"
 #include "platt2/EAutonConfig.hpp"
 #include "platt2/menu/menu.hpp"
-
+#include "ERobotConfig.hpp"
+#include "platt2/config/PinkConfig.hpp"
+#include "platt2/config/PurpleConfig.hpp"
+#include "platt2/menu/menu.hpp"
+#include "pros/rtos.hpp"
 #include <memory>
+
 namespace platt2{
 
 class MatchController{

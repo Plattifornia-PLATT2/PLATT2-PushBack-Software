@@ -16,7 +16,7 @@ class OpticalTrackingSensor{
 private:
     const int BAUD_RATE = 74880;
 
-    pros::Serial m_serialInterface = pros::Serial(19, BAUD_RATE);
+    pros::Serial m_serialInterface = pros::Serial(12, BAUD_RATE);
 
     pros::Task m_otosTask;
 
