@@ -15,6 +15,8 @@
 #include "platt2/profiles/DriverProfile.hpp"
 #include "platt2/profiles/QuinnProfile.hpp"
 
+#include "platt2/auton/PurpleCompAuton.hpp"
+
 #include "pros/motors.hpp"
 
 

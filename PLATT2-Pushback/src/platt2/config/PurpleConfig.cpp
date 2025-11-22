@@ -69,8 +69,29 @@ std::shared_ptr<robot::Robot> PurpleConfig::buildRobot(robot::AutonConfig auton,
         driver_profile = std::move(quinn_profile);
     }
 
+        // Build auton routine
+    std::unique_ptr<auton::IAuton> auton_routine;
+
+    if(auton == robot::SKILLS_1 ){
+        std::unique_ptr<auton::PurpleCompAuton> purple_comp_auton = std::make_unique<auton::PurpleCompAuton>();
+        auton_routine = std::move(purple_comp_auton);
+    }
+    else {
+        
+    }
+
     // build robot object
-    std::shared_ptr<robot::Robot> robot{std::make_shared<robot::Robot>(XDrive_subsystem, odom_subsystem, holonomic_contol_subsystem, intake_subsystem, alliance, platt2::robot::RobotConfig::PURPLE, auton, driver_profile)};
+    std::shared_ptr<robot::Robot> robot{std::make_shared<robot::Robot>(
+        XDrive_subsystem, 
+        odom_subsystem, 
+        holonomic_contol_subsystem, 
+        intake_subsystem, 
+        alliance, 
+        platt2::robot::RobotConfig::PURPLE, 
+        auton, 
+        driver_profile,
+        auton_routine
+    )};
 
     return robot;
 

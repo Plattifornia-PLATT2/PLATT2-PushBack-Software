@@ -2,6 +2,7 @@
 #include "platt2/EAllianceConfig.hpp"
 #include "platt2/EAutonConfig.hpp"
 #include "platt2/ERobotConfig.hpp"
+#include "platt2/auton/IAuton.hpp"
 #include "pros/misc.h"
 #include "pros/misc.hpp"
 #include "pros/rtos.hpp"
@@ -25,12 +26,14 @@ namespace robot{
         platt2::robot::AllianceConfig alliance_config,
         platt2::robot::RobotConfig robot_config,
         platt2::robot::AutonConfig auton_config,
-        std::unique_ptr<profiles::DriverProfile>& driver_profile
+        std::unique_ptr<profiles::DriverProfile>& driver_profile,
+        std::unique_ptr<auton::IAuton>& auton_routine
     ) : holonomicDrive_subsystem{xdrive_subsystem},
         odom_subsystem{odometry_subsystem},
         holonomic_controller{holonomic_controller},
         intake_subsystem{intake_subsystem},
-        driver_profile{std::move(driver_profile)}
+        driver_profile{std::move(driver_profile)},
+        auton_routine{std::move(auton_routine)}
     {
         current_alliance = alliance_config;
         current_auton_route = auton_config;

@@ -1,5 +1,7 @@
 #include "platt2/config/PinkConfig.hpp"
+#include "platt2/EAutonConfig.hpp"
 #include "platt2/EDriverConfig.hpp"
+#include "platt2/auton/PinkCompAuton.hpp"
 #include "platt2/profiles/DriverProfile.hpp"
 #include "platt2/profiles/JonProfile.hpp"
 #include "platt2/profiles/QuinnProfile.hpp"
@@ -73,8 +75,29 @@ std::shared_ptr<robot::Robot> PinkConfig::buildRobot(robot::AutonConfig auton, r
         driver_profile = std::move(quinn_profile);
     }
 
+    // Build auton routine
+    std::unique_ptr<auton::IAuton> auton_routine;
+
+    if(auton == robot::SKILLS_1 ){
+        std::unique_ptr<auton::PinkCompAuton> pink_comp_auton = std::make_unique<auton::PinkCompAuton>();
+        auton_routine = std::move(pink_comp_auton);
+    }
+    else {
+        
+    }
+
     // build robot object
-    std::shared_ptr<robot::Robot> robot{std::make_shared<robot::Robot>(XDrive_subsystem, odom_subsystem, holonomic_contol_subsystem, intake_subsystem, alliance, platt2::robot::RobotConfig::PINK, auton, driver_profile)};
+    std::shared_ptr<robot::Robot> robot{std::make_shared<robot::Robot>(
+        XDrive_subsystem, 
+        odom_subsystem, 
+        holonomic_contol_subsystem, 
+        intake_subsystem, 
+        alliance, 
+        platt2::robot::RobotConfig::PINK, 
+        auton, 
+        driver_profile, 
+        auton_routine
+    )};
 
     return robot;
 

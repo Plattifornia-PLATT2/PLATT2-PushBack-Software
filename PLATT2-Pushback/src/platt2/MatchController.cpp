@@ -1,11 +1,4 @@
 #include "platt2/MatchController.hpp"
-#include "EAllianceConfig.hpp"
-#include "ERobotConfig.hpp"
-#include "platt2/config/PinkConfig.hpp"
-#include "platt2/config/PurpleConfig.hpp"
-#include "platt2/menu/menu.hpp"
-#include "pros/rtos.hpp"
-#include <memory>
 
 namespace platt2{
 
