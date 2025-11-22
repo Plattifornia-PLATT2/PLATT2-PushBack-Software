@@ -3,6 +3,9 @@
 
 #include <memory>
 
+#include "platt2/EAllianceConfig.hpp"
+#include "platt2/EAutonConfig.hpp"
+#include "platt2/EDriverConfig.hpp"
 #include "platt2/robot/Robot.hpp"
 
 namespace platt2{
@@ -14,7 +17,7 @@ namespace config{
 
         virtual ~IConfig() = default;
 
-        virtual std::shared_ptr<robot::Robot> buildRobot() = 0;
+        virtual std::shared_ptr<robot::Robot> buildRobot(robot::AutonConfig auton, robot::DriverProfile profile, robot::AllianceConfig alliance) = 0;
     };
 }
 }
