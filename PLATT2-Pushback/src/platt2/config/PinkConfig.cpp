@@ -81,6 +81,7 @@ std::shared_ptr<robot::Robot> PinkConfig::buildRobot(robot::AutonConfig auton, r
     if(auton == robot::SKILLS_1 ){
         std::unique_ptr<auton::PinkCompAuton> pink_comp_auton = std::make_unique<auton::PinkCompAuton>();
         auton_routine = std::move(pink_comp_auton);
+        auton_routine->init(holonomic_contol_subsystem, odom_subsystem, intake_subsystem);
     }
     else {
         
