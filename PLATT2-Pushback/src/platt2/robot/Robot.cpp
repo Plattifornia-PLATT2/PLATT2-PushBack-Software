@@ -32,9 +32,9 @@ namespace robot{
         intake_subsystem{std::move(intake_subsystem)},
         driver_profile{std::move(driver_profile)}
     {
-        current_alliance = NO_ALLIANCE;
-        current_auton_route = NO_AUTON;
-        current_config = NO_ROBOT;
+        current_alliance = alliance_config;
+        current_auton_route = auton_config;
+        current_config = robot_config;
     }
 
     void Robot::driverControl(){
