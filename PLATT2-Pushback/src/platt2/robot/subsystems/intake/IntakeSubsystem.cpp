@@ -56,6 +56,22 @@ namespace intake{
             }
         }
     }
+
+    void IntakeSubsystem::toggle_ed_mech_piston(){
+        ed_mech_piston_state = !ed_mech_piston_state;
+        ed_mech_piston->set_value(ed_mech_piston_state);
+    }
+
+    void IntakeSubsystem::toggle_upper_conveyor_height_piston(){
+        upper_conveyor_height_piston_state = !upper_conveyor_height_piston_state;
+        upper_conveyor_height_piston->set_value(upper_conveyor_height_piston_state);
+    }
+
+    void IntakeSubsystem::toggle_conveyor_stopper_piston(){
+        conveyor_stopper_piston_state = !conveyor_stopper_piston_state;
+        conveyor_stopper_piston->set_value(conveyor_stopper_piston_state);
+    }
+
 }
 }
 }

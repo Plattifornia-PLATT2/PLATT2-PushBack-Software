@@ -73,13 +73,21 @@ namespace robot{
                 intake_subsystem->toggle_ed_mech_piston();
             }
 
+            if(controller.get_digital_new_press(driver_profile->highScore_toggle)){
+                intake_subsystem->toggle_upper_conveyor_height_piston();
+            }
+
+            if(controller.get_digital_new_press(driver_profile->stopper_toggle)){
+                intake_subsystem->toggle_conveyor_stopper_piston();
+            }  
+
             pros::delay(10);
         }
     
     }
 
     void Robot::autonControl(){
-    auton_routine->run();
+        auton_routine->run();
     }
 
 }

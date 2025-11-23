@@ -36,9 +36,16 @@ namespace intake{
         std::unique_ptr<pros::adi::DigitalOut> upper_conveyor_height_piston;
         std::unique_ptr<pros::adi::DigitalOut> conveyor_stopper_piston;
 
+        bool conveyor_stopper_piston_state = false;
+        bool conveyor_stopper_piston_lastState = false;
+        bool ed_mech_piston_state = false;
+        bool ed_mech_piston_lastState = false;
+        bool upper_conveyor_height_piston_state = false;
+        bool upper_conveyor_height_piston_lastState = false;
 
         public:
         void move_intake(IntakeDirection direction);
+
         void toggle_ed_mech_piston();
         void toggle_upper_conveyor_height_piston();
         void toggle_conveyor_stopper_piston();
