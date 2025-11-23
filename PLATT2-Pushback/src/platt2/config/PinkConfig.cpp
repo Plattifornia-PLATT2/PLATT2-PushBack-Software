@@ -59,7 +59,20 @@ std::shared_ptr<robot::Robot> PinkConfig::buildRobot(robot::AutonConfig auton, r
     std::shared_ptr<robot::subsystems::odometry::Odometry> odom_subsystem = std::make_shared<robot::subsystems::odometry::Odometry>();
 
     // intake subsystem
-    std::shared_ptr<robot::subsystems::intake::IntakeSubsystem> intake_subsystem = std::make_shared<robot::subsystems::intake::IntakeSubsystem>(std::move(front_intake_motor), std::move(middle_intake_motor), std::move(rear_intake_motor), std::move(upper_conveyor_motor));
+    std::unique_ptr<pros::adi::DigitalOut> ed_mech_piston{std::make_unique<pros::adi::DigitalOut>(ED_MECH_PISTON_PORT)};
+    std::unique_ptr<pros::adi::DigitalOut> upper_conveyor_height_piston{std::make_unique<pros::adi::DigitalOut>(UPPER_CONVEYOR_HEIGHT_PISTON_PORT)};
+    std::unique_ptr<pros::adi::DigitalOut> conveyor_stopper_piston{std::make_unique<pros::adi::DigitalOut>(CONVEYOR_STOPPER_PISTON_PORT)};
+
+    std::shared_ptr<robot::subsystems::intake::IntakeSubsystem> intake_subsystem = std::make_shared<robot::subsystems::intake::IntakeSubsystem>(
+        std::move(front_intake_motor), 
+        std::move(middle_intake_motor), 
+        std::move(rear_intake_motor), 
+        std::move(upper_conveyor_motor),
+        std::move(ed_mech_piston),
+        std::move(upper_conveyor_height_piston),
+        std::move(conveyor_stopper_piston)
+    );
+    
     //holonomic control system
     std::unique_ptr<robot::pid::PID>position_pid = std::make_unique<robot::pid::PID>(position_dt, position_max, position_min, position_Kp, position_Kd, position_Ki);
     std::unique_ptr<robot::pid::PID>heading_pid = std::make_unique<robot::pid::PID>(heading_dt, heading_max, heading_min, heading_Kp, heading_Kd, heading_Ki);

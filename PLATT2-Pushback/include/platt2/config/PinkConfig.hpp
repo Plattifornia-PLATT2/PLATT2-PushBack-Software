@@ -54,7 +54,12 @@ class PinkConfig : public IConfig {
     // ** Color Sort Ports **
     static constexpr int OPTICAL_SENSOR_PORT{18};
 
-    // ** PID Tuning Values **
+    // ** Pneumatics **
+    static constexpr int ED_MECH_PISTON_PORT{1};
+    static constexpr int UPPER_CONVEYOR_HEIGHT_PISTON_PORT{2};
+    static constexpr int CONVEYOR_STOPPER_PISTON_PORT{3};
+
+    // ** Linear PID Tuning Values **
     static constexpr double position_dt{0.01};
     static constexpr double position_max{0.4};
     static constexpr double position_min{-0.4};
@@ -62,6 +67,7 @@ class PinkConfig : public IConfig {
     static constexpr double position_Kd{0.006};
     static constexpr double position_Ki{0};
 
+    // ** Angular PID Tuning Values **
     static constexpr double heading_dt{0.01};
     static constexpr double heading_max{0.3};
     static constexpr double heading_min{-0.3};
