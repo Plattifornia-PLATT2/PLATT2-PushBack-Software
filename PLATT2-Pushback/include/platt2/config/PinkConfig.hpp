@@ -12,6 +12,7 @@
 #include "platt2/EAutonConfig.hpp"
 #include "platt2/ERobotConfig.hpp"
 #include "platt2/profiles/JonProfile.hpp"
+#include "platt2/auton/PinkSkillsAuton.hpp"
 
 #include "pros/motors.hpp"
 
