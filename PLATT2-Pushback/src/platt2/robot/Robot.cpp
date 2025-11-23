@@ -59,18 +59,23 @@ namespace robot{
             // Send to subsystem
             holonomicDrive_subsystem->moveVector(movement);
 
-            if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1)){
+            if(controller.get_digital(driver_profile->frontIntake_IN)){
                 intake_subsystem->move_intake(subsystems::intake::IntakeDirection::IN);
             }
-            else if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L2)){
+            else if(controller.get_digital(driver_profile->frontIntake_OUT)){
                 intake_subsystem->move_intake(subsystems::intake::IntakeDirection::OUT);
             }
             else{
                 intake_subsystem->move_intake(subsystems::intake::IntakeDirection::STOP);
             }
 
+            if(controller.get_digital_new_press(driver_profile->edMech_toggle)){
+                intake_subsystem->toggle_ed_mech_piston();
+            }
+
             pros::delay(10);
         }
+    
     }
 
     void Robot::autonControl(){
