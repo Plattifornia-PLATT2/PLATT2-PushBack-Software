@@ -1,6 +1,7 @@
 #ifndef INTAKESUBSYSTEM_HPP
 #define INTAKESUBSYSTEM_HPP
 
+#include "pros/adi.hpp"
 #include "pros/motors.hpp"
 #include <memory>
 namespace platt2{
@@ -23,15 +24,34 @@ namespace intake{
 
         private:
         double intake_speed{600};
-    
+        
+        // ** Motors **
         std::unique_ptr<pros::Motor> front_intake_motor;
         std::unique_ptr<pros::Motor> rear_intake_motor;
         std::unique_ptr<pros::Motor> middle_intake_motor;
         std::unique_ptr<pros::Motor> upper_conveyor_motor;
+
+        // ** Solenoids **
+        std::unique_ptr<pros::adi::DigitalOut> ed_mech_piston;
+        std::unique_ptr<pros::adi::DigitalOut> upper_conveyor_height_piston;
+        std::unique_ptr<pros::adi::DigitalOut> conveyor_stopper_piston;
+
+
         public:
         void move_intake(IntakeDirection direction);
+        void toggle_ed_mech_piston();
+        void toggle_upper_conveyor_height_piston();
+        void toggle_conveyor_stopper_piston();
 
-        IntakeSubsystem(std::unique_ptr<pros::Motor>front_intake, std::unique_ptr<pros::Motor>rear_intake, std::unique_ptr<pros::Motor>mid_intake, std::unique_ptr<pros::Motor>upper_conveyor);
+        IntakeSubsystem(
+            std::unique_ptr<pros::Motor>front_intake, 
+            std::unique_ptr<pros::Motor>rear_intake, 
+            std::unique_ptr<pros::Motor>mid_intake, 
+            std::unique_ptr<pros::Motor>upper_conveyor,
+            std::unique_ptr<pros::adi::DigitalOut> ed_mech_piston,
+            std::unique_ptr<pros::adi::DigitalOut> upper_conveyor_height_piston,
+            std::unique_ptr<pros::adi::DigitalOut> conveyor_stopper_piston
+        );
 
 
     };
