@@ -16,7 +16,6 @@
 #include "platt2/profiles/QuinnProfile.hpp"
 
 #include "platt2/auton/PurpleCompAuton.hpp"
-#include "platt2/auton/PurpleSkillsAuton.hpp"
 
 #include "pros/motors.hpp"
 

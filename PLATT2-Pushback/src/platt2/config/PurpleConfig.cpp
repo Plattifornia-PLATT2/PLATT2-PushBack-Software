@@ -1,6 +1,4 @@
 #include "platt2/config/PurpleConfig.hpp"
-#include "platt2/auton/PurpleSkillsAuton.hpp"
-#include <memory>
 
 namespace platt2{
 namespace config{
@@ -74,15 +72,13 @@ std::shared_ptr<robot::Robot> PurpleConfig::buildRobot(robot::AutonConfig auton,
         // Build auton routine
     std::unique_ptr<auton::IAuton> auton_routine;
 
-    if(auton == robot::COMP_1 ){
+    if(auton == robot::SKILLS_1 ){
         std::unique_ptr<auton::PurpleCompAuton> purple_comp_auton = std::make_unique<auton::PurpleCompAuton>();
         auton_routine = std::move(purple_comp_auton);
         auton_routine->init(holonomic_contol_subsystem, odom_subsystem, intake_subsystem);
     }
     else {
-        std::unique_ptr<auton::PurpleSkillsAuton> purple_skills_auton = std::make_unique<auton::PurpleSkillsAuton>();
-        auton_routine = std::move(purple_skills_auton);
-        auton_routine->init(holonomic_contol_subsystem, odom_subsystem, intake_subsystem);
+        
     }
 
     // build robot object
