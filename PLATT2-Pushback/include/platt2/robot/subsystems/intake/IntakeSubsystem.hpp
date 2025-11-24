@@ -35,6 +35,7 @@ namespace intake{
         std::unique_ptr<pros::adi::DigitalOut> ed_mech_piston;
         std::unique_ptr<pros::adi::DigitalOut> upper_conveyor_height_piston;
         std::unique_ptr<pros::adi::DigitalOut> conveyor_stopper_piston;
+        std::unique_ptr<pros::adi::DigitalOut> rake_mech_piston;
 
         bool conveyor_stopper_piston_state = false;
         bool conveyor_stopper_piston_lastState = false;
@@ -42,6 +43,7 @@ namespace intake{
         bool ed_mech_piston_lastState = false;
         bool upper_conveyor_height_piston_state = false;
         bool upper_conveyor_height_piston_lastState = false;
+        bool rake_mech_piston_state = false;
 
         public:
         void move_intake(IntakeDirection direction);
@@ -49,6 +51,7 @@ namespace intake{
         void toggle_ed_mech_piston();
         void toggle_upper_conveyor_height_piston();
         void toggle_conveyor_stopper_piston();
+        void toggle_rake_mech_piston();
 
         IntakeSubsystem(
             std::unique_ptr<pros::Motor>front_intake, 
@@ -57,7 +60,8 @@ namespace intake{
             std::unique_ptr<pros::Motor>upper_conveyor,
             std::unique_ptr<pros::adi::DigitalOut> ed_mech_piston,
             std::unique_ptr<pros::adi::DigitalOut> upper_conveyor_height_piston,
-            std::unique_ptr<pros::adi::DigitalOut> conveyor_stopper_piston
+            std::unique_ptr<pros::adi::DigitalOut> conveyor_stopper_piston,
+            std::unique_ptr<pros::adi::DigitalOut> rake_mech_piston
         );
 
 

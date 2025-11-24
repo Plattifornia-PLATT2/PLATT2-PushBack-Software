@@ -15,6 +15,7 @@ namespace profiles{
         highScore_toggle = pros::E_CONTROLLER_DIGITAL_R2;
         stopper_toggle = pros::E_CONTROLLER_DIGITAL_UP;
         colorSort_toggle = pros::E_CONTROLLER_DIGITAL_DOWN;
+        rakeMech_toggle = pros::E_CONTROLLER_DIGITAL_LEFT;
     }
     };
 
