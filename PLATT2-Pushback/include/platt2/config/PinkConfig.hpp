@@ -58,6 +58,10 @@ class PinkConfig : public IConfig {
     static constexpr int ED_MECH_PISTON_PORT{1};
     static constexpr int UPPER_CONVEYOR_HEIGHT_PISTON_PORT{2};
     static constexpr int CONVEYOR_STOPPER_PISTON_PORT{3};
+    static constexpr int RAKE_MECH_PISTON_PORT{4};
+
+    // ** VEX IMU Port **
+    static constexpr int VEX_IMU_PORT{11};
 
     // ** Linear PID Tuning Values **
     static constexpr double position_dt{0.01};

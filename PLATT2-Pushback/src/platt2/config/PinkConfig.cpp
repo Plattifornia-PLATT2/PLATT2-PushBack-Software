@@ -6,6 +6,7 @@
 #include "platt2/profiles/DriverProfile.hpp"
 #include "platt2/profiles/JonProfile.hpp"
 #include "platt2/profiles/QuinnProfile.hpp"
+#include "pros/imu.hpp"
 #include <memory>
 
 
@@ -56,12 +57,14 @@ std::shared_ptr<robot::Robot> PinkConfig::buildRobot(robot::AutonConfig auton, r
     std::shared_ptr<platt2::robot::subsystems::holonomicDrive::XDrive> XDrive_subsystem = std::make_shared<platt2::robot::subsystems::holonomicDrive::XDrive>(std::move(modules));
 
     // odom subsystem
-    std::shared_ptr<robot::subsystems::odometry::Odometry> odom_subsystem = std::make_shared<robot::subsystems::odometry::Odometry>();
+    std::unique_ptr<pros::IMU> vex_imu = std::make_unique<pros::IMU>(VEX_IMU_PORT);
+    std::shared_ptr<robot::subsystems::odometry::Odometry> odom_subsystem = std::make_shared<robot::subsystems::odometry::Odometry>(std::move(vex_imu));
 
     // intake subsystem
     std::unique_ptr<pros::adi::DigitalOut> ed_mech_piston{std::make_unique<pros::adi::DigitalOut>(ED_MECH_PISTON_PORT)};
     std::unique_ptr<pros::adi::DigitalOut> upper_conveyor_height_piston{std::make_unique<pros::adi::DigitalOut>(UPPER_CONVEYOR_HEIGHT_PISTON_PORT)};
     std::unique_ptr<pros::adi::DigitalOut> conveyor_stopper_piston{std::make_unique<pros::adi::DigitalOut>(CONVEYOR_STOPPER_PISTON_PORT)};
+    std::unique_ptr<pros::adi::DigitalOut> rake_mech_piston{std::make_unique<pros::adi::DigitalOut>(RAKE_MECH_PISTON_PORT)};
 
     std::shared_ptr<robot::subsystems::intake::IntakeSubsystem> intake_subsystem = std::make_shared<robot::subsystems::intake::IntakeSubsystem>(
         std::move(front_intake_motor), 
@@ -70,7 +73,8 @@ std::shared_ptr<robot::Robot> PinkConfig::buildRobot(robot::AutonConfig auton, r
         std::move(upper_conveyor_motor),
         std::move(ed_mech_piston),
         std::move(upper_conveyor_height_piston),
-        std::move(conveyor_stopper_piston)
+        std::move(conveyor_stopper_piston),
+        std::move(rake_mech_piston)
     );
     
     //holonomic control system
