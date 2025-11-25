@@ -27,6 +27,7 @@ namespace odometry{
         double getX();
         double getY();
         double getHeading();
+        void resetHeading();
         Odometry(std::unique_ptr<pros::IMU> vex_imu);
     };
 

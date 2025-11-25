@@ -88,7 +88,14 @@ namespace robot{
             if(controller.get_digital_new_press(driver_profile->rakeMech_toggle)){
                 intake_subsystem->toggle_rake_mech_piston();
             }
+            
+            if(controller.get_digital_new_press(driver_profile->fieldOriented_toggle)){
 
+            }
+
+            if(controller.get_digital_new_press(driver_profile->heading_reset)){
+                odom_subsystem->resetHeading();
+            }
             pros::delay(10);
         }
     

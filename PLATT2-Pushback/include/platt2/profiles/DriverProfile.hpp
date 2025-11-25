@@ -22,6 +22,10 @@ namespace profiles{
 
         // Color Sort
         pros::controller_digital_e_t colorSort_toggle;
+
+        // Field Oriented Drive
+        pros::controller_digital_e_t fieldOriented_toggle;
+        pros::controller_digital_e_t heading_reset;
     };
 }
 }

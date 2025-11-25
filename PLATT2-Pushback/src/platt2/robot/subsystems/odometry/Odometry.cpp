@@ -43,6 +43,12 @@ double Odometry::getHeading() {
     return -heading; // radians in [-pi, pi]
 }
 
+void Odometry::resetHeading() {
+    if (this->vex_imu) {
+        this->vex_imu->set_heading(0);
+    }
+}
+
 Odometry::Odometry(std::unique_ptr<pros::IMU> vex_imu)
     : otos(0, 0), vex_imu(std::move(vex_imu)) {
   if (this->vex_imu) {

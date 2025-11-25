@@ -16,6 +16,8 @@ namespace profiles{
         stopper_toggle = pros::E_CONTROLLER_DIGITAL_UP;
         colorSort_toggle = pros::E_CONTROLLER_DIGITAL_DOWN;
         rakeMech_toggle = pros::E_CONTROLLER_DIGITAL_LEFT;
+        fieldOriented_toggle = pros::E_CONTROLLER_DIGITAL_RIGHT;
+        heading_reset = pros::E_CONTROLLER_DIGITAL_B;
     }
     };
 
