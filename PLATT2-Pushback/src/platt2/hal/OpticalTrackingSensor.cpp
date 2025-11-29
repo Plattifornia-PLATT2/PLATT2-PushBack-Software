@@ -1,11 +1,17 @@
 #include "PLATT2/hal/OpticalTrackingSensor.hpp"
+#include "pros/imu.hpp"
 #include "pros/rtos.hpp"
 #include "pros/screen.h"
 #include "pros/screen.hpp"
 //#include <cstdint>
+#include <cstdint>
+#include <cstdio>
 #include <exception>
 #include <math.h>
+#include <memory>
+#include <string>
 #include <sys/types.h>
+#include <vector>
 
 namespace platt2{
 
@@ -15,14 +21,22 @@ static void taskThunk(void *p) {
     reinterpret_cast<OpticalTrackingSensor*>(p)->readData();
 }
 
-OpticalTrackingSensor::OpticalTrackingSensor(double xOffset, double yOffset):
- m_otosTask(taskThunk, this)
+OpticalTrackingSensor::OpticalTrackingSensor(double xOffset, double yOffset, std::unique_ptr<pros::IMU> vex_imu):
+ m_otosTask(taskThunk, this),
+ vex_imu(std::move(vex_imu))
 {
     this->xOffset = xOffset;
     this->yOffset = yOffset;
     xPos = 0;
     yPos = 0;
     heading = 0;
+
+    if(vex_imu){
+        this->vex_imu->reset();
+        while(vex_imu->is_calibrating()){
+            pros::delay(10);
+        }
+    }
 }
 
 double OpticalTrackingSensor::getXPosition(){
@@ -37,11 +51,49 @@ double OpticalTrackingSensor::getHeading(){
     return heading;
 }
 
+void OpticalTrackingSensor::resetHeading(){
+    if(vex_imu){
+        vex_imu->set_heading(0);
+        localHeading = 0;
+    }
+}
+
+double OpticalTrackingSensor::getBoundedHeading(){
+// return otos.getHeading();
+    double heading = vex_imu->get_heading();
+    /*// Normalize in case heading is outside 0–360
+    while (heading < 0)   heading += 360;
+    while (heading >= 360) heading -= 360;
+
+    // Convert to -180 to 180
+    if (heading > 180)
+        heading -= 360;*/
+    heading = heading * M_PI / 180.0;        // convert to radians
+
+    // wrap to [-pi, pi]
+    heading = fmod(heading + M_PI, 2.0*M_PI);
+    if (heading < 0) heading += 2.0*M_PI;
+    heading -= M_PI;
+
+    return -heading; // radians in [-pi, pi]
+}
+
 void OpticalTrackingSensor::readData(){
 
     double tempHeading;
+    double imuHeading;
     std::string fullRead = "";
+    std::string writeString = "";
     while(true){
+
+        imuHeading = getBoundedHeading();
+        writeString = "/H:" + std::to_string(imuHeading) + ";\n";
+        std::vector<uint8_t> writeData (writeString.begin(), writeString.end());
+
+        if(m_serialInterface.get_write_free() > 0){
+            m_serialInterface.write(reinterpret_cast<uint8_t*>(writeData.data()), writeData.size());
+            pros::delay(5);
+        }
 
         fullRead = "";
         std::string xPosStr = "";

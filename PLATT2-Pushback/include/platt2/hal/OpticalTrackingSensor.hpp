@@ -3,6 +3,8 @@
 
 #include "pros/serial.hpp"
 #include "pros/screen.hpp"
+#include "pros/imu.hpp"
+#include <memory>
 #include <string>
 #include <stdint.h>
 #include <iostream>
@@ -18,6 +20,8 @@ private:
 
     pros::Serial m_serialInterface = pros::Serial(12, BAUD_RATE);
 
+    std::unique_ptr<pros::IMU> vex_imu;
+
     pros::Task m_otosTask;
 
     double xOffset;
@@ -30,8 +34,12 @@ private:
 
     double heading;
 
+    double localHeading;
+
+    double getBoundedHeading();
+
 public:
-    OpticalTrackingSensor(double xOffset, double yOffset);
+    OpticalTrackingSensor(double xOffset, double yOffset, std::unique_ptr<pros::IMU> vex_imu);
 
     void readData();
 
@@ -40,6 +48,8 @@ public:
     double getYPosition();
 
     double getHeading();
+
+    void resetHeading();
 };
 
 } // namespace hal
