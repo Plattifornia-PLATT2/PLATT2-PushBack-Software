@@ -1,43 +1,64 @@
 #include "platt2/robot/subsystems/odometry/Odometry.hpp"
 #include "OdometryPosition.hpp"
-//#include "pros/rtos.hpp"
-//#include <memory>
+#include <memory>
+#include "pros/rtos.hpp"
+#include <math.h>
 
+namespace platt2 {
 
+namespace robot {
 
-namespace platt2{
+namespace subsystems {
 
-namespace robot{
+namespace odometry {
 
-namespace subsystems{
+OdometryPosition Odometry::getPos() {
+  OdometryPosition curPos;
+  curPos.x = otos.getXPosition();
+  curPos.y = otos.getYPosition();
+  curPos.heading = otos.getHeading();
 
-namespace odometry{
+  return curPos;
+}
 
-    OdometryPosition Odometry::getPos(){
-        OdometryPosition curPos;
-        curPos.x = otos.getXPosition();
-        curPos.y = otos.getYPosition();
-        curPos.heading = otos.getHeading();
+double Odometry::getX() { return otos.getXPosition(); }
+double Odometry::getY() { return otos.getYPosition(); }
+double Odometry::getHeading() {
+  // return otos.getHeading();
+    double heading = vex_imu->get_heading();
+    /*// Normalize in case heading is outside 0–360
+    while (heading < 0)   heading += 360;
+    while (heading >= 360) heading -= 360;
 
-        return curPos;
-    }
+    // Convert to -180 to 180
+    if (heading > 180)
+        heading -= 360;*/
+    heading = heading * M_PI / 180.0;        // convert to radians
 
-    double Odometry::getX(){
-       return otos.getXPosition();
-    }
-    double Odometry::getY(){
-        return otos.getYPosition();
-    }
-    double Odometry::getHeading(){
-        return otos.getHeading();
-    }
+    // wrap to [-pi, pi]
+    heading = fmod(heading + M_PI, 2.0*M_PI);
+    if (heading < 0) heading += 2.0*M_PI;
+    heading -= M_PI;
 
-    Odometry::Odometry():
-    otos(0,0)
-    {
-         
+    return -heading; // radians in [-pi, pi]
+}
+
+void Odometry::resetHeading() {
+    if (this->vex_imu) {
+        this->vex_imu->set_heading(0);
     }
 }
+
+Odometry::Odometry(std::unique_ptr<pros::IMU> vex_imu)
+    : otos(0, 0), vex_imu(std::move(vex_imu)) {
+  if (this->vex_imu) {
+    this->vex_imu->reset();
+    while (this->vex_imu->is_calibrating()) {
+      pros::delay(10);
+    }
+  }
 }
-}
-}
+} // namespace odometry
+} // namespace subsystems
+} // namespace robot
+} // namespace platt2

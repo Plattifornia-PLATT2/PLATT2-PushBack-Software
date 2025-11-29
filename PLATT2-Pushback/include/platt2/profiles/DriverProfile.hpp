@@ -18,9 +18,14 @@ namespace profiles{
         pros::controller_digital_e_t edMech_toggle;
         pros::controller_digital_e_t highScore_toggle;
         pros::controller_digital_e_t stopper_toggle;
+        pros::controller_digital_e_t rakeMech_toggle;
 
         // Color Sort
         pros::controller_digital_e_t colorSort_toggle;
+
+        // Field Oriented Drive
+        pros::controller_digital_e_t fieldOriented_toggle;
+        pros::controller_digital_e_t heading_reset;
     };
 }
 }

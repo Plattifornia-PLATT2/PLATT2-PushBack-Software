@@ -4,6 +4,8 @@
 //#include "api.h"
 #include "platt2/hal/OpticalTrackingSensor.hpp"
 #include "platt2/robot/subsystems/odometry/OdometryPosition.hpp"
+#include "pros/imu.hpp"
+#include <memory>
 //#include "pros/rtos.hpp"
 
 
@@ -18,13 +20,15 @@ namespace odometry{
     class Odometry{
         private:
         hal::OpticalTrackingSensor otos;
+        std::unique_ptr<pros::IMU> vex_imu;
 
         public:
         OdometryPosition getPos();
         double getX();
         double getY();
         double getHeading();
-        Odometry();
+        void resetHeading();
+        Odometry(std::unique_ptr<pros::IMU> vex_imu);
     };
 
 };

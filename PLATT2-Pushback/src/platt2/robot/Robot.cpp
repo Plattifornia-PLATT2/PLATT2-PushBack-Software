@@ -6,6 +6,8 @@
 #include "pros/misc.h"
 #include "pros/misc.hpp"
 #include "pros/rtos.hpp"
+#include "pros/screen.h"
+#include "pros/screen.hpp"
 #include "subsystems/holonomicDrive/XDrive.hpp"
 #include "subsystems/intake/IntakeSubsystem.hpp"
 #include "subsystems/odometry/Odometry.hpp"
@@ -45,6 +47,8 @@ namespace robot{
         pros::Controller controller{pros::Controller(pros::E_CONTROLLER_MASTER)};
 
         while(true){
+            pros::screen::print(pros::E_TEXT_MEDIUM_CENTER,6, "IMU Heading %f", odom_subsystem->getHeading());
+            std::cout << "IMU Heading: " << odom_subsystem->getHeading() << std::endl;
             double leftX = double(controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y));
             double leftY = double(-controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_X));
             double rightX = double(controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X));
@@ -59,22 +63,46 @@ namespace robot{
             // Send to subsystem
             holonomicDrive_subsystem->moveVector(movement);
 
-            if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1)){
+            if(controller.get_digital(driver_profile->frontIntake_IN)){
                 intake_subsystem->move_intake(subsystems::intake::IntakeDirection::IN);
             }
-            else if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L2)){
+            else if(controller.get_digital(driver_profile->frontIntake_OUT)){
                 intake_subsystem->move_intake(subsystems::intake::IntakeDirection::OUT);
             }
             else{
                 intake_subsystem->move_intake(subsystems::intake::IntakeDirection::STOP);
             }
 
+            if(controller.get_digital_new_press(driver_profile->edMech_toggle)){
+                intake_subsystem->toggle_ed_mech_piston();
+            }
+
+            if(controller.get_digital_new_press(driver_profile->highScore_toggle)){
+                intake_subsystem->toggle_upper_conveyor_height_piston();
+            }
+
+            if(controller.get_digital_new_press(driver_profile->stopper_toggle)){
+                intake_subsystem->toggle_conveyor_stopper_piston();
+            }  
+            
+            if(controller.get_digital_new_press(driver_profile->rakeMech_toggle)){
+                intake_subsystem->toggle_rake_mech_piston();
+            }
+            
+            if(controller.get_digital_new_press(driver_profile->fieldOriented_toggle)){
+
+            }
+
+            if(controller.get_digital_new_press(driver_profile->heading_reset)){
+                odom_subsystem->resetHeading();
+            }
             pros::delay(10);
         }
+    
     }
 
     void Robot::autonControl(){
-    auton_routine->run();
+        auton_routine->run();
     }
 
 }

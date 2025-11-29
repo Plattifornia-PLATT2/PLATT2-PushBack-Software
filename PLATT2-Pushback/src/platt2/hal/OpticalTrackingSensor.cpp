@@ -97,7 +97,6 @@ void OpticalTrackingSensor::readData(){
 
 
         //std::cout << xPosStr << yPosStr << hPosStr << std::endl;
-        pros::screen::erase();
         pros::screen::print(pros::E_TEXT_MEDIUM_CENTER, 1, "X Pos: %s", xPosStr);
         pros::screen::print(pros::E_TEXT_MEDIUM_CENTER, 2, "Y Pos: %s", yPosStr);
         pros::screen::print(pros::E_TEXT_MEDIUM_CENTER, 3, "Heading: %f", heading*180/M_PI);
