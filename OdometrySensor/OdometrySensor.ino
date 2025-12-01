@@ -31,6 +31,17 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
 
+  if (rs485Serial.available()) {
+    String line = rs485Serial.readStringUntil('\n');
+    if (line.startsWith("H:")) {
+      double heading = line.substring(2).toDouble();
+      sfe_otos_pose2d_t newPos;
+      odomSensor.getPosition(newPos);
+      newPos.h = heading;
+      odomSensor.setPosition(newPos);
+    }
+  }
+
   sfe_otos_pose2d_t currentPos;
   odomSensor.getPosition(currentPos);
 
@@ -46,4 +57,7 @@ void loop() {
   Serial.println(outputString);
 
   rs485Serial.print(outputString);
+
+  delay(10);
 }
+
