@@ -20,6 +20,7 @@ namespace odometry{
     class Odometry{
         private:
         hal::OpticalTrackingSensor otos;
+        std::unique_ptr<pros::IMU> vex_imu;
 
         public:
         OdometryPosition getPos();
