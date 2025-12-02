@@ -47,8 +47,8 @@ namespace robot{
         pros::Controller controller{pros::Controller(pros::E_CONTROLLER_MASTER)};
 
         while(true){
-            pros::screen::print(pros::E_TEXT_MEDIUM_CENTER,6, "IMU Heading %f", odom_subsystem->getHeading());
-            std::cout << "IMU Heading: " << odom_subsystem->getHeading() << std::endl;
+          // pros::screen::print(pros::E_TEXT_MEDIUM_CENTER,6, "IMU Heading %f", odom_subsystem->getHeading());
+           // std::cout << "IMU Heading: " << odom_subsystem->getHeading() << std::endl;
             double leftX = double(controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y));
             double leftY = double(-controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_X));
             double rightX = double(controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X));

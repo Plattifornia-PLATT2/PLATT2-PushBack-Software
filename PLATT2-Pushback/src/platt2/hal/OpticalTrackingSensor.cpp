@@ -1,5 +1,6 @@
 #include "PLATT2/hal/OpticalTrackingSensor.hpp"
 #include "pros/imu.hpp"
+#include "pros/motors.h"
 #include "pros/rtos.hpp"
 #include "pros/screen.h"
 #include "pros/screen.hpp"
@@ -7,6 +8,7 @@
 #include <cstdint>
 #include <cstdio>
 #include <exception>
+#include <iostream>
 #include <math.h>
 #include <memory>
 #include <string>
@@ -36,6 +38,7 @@ OpticalTrackingSensor::OpticalTrackingSensor(double xOffset, double yOffset, std
         while(vex_imu->is_calibrating()){
             pros::delay(10);
         }
+        vex_imu->set_heading(90.0);
     }
 }
 
@@ -85,11 +88,14 @@ void OpticalTrackingSensor::readData(){
     std::string fullRead = "";
     std::string writeString = "";
     while(true){
-
-        imuHeading = getBoundedHeading();
-        writeString = "/H:" + std::to_string(imuHeading) + ";\n";
+        pros::screen::erase();
+        writeString = "";
+        imuHeading = vex_imu->get_heading();
+        imuHeading = std::round(imuHeading * 100.0) / 100.0;
+        std::cout<<"IMU Heading"<<imuHeading<<std::endl;
+        writeString = "/H:" + std::to_string(imuHeading) + ";";
         std::vector<uint8_t> writeData (writeString.begin(), writeString.end());
-
+        std::cout<<writeData.data()<<std::endl;
         if(m_serialInterface.get_write_free() > 0){
             m_serialInterface.write(reinterpret_cast<uint8_t*>(writeData.data()), writeData.size());
             pros::delay(5);
@@ -99,11 +105,15 @@ void OpticalTrackingSensor::readData(){
         std::string xPosStr = "";
         std::string yPosStr = "";
         std::string hPosStr = "";
-        
+        while(!m_serialInterface.get_read_avail()){
+            pros::delay(10);
+        }
+
         while(m_serialInterface.get_read_avail()){
             char byteRead = static_cast<char>(m_serialInterface.read_byte());
             fullRead.push_back(byteRead);
         }
+        std::cout<<"Full Read"<<fullRead<<std::endl; 
         if(fullRead.find('/') != std::string::npos){
                 fullRead = fullRead.substr(fullRead.find('/'));
         if(fullRead.size() > 0){
@@ -118,6 +128,7 @@ void OpticalTrackingSensor::readData(){
         int hIndexFront = fullRead.find("H");
         int hIndexBack = fullRead.find(";", hIndexFront+1);
         hPosStr = fullRead.substr(hIndexFront+2, hIndexBack-(hIndexFront+2));
+        std::cout<<hPosStr<<std::endl; 
         }
 
         try{
@@ -145,17 +156,19 @@ void OpticalTrackingSensor::readData(){
 
     } else {
         m_serialInterface.flush();
+        std::cout<< "Flushed serial interface due to missing data." << std::endl;
     }
-
 
         //std::cout << xPosStr << yPosStr << hPosStr << std::endl;
         pros::screen::print(pros::E_TEXT_MEDIUM_CENTER, 1, "X Pos: %s", xPosStr);
         pros::screen::print(pros::E_TEXT_MEDIUM_CENTER, 2, "Y Pos: %s", yPosStr);
-        pros::screen::print(pros::E_TEXT_MEDIUM_CENTER, 3, "Heading: %f", heading*180/M_PI);
+        pros::screen::print(pros::E_TEXT_MEDIUM_CENTER, 3, "Heading: %f", heading);
+        pros::screen::print(pros::E_TEXT_MEDIUM_CENTER, 4, "Write String: %f", imuHeading);
 
         pros::delay(10);
         
-    }
+    
+}
 }
 } // namespace hal
 } // namespace platt2
