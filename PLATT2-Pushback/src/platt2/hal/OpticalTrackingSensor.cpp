@@ -92,6 +92,11 @@ void OpticalTrackingSensor::readData(){
         writeString = "";
         imuHeading = vex_imu->get_heading();
         imuHeading = std::round(imuHeading * 100.0) / 100.0;
+
+        if (imuHeading > 180) {
+            imuHeading -= 360;
+        }
+
         std::cout<<"IMU Heading"<<imuHeading<<std::endl;
         writeString = "/H:" + std::to_string(imuHeading) + ";";
         std::vector<uint8_t> writeData (writeString.begin(), writeString.end());
