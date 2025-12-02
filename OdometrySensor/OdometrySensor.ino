@@ -29,9 +29,23 @@ void setup() {
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
+  // put your main code here, to run repeatedly
 
-  sfe_otos_pose2d_t currentPos;
+  if (rs485Serial.available()) {
+    String line = rs485Serial.readStringUntil(';');
+    if (line.startsWith("/")) {
+      float heading = line.substring(line.indexOf(':') + 1).toFloat();
+      sfe_otos_pose2d_t newPos;
+      odomSensor.getPosition(newPos);
+      newPos.h = heading;
+      odomSensor.setPosition(newPos);
+      Serial.println(heading);
+    }
+    else{
+      rs485Serial.flush();
+    }
+
+    sfe_otos_pose2d_t currentPos;
   odomSensor.getPosition(currentPos);
 
   float currentX = currentPos.x;
@@ -46,4 +60,14 @@ void loop() {
   Serial.println(outputString);
 
   rs485Serial.print(outputString);
+
+  delay(10);
+
+
+   
+  }
+
+  
+
 }
+

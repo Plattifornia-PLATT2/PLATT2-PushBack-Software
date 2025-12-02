@@ -23,40 +23,16 @@ OdometryPosition Odometry::getPos() {
 
 double Odometry::getX() { return otos.getXPosition(); }
 double Odometry::getY() { return otos.getYPosition(); }
-double Odometry::getHeading() {
-  // return otos.getHeading();
-    double heading = vex_imu->get_heading();
-    /*// Normalize in case heading is outside 0–360
-    while (heading < 0)   heading += 360;
-    while (heading >= 360) heading -= 360;
-
-    // Convert to -180 to 180
-    if (heading > 180)
-        heading -= 360;*/
-    heading = heading * M_PI / 180.0;        // convert to radians
-
-    // wrap to [-pi, pi]
-    heading = fmod(heading + M_PI, 2.0*M_PI);
-    if (heading < 0) heading += 2.0*M_PI;
-    heading -= M_PI;
-
-    return -heading; // radians in [-pi, pi]
-}
+double Odometry::getHeading() { return otos.getHeading(); }
 
 void Odometry::resetHeading() {
-    if (this->vex_imu) {
-        this->vex_imu->set_heading(0);
-    }
+
 }
 
 Odometry::Odometry(std::unique_ptr<pros::IMU> vex_imu)
-    : otos(0, 0), vex_imu(std::move(vex_imu)) {
-  if (this->vex_imu) {
-    this->vex_imu->reset();
-    while (this->vex_imu->is_calibrating()) {
-      pros::delay(10);
-    }
-  }
+: otos(0.0, 0.0,  std::move(vex_imu)) 
+{
+   
 }
 } // namespace odometry
 } // namespace subsystems
