@@ -18,12 +18,14 @@ class PinkCompAuton : public auton::IAuton {
     std::shared_ptr<robot::subsystems::holonomicDrive::HolonomicControl> holonomic_subsytem;
     std::shared_ptr<robot::subsystems::odometry::Odometry> odometry_subsystem;
     std::shared_ptr<robot::subsystems::intake::IntakeSubsystem> intake_subsystem;
+    std::shared_ptr<robot::subsystems::colorsort::ColorSortSubsystem> color_sort_subsystem;
     
     public:
     void init(
         std::shared_ptr<robot::subsystems::holonomicDrive::HolonomicControl> holonomic_subsytem, 
         std::shared_ptr<robot::subsystems::odometry::Odometry> odometry_subsystem, 
-        std::shared_ptr<robot::subsystems::intake::IntakeSubsystem> intake_subsystem
+        std::shared_ptr<robot::subsystems::intake::IntakeSubsystem> intake_subsystem,
+        std::shared_ptr<robot::subsystems::colorsort::ColorSortSubsystem> color_sort_subsystem
     ) override; 
 
     void run() override;

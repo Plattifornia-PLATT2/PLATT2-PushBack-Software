@@ -29,10 +29,18 @@ namespace intake{
     void IntakeSubsystem::move_intake(IntakeDirection direction){
         switch(direction){
             case IN:{
-                front_intake_motor->move_velocity(intake_speed);
-                middle_intake_motor->move_velocity(intake_speed);
-                rear_intake_motor->move_velocity(intake_speed);
-                upper_conveyor_motor->move_velocity(intake_speed);
+                if(rear_intake_motor->get_target_velocity() == -intake_speed){
+                    front_intake_motor->move_velocity(intake_speed);
+                    middle_intake_motor->move_velocity(intake_speed);
+                    upper_conveyor_motor->move_velocity(intake_speed);
+                }
+                else{
+                    front_intake_motor->move_velocity(intake_speed);
+                    middle_intake_motor->move_velocity(intake_speed);
+                    rear_intake_motor->move_velocity(intake_speed);
+                    upper_conveyor_motor->move_velocity(intake_speed);
+                }
+
                 break;
             }
             case OUT:{
@@ -79,6 +87,30 @@ namespace intake{
         rake_mech_piston->set_value(rake_mech_piston_state);
     }
 
+    void IntakeSubsystem::move_rear_motor(IntakeDirection direction){
+        switch(direction){
+            case IN:{
+                rear_intake_motor->move_velocity(intake_speed);
+                break;
+            }
+            case OUT:{
+                rear_intake_motor->move_velocity(-intake_speed);
+                break;   
+            }
+            case STOP:{
+                rear_intake_motor->move_velocity(0);
+                break;
+            }
+        }
+    }
+
+    void IntakeSubsystem::tare_rear_motor_position(){
+        rear_intake_motor->tare_position();
+    }
+
+    double IntakeSubsystem::get_rear_motor_position(){
+        return rear_intake_motor->get_position();
+    }
 }
 }
 }

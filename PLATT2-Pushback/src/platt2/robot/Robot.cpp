@@ -29,13 +29,15 @@ namespace robot{
         platt2::robot::RobotConfig robot_config,
         platt2::robot::AutonConfig auton_config,
         std::unique_ptr<profiles::DriverProfile>& driver_profile,
-        std::unique_ptr<auton::IAuton>& auton_routine
+        std::unique_ptr<auton::IAuton>& auton_routine,
+        std::shared_ptr<subsystems::colorsort::ColorSortSubsystem>& color_sort_subsystem
     ) : holonomicDrive_subsystem{xdrive_subsystem},
         odom_subsystem{odometry_subsystem},
         holonomic_controller{holonomic_controller},
         intake_subsystem{intake_subsystem},
         driver_profile{std::move(driver_profile)},
-        auton_routine{std::move(auton_routine)}
+        auton_routine{std::move(auton_routine)},
+        color_sort_subsystem{color_sort_subsystem}
     {
         current_alliance = alliance_config;
         current_auton_route = auton_config;
@@ -95,6 +97,10 @@ namespace robot{
 
             if(controller.get_digital_new_press(driver_profile->heading_reset)){
                 odom_subsystem->resetHeading();
+            }
+
+            if(controller.get_digital_new_press(driver_profile->colorSort_toggle)){
+                color_sort_subsystem->toggleSortedColor();
             }
             pros::delay(10);
         }

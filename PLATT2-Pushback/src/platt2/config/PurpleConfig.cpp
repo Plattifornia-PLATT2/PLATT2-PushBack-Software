@@ -69,6 +69,10 @@ std::shared_ptr<robot::Robot> PurpleConfig::buildRobot(robot::AutonConfig auton,
         std::move(rake_mech_piston)
     );
 
+    // Color sort subsystem
+    std::unique_ptr<pros::Optical> optical_sensor{std::make_unique<pros::Optical>(OPTICAL_SENSOR_PORT)};
+    std::shared_ptr<robot::subsystems::colorsort::ColorSortSubsystem> color_sort_subsystem = std::make_shared<robot::subsystems::colorsort::ColorSortSubsystem>(intake_subsystem,std::move(optical_sensor));
+
     //holonomic control system
     std::unique_ptr<robot::pid::PID>position_pid = std::make_unique<robot::pid::PID>(position_dt, position_max, position_min, position_Kp, position_Kd, position_Ki);
     std::unique_ptr<robot::pid::PID>heading_pid = std::make_unique<robot::pid::PID>(heading_dt, heading_max, heading_min, heading_Kp, heading_Kd, heading_Ki);
@@ -92,12 +96,12 @@ std::shared_ptr<robot::Robot> PurpleConfig::buildRobot(robot::AutonConfig auton,
     if(auton == robot::COMP_1 ){
         std::unique_ptr<auton::PurpleCompAuton> purple_comp_auton = std::make_unique<auton::PurpleCompAuton>();
         auton_routine = std::move(purple_comp_auton);
-        auton_routine->init(holonomic_contol_subsystem, odom_subsystem, intake_subsystem);
+        auton_routine->init(holonomic_contol_subsystem, odom_subsystem, intake_subsystem, color_sort_subsystem);
     }
     else {
         std::unique_ptr<auton::PurpleSkillsAuton> purple_skills_auton = std::make_unique<auton::PurpleSkillsAuton>();
         auton_routine = std::move(purple_skills_auton);
-        auton_routine->init(holonomic_contol_subsystem, odom_subsystem, intake_subsystem);
+        auton_routine->init(holonomic_contol_subsystem, odom_subsystem, intake_subsystem, color_sort_subsystem);
     }
 
     // build robot object
@@ -110,7 +114,8 @@ std::shared_ptr<robot::Robot> PurpleConfig::buildRobot(robot::AutonConfig auton,
         platt2::robot::RobotConfig::PURPLE, 
         auton, 
         driver_profile,
-        auton_routine
+        auton_routine,
+        color_sort_subsystem
     )};
 
     return robot;

@@ -8,6 +8,7 @@
 #include "platt2/robot/subsystems/holonomicDrive/XDriveModule.hpp"
 #include "platt2/robot/subsystems/intake/IntakeSubsystem.hpp"
 #include "platt2/robot/subsystems/odometry/Odometry.hpp"
+#include "platt2/robot/subsystems/colorsort/ColorSort.hpp"
 #include "platt2/EAllianceConfig.hpp"
 #include "platt2/EAutonConfig.hpp"
 #include "platt2/ERobotConfig.hpp"
