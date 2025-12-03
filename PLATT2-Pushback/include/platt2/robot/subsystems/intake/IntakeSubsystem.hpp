@@ -47,6 +47,9 @@ namespace intake{
 
         public:
         void move_intake(IntakeDirection direction);
+        void move_rear_motor(IntakeDirection direction);
+        double get_rear_motor_position();
+        void tare_rear_motor_position();
 
         void toggle_ed_mech_piston();
         void toggle_upper_conveyor_height_piston();
