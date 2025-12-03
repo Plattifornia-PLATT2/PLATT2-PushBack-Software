@@ -1,4 +1,5 @@
 #include "platt2/robot/subsystems/intake/IntakeSubsystem.hpp"
+#include "pros/rtos.hpp"
 
 namespace platt2{
 namespace robot{
@@ -13,7 +14,8 @@ namespace intake{
         std::unique_ptr<pros::adi::DigitalOut> ed_mech_piston,
         std::unique_ptr<pros::adi::DigitalOut> upper_conveyor_height_piston,
         std::unique_ptr<pros::adi::DigitalOut> conveyor_stopper_piston,
-        std::unique_ptr<pros::adi::DigitalOut> rake_mech_piston
+        std::unique_ptr<pros::adi::DigitalOut> rake_mech_piston,
+        std::unique_ptr<pros::Distance> distance_sensor
     )
         {
         front_intake_motor = std::move(front_intake);
@@ -24,6 +26,7 @@ namespace intake{
         this->upper_conveyor_height_piston = std::move(upper_conveyor_height_piston);
         this->conveyor_stopper_piston = std::move(conveyor_stopper_piston);
         this->rake_mech_piston = std::move(rake_mech_piston);
+        this->distance_sensor = std::move(distance_sensor);
     }
 
     void IntakeSubsystem::move_intake(IntakeDirection direction){
@@ -110,6 +113,20 @@ namespace intake{
 
     double IntakeSubsystem::get_rear_motor_position(){
         return rear_intake_motor->get_position();
+    }
+
+    void IntakeSubsystem::auto_unload(){
+        auto_unload_active = true;
+        double start_time = pros::millis();
+        while(distance_sensor->get() < MAX_DISTANCE || pros::millis() < start_time + 7000){
+            move_intake(OUT);
+        }
+        move_intake(STOP);
+        auto_unload_active = false;
+    }
+
+    bool IntakeSubsystem::is_auto_unload_active(){
+        return auto_unload_active;
     }
 }
 }

@@ -53,6 +53,7 @@ class PurpleConfig : public IConfig {
     static constexpr int REAR_INTAKE_MOTOR_PORT{13};
     static constexpr int UPPER_CONVEYOR_MOTOR_PORT{14};
     static constexpr pros::MotorGears INTAKE_GEARSET{pros::MotorGears::blue};
+    static constexpr int DISTANCE_SENSOR_PORT{17};
 
     // ** Color Sort Ports **
     static constexpr int OPTICAL_SENSOR_PORT{18};

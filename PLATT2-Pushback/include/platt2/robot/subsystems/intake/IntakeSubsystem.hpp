@@ -2,6 +2,7 @@
 #define INTAKESUBSYSTEM_HPP
 
 #include "pros/adi.hpp"
+#include "pros/distance.hpp"
 #include "pros/motors.hpp"
 #include <memory>
 namespace platt2{
@@ -37,6 +38,9 @@ namespace intake{
         std::unique_ptr<pros::adi::DigitalOut> conveyor_stopper_piston;
         std::unique_ptr<pros::adi::DigitalOut> rake_mech_piston;
 
+        // ** Sensors **
+        std::unique_ptr<pros::Distance> distance_sensor;
+
         bool conveyor_stopper_piston_state = false;
         bool conveyor_stopper_piston_lastState = false;
         bool ed_mech_piston_state = false;
@@ -44,12 +48,17 @@ namespace intake{
         bool upper_conveyor_height_piston_state = false;
         bool upper_conveyor_height_piston_lastState = false;
         bool rake_mech_piston_state = false;
+        bool auto_unload_active = false;
+
+        const double MAX_DISTANCE{100.0};
 
         public:
         void move_intake(IntakeDirection direction);
         void move_rear_motor(IntakeDirection direction);
+        void auto_unload();
         double get_rear_motor_position();
         void tare_rear_motor_position();
+        bool is_auto_unload_active();
 
         void toggle_ed_mech_piston();
         void toggle_upper_conveyor_height_piston();
@@ -64,7 +73,8 @@ namespace intake{
             std::unique_ptr<pros::adi::DigitalOut> ed_mech_piston,
             std::unique_ptr<pros::adi::DigitalOut> upper_conveyor_height_piston,
             std::unique_ptr<pros::adi::DigitalOut> conveyor_stopper_piston,
-            std::unique_ptr<pros::adi::DigitalOut> rake_mech_piston
+            std::unique_ptr<pros::adi::DigitalOut> rake_mech_piston,
+            std::unique_ptr<pros::Distance> distance_sensor
         );
 
 

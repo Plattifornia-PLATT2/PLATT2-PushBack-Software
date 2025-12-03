@@ -1,22 +1,31 @@
 #ifndef ROBOT_HPP
 #define ROBOT_HPP
 
-#include "api.h"
-#include "platt2/auton/IAuton.hpp"
+// ** PLATT2 Library Includes **
 #include "platt2/profiles/DriverProfile.hpp"
 #include "platt2/robot/subsystems/odometry/Odometry.hpp"
-#include "pros/misc.h"
-#include "pros/misc.hpp"
-#include "subsystems/colorSort/colorSort.hpp"
-#include "subsystems/holonomicDrive/IHolonomicDrive.hpp"
-#include "subsystems/holonomicDrive/XDrive.hpp"
 #include "platt2/EAllianceConfig.hpp"
 #include "platt2/EAutonConfig.hpp"
 #include "platt2/ERobotConfig.hpp"
 #include "platt2/robot/subsystems/holonomicDrive/HolonomicControl.hpp"
 #include "platt2/robot/subsystems/intake/IntakeSubsystem.hpp"
 #include "platt2/robot/subsystems/colorsort/ColorSort.hpp"
+#include "platt2/EAllianceConfig.hpp"
+#include "platt2/EAutonConfig.hpp"
+#include "platt2/ERobotConfig.hpp"
+#include "platt2/auton/IAuton.hpp"
+
+// ** PROS API Includes **
+#include "pros/misc.hpp"
+#include "pros/rtos.hpp"
+#include "pros/screen.hpp"
+
+// ** Standard Library Includes **
 #include <memory>
+#include <algorithm>
+#include <cmath>
+#include <utility>
+
 
 namespace platt2
 {

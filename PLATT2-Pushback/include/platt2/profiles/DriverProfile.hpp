@@ -13,6 +13,7 @@ namespace profiles{
         // Intake Mappings
         pros::controller_digital_e_t frontIntake_IN;
         pros::controller_digital_e_t frontIntake_OUT;
+        pros::controller_digital_e_t auto_unload_button;
 
         // Pnuematic Actuations
         pros::controller_digital_e_t edMech_toggle;

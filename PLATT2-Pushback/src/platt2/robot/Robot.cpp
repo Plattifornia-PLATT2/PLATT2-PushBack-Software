@@ -1,20 +1,4 @@
 #include "platt2/robot/Robot.hpp"
-#include "platt2/EAllianceConfig.hpp"
-#include "platt2/EAutonConfig.hpp"
-#include "platt2/ERobotConfig.hpp"
-#include "platt2/auton/IAuton.hpp"
-#include "pros/misc.h"
-#include "pros/misc.hpp"
-#include "pros/rtos.hpp"
-#include "pros/screen.h"
-#include "pros/screen.hpp"
-#include "subsystems/holonomicDrive/XDrive.hpp"
-#include "subsystems/intake/IntakeSubsystem.hpp"
-#include "subsystems/odometry/Odometry.hpp"
-#include <algorithm>
-#include <cmath>
-#include <memory>
-#include <utility>
 
 namespace platt2{
 
@@ -101,6 +85,12 @@ namespace robot{
 
             if(controller.get_digital_new_press(driver_profile->colorSort_toggle)){
                 color_sort_subsystem->toggleSortedColor();
+            }
+
+            if(controller.get_digital_new_press(driver_profile->auto_unload_button)){
+                if(!intake_subsystem->is_auto_unload_active()){
+                    pros::Task([this]{ intake_subsystem->auto_unload(); });
+                }
             }
             pros::delay(10);
         }

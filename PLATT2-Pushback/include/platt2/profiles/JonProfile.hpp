@@ -11,6 +11,7 @@ namespace profiles{
     JonProfile() {
         frontIntake_IN = pros::E_CONTROLLER_DIGITAL_L1;
         frontIntake_OUT = pros::E_CONTROLLER_DIGITAL_L2;
+        auto_unload_button = pros::E_CONTROLLER_DIGITAL_Y;
         edMech_toggle = pros::E_CONTROLLER_DIGITAL_R1;
         highScore_toggle = pros::E_CONTROLLER_DIGITAL_R2;
         stopper_toggle = pros::E_CONTROLLER_DIGITAL_UP;
