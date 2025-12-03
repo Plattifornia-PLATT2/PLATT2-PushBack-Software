@@ -98,6 +98,10 @@ namespace robot{
             if(controller.get_digital_new_press(driver_profile->heading_reset)){
                 odom_subsystem->resetHeading();
             }
+
+            if(controller.get_digital_new_press(driver_profile->colorSort_toggle)){
+                color_sort_subsystem->toggleSortedColor();
+            }
             pros::delay(10);
         }
     

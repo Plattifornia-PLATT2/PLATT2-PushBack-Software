@@ -31,6 +31,8 @@ namespace colorsort{
         
         void setSortedColor(BallColor color);
 
+        void toggleSortedColor();
+        
         void run();
 
         ColorSortSubsystem(

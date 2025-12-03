@@ -25,6 +25,20 @@ namespace colorsort{
         current_color = color;
     }
 
+    void ColorSortSubsystem::toggleSortedColor() {
+        switch(current_color) {
+            case OFF:
+                current_color = RED;
+                break;
+            case RED:
+                current_color = BLUE;
+                break;
+            case BLUE:
+                current_color = OFF;
+                break;
+        }
+    }
+
     void ColorSortSubsystem::run() {
         optical_sensor->set_led_pwm(100);
     while(true){
