@@ -7,6 +7,7 @@
 #include "platt2/robot/subsystems/odometry/Odometry.hpp"
 #include "pros/misc.h"
 #include "pros/misc.hpp"
+#include "subsystems/colorSort/colorSort.hpp"
 #include "subsystems/holonomicDrive/IHolonomicDrive.hpp"
 #include "subsystems/holonomicDrive/XDrive.hpp"
 #include "platt2/EAllianceConfig.hpp"
@@ -14,6 +15,7 @@
 #include "platt2/ERobotConfig.hpp"
 #include "platt2/robot/subsystems/holonomicDrive/HolonomicControl.hpp"
 #include "platt2/robot/subsystems/intake/IntakeSubsystem.hpp"
+#include "platt2/robot/subsystems/colorsort/ColorSort.hpp"
 #include <memory>
 
 namespace platt2
@@ -29,6 +31,7 @@ namespace platt2
             std::shared_ptr<subsystems::holonomicDrive::IHolonomic> holonomicDrive_subsystem;
             std::shared_ptr<subsystems::holonomicDrive::HolonomicControl> holonomic_controller;
             std::shared_ptr<subsystems::intake::IntakeSubsystem> intake_subsystem;
+            std::shared_ptr<subsystems::colorsort::ColorSortSubsystem> color_sort_subsystem;
 
             // Auton Class
             std::unique_ptr<auton::IAuton> auton_routine;
@@ -55,7 +58,8 @@ namespace platt2
                 platt2::robot::RobotConfig robot_config,
                 platt2::robot::AutonConfig auton_config,
                 std::unique_ptr<profiles::DriverProfile>& driver_profile,
-                std::unique_ptr<auton::IAuton>& auton_routine
+                std::unique_ptr<auton::IAuton>& auton_routine,
+                std::shared_ptr<subsystems::colorsort::ColorSortSubsystem>& color_sort_subsystem
             );
 
         };
