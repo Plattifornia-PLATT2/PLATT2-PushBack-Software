@@ -4,12 +4,37 @@
 #include "pros/adi.hpp"
 #include "pros/distance.hpp"
 #include "pros/motors.hpp"
+
 #include <memory>
+
+/**
+ * @brief Namespace for PLATT2 library code.
+ * @authors PLATT2 Development team.
+ */
 namespace platt2{
+
+/**
+ * @brief Namespace for robot-related code.
+ * @authors PLATT2 Development team.
+ */
 namespace robot{
+
+/**
+ * @brief Namespace for subsystem-related code.
+ * @authors PLATT2 Development team.
+ */
 namespace subsystems{
+
+/**
+ * @brief Namespace for intake subsystem related code.
+ * @authors PLATT2 Development team.
+ */
 namespace intake{
 
+    /**
+     * @brief An enumeration to represent the direction of the intake subsystem.
+     * @author Dominic Young
+     */
     enum IntakeDirection{
         IN = 1,
         OUT = 2,
@@ -53,18 +78,79 @@ namespace intake{
         const double MAX_DISTANCE{100.0};
 
         public:
+        /**
+         * @brief Moves the intake motors in the specified direction.
+         * 
+         * @param direction The direction to move the intake motors.
+         */
         void move_intake(IntakeDirection direction);
+
+        /**
+         * @brief Moves the rear intake motor in the specified direction.
+         * 
+         * @param direction The direction to move the rear intake motor.
+         */
         void move_rear_motor(IntakeDirection direction);
+        
+        /**
+         * @brief Automatically unloads the intake subsystem.
+         */
         void auto_unload();
+
+        /**
+         * @brief Get the rear motor position object   
+         * 
+         * @return double 
+         */
         double get_rear_motor_position();
+
+        /**
+         * @brief Tares the rear motor position.
+         * 
+         */
         void tare_rear_motor_position();
+
+        /**
+         * @brief Checks if the auto unload feature is active.
+         * 
+         * @return true When the auto unload feature is active and running.
+         * @return false When the auto unload feature is not active.
+         */
         bool is_auto_unload_active();
 
+        /**
+         * @brief Toggles the state of the ED mechanism piston.
+         * 
+         */
         void toggle_ed_mech_piston();
+
+        /**
+         * @brief Toggles the state of the upper conveyor height piston.
+         * 
+         */
         void toggle_upper_conveyor_height_piston();
+
+        /**
+         * @brief Toggles the state of the conveyor stopper piston.
+         * 
+         */
         void toggle_conveyor_stopper_piston();
+
+        /**
+         * @brief Toggles the state of the rake mechanism piston.
+         * 
+         */
         void toggle_rake_mech_piston();
 
+        /**
+         * @brief Construct a new Intake Subsystem object
+         * 
+         * @param ed_mech_piston ED Mech piston object
+         * @param upper_conveyor_height_piston Upper conveyor height piston object
+         * @param conveyor_stopper_piston Conveyor stopper piston object
+         * @param rake_mech_piston Rake mechanism piston object
+         * @param distance_sensor Distance sensor object
+         */
         IntakeSubsystem(
             std::unique_ptr<pros::Motor>front_intake, 
             std::unique_ptr<pros::Motor>rear_intake, 

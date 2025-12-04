@@ -26,11 +26,22 @@
 #include <cmath>
 #include <utility>
 
-
+/**
+ * @brief The namespace for all PLATT2 library code.
+ * @authors PLATT2 Development team.
+ */
 namespace platt2
 {
+    /**
+     * @brief The namespace for robot-related code.
+     * @authors PLATT2 Development team.
+     */
     namespace robot
     {
+        /**
+         * @brief The robot class containing all subsystems and control logic.
+         * @authors Dominic Young & Logan Wolf
+         */
         class Robot
         {
             private:
@@ -42,23 +53,41 @@ namespace platt2
             std::shared_ptr<subsystems::intake::IntakeSubsystem> intake_subsystem;
             std::shared_ptr<subsystems::colorsort::ColorSortSubsystem> color_sort_subsystem;
 
-            // Auton Class
+            // Config Values
             std::unique_ptr<auton::IAuton> auton_routine;
-
-            // Config Enums
             AllianceConfig current_alliance;
             RobotConfig current_config;
             AutonConfig current_auton_route;
-
-            // Driver Profile
             std::unique_ptr<profiles::DriverProfile> driver_profile;
 
             public:
             
+            /**
+             * @brief Runs the autonomous control routine.
+             * 
+             */
             void autonControl();
 
+            /**
+             * @brief Runs the driver control routine.
+             * 
+             */
             void driverControl();
 
+            /**
+             * @brief Construct a new Robot object with the given subsystems and parameters.
+             * 
+             * @param xdrive_subsystem Shared pointer to an Xdrive subsystem object
+             * @param odometry_subsystem Shared pointer to an Odometry subsystem object
+             * @param holonomic_controller Shared pointer to a HolonomicControl subsystem object
+             * @param intake_subsystem Shared pointer to an IntakeSubsystem object
+             * @param alliance_config Current alliance configuration
+             * @param robot_config Current robot configuration
+             * @param auton_config Current autonomous route configuration
+             * @param driver_profile Current driver profile
+             * @param auton_routine Current autonomous routine
+             * @param color_sort_subsystem Shared pointer to a ColorSortSubsystem object
+             */
             Robot(std::shared_ptr<subsystems::holonomicDrive::XDrive>& xdrive_subsystem, 
                 std::shared_ptr<subsystems::odometry::Odometry>& odometry_subsystem, 
                 std::shared_ptr<subsystems::holonomicDrive::HolonomicControl>& holonomic_controller,

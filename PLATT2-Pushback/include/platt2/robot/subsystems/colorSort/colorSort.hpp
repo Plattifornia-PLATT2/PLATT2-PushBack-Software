@@ -1,23 +1,56 @@
 #ifndef COLORSORT_HPP
 #define COLORSORT_HPP
 
+// ** PLATT2 Library Includes **
 #include "platt2/robot/subsystems/intake/IntakeSubsystem.hpp"
+
+// ** PROS API Includes **
 #include "pros/motors.hpp"
 #include "pros/optical.hpp"
 #include "pros/rtos.hpp"
+
+// ** Standard Library Includes**
 #include <atomic>
 #include <memory>
+
+/**
+ * @brief Namespace for all PLATT2 library code.
+ * @authors PLATT2 Development team.
+ */
 namespace platt2{
+
+/**
+ * @brief Namespace for robot-related code.
+ * @authors PLATT2 Development team.
+ */
 namespace robot{
+
+/**
+ * @brief Namespace for subsystem-related code.
+ * @authors PLATT2 Development team.
+ */
 namespace subsystems{
+
+/**
+ * @brief Namespace for color sorting subsystem-related code.
+ * @authors PLATT2 Development team.
+ */
 namespace colorsort{
 
+    /**
+     * @brief Enumeration for ball colors.
+     * @author Dominic Young
+     */
     enum BallColor{
         OFF = 0,
         RED = 1,
         BLUE = 2
     };
 
+    /**
+     * @brief Subsystem to run the color sort process.
+     * @author Dominic Young
+     */
     class ColorSortSubsystem{
         private:
         std::shared_ptr<subsystems::intake::IntakeSubsystem> intake_subsystem;
@@ -29,12 +62,31 @@ namespace colorsort{
         pros::Task color_sort_task;
         public:
         
+        /**
+         * @brief Set the Sorted Color
+         * 
+         * @param color Enumeration to set the current color
+         */
         void setSortedColor(BallColor color);
 
+        /**
+         * @brief Step through the color options
+         * 
+         */
         void toggleSortedColor();
         
+        /**
+         * @brief Run the color sort process
+         * 
+         */
         void run();
 
+        /**
+         * @brief Construct a new Color Sort Subsystem object
+         * 
+         * @param intake_subsystem Intake subsystem object
+         * @param optical_sensor Optical sensor object
+         */
         ColorSortSubsystem(
             std::shared_ptr<subsystems::intake::IntakeSubsystem> intake_subsystem,
             std::unique_ptr<pros::Optical> optical_sensor
