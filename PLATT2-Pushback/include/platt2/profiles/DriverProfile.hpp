@@ -20,6 +20,7 @@ namespace profiles{
         pros::controller_digital_e_t highScore_toggle;
         pros::controller_digital_e_t stopper_toggle;
         pros::controller_digital_e_t rakeMech_toggle;
+        pros::controller_digital_e_t descore_toggle;
 
         // Color Sort
         pros::controller_digital_e_t colorSort_toggle;

@@ -24,6 +24,7 @@ OdometryPosition Odometry::getPos() {
 double Odometry::getX() { return otos.getXPosition(); }
 double Odometry::getY() { return otos.getYPosition(); }
 double Odometry::getHeading() { return otos.getHeading(); }
+double Odometry::getVexHeading() {return otos.getVexHeading();}
 
 void Odometry::resetHeading() {
 

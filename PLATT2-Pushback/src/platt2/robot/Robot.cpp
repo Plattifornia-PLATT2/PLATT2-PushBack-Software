@@ -35,8 +35,8 @@ namespace robot{
         while(true){
           // pros::screen::print(pros::E_TEXT_MEDIUM_CENTER,6, "IMU Heading %f", odom_subsystem->getHeading());
            // std::cout << "IMU Heading: " << odom_subsystem->getHeading() << std::endl;
-            double leftX = double(controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y));
-            double leftY = double(-controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_X));
+            double leftX = double(controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_X));
+            double leftY = double(controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y));
             double rightX = double(controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X));
             // Create movement vector
             subsystems::holonomicDrive::MovementVector movement;   
@@ -85,6 +85,10 @@ namespace robot{
 
             if(controller.get_digital_new_press(driver_profile->colorSort_toggle)){
                 color_sort_subsystem->toggleSortedColor();
+            }
+
+            if(controller.get_digital_new_press(driver_profile->descore_toggle)){
+                intake_subsystem->toggle_descore_piston();
             }
 
             if(controller.get_digital_new_press(driver_profile->auto_unload_button)){

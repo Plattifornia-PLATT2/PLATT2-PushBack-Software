@@ -15,7 +15,6 @@ void setup() {
   rs485Serial.begin(baud_rate);
   Serial.begin(baud_rate);
   odomSensor.begin();
-
   delay(1000); // delay to prevent heading being screwed up due to touch
   odomSensor.calibrateImu(1000, true);
 
@@ -37,9 +36,11 @@ void loop() {
       float heading = line.substring(line.indexOf(':') + 1).toFloat();
       sfe_otos_pose2d_t newPos;
       odomSensor.getPosition(newPos);
-      newPos.h = heading;
-      odomSensor.setPosition(newPos);
-      Serial.println(heading);
+      /*newPos.h = heading;
+      newPos.x += 0.005;
+      newPos.y += 0.005;
+      odomSensor.setPosition(newPos);*/
+      Serial.println(String(heading) + " X: " + String(newPos.x) + "Y: " + String(newPos.y));
     }
     else{
       rs485Serial.flush();

@@ -81,6 +81,13 @@ namespace odometry{
         void resetHeading();
 
         /**
+         * @brief Gets the heading from the VEX IMU sensor.
+         * 
+         * @return double Vex IMU heading in radians.
+         */
+        double getVexHeading();
+
+        /**
          * @brief Construct a new Odometry object with a vex IMU sensor.
          * 
          * @param vex_imu The unique pointer to a vex IMU sensor object.

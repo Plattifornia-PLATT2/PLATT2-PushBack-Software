@@ -81,6 +81,10 @@ double OpticalTrackingSensor::getBoundedHeading(){
     return -heading; // radians in [-pi, pi]
 }
 
+double OpticalTrackingSensor::getVexHeading(){
+    return getBoundedHeading();
+}
+
 void OpticalTrackingSensor::readData(){
 
     double tempHeading;

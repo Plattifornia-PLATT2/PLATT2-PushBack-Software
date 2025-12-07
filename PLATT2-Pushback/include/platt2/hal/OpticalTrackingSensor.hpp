@@ -18,7 +18,7 @@ class OpticalTrackingSensor{
 private:
     const int BAUD_RATE = 74880;
 
-    pros::Serial m_serialInterface = pros::Serial(12, BAUD_RATE);
+    pros::Serial m_serialInterface = pros::Serial(4, BAUD_RATE);
 
     std::unique_ptr<pros::IMU> vex_imu;
 
@@ -50,6 +50,8 @@ public:
     double getHeading();
 
     void resetHeading();
+
+    double getVexHeading();
 };
 
 } // namespace hal

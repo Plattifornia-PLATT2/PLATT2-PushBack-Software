@@ -62,6 +62,7 @@ namespace intake{
         std::unique_ptr<pros::adi::DigitalOut> upper_conveyor_height_piston;
         std::unique_ptr<pros::adi::DigitalOut> conveyor_stopper_piston;
         std::unique_ptr<pros::adi::DigitalOut> rake_mech_piston;
+        std::unique_ptr<pros::adi::DigitalOut> descore_piston;
 
         // ** Sensors **
         std::unique_ptr<pros::Distance> distance_sensor;
@@ -74,6 +75,7 @@ namespace intake{
         bool upper_conveyor_height_piston_lastState = false;
         bool rake_mech_piston_state = false;
         bool auto_unload_active = false;
+        bool descore_piston_state = false;
 
         const double MAX_DISTANCE{100.0};
 
@@ -143,6 +145,12 @@ namespace intake{
         void toggle_rake_mech_piston();
 
         /**
+         * @brief Toggles the state of the descore piston.
+         * 
+         */
+        void toggle_descore_piston();
+
+        /**
          * @brief Construct a new Intake Subsystem object
          * 
          * @param ed_mech_piston ED Mech piston object
@@ -160,6 +168,7 @@ namespace intake{
             std::unique_ptr<pros::adi::DigitalOut> upper_conveyor_height_piston,
             std::unique_ptr<pros::adi::DigitalOut> conveyor_stopper_piston,
             std::unique_ptr<pros::adi::DigitalOut> rake_mech_piston,
+            std::unique_ptr<pros::adi::DigitalOut> descore_piston,
             std::unique_ptr<pros::Distance> distance_sensor
         );
 
