@@ -141,13 +141,13 @@ void OpticalTrackingSensor::readData(){
         }
 
         try{
-        xPos = std::stod(xPosStr);
+        xPos = std::stod(xPosStr) + xOffset;
         }
         catch( std::exception e){
 
         }
         try{
-        yPos = std::stod(yPosStr);
+        yPos = std::stod(yPosStr) + yOffset;
         } catch (std::exception e){
 
         }

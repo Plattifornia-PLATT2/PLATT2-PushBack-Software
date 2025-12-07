@@ -50,7 +50,14 @@ std::shared_ptr<robot::Robot> PurpleConfig::buildRobot(robot::AutonConfig auton,
 
     // odom subsystem
     std::unique_ptr<pros::IMU> vex_imu = std::make_unique<pros::IMU>(VEX_IMU_PORT);
-    std::shared_ptr<robot::subsystems::odometry::Odometry> odom_subsystem = std::make_shared<robot::subsystems::odometry::Odometry>(std::move(vex_imu));
+
+    std::shared_ptr<robot::subsystems::odometry::Odometry> odom_subsystem;
+    if(auton == robot::SKILLS_1){
+        odom_subsystem = std::make_shared<robot::subsystems::odometry::Odometry>(std::move(vex_imu), SKILLS_X_OFFSET, SKILLS_Y_OFFSET);
+    }
+    else {
+        odom_subsystem = std::make_shared<robot::subsystems::odometry::Odometry>(std::move(vex_imu), COMP_X_OFFSET, COMP_Y_OFFSET);
+    }
 
     // intake subsystem
     std::unique_ptr<pros::adi::DigitalOut> ed_mech_piston{std::make_unique<pros::adi::DigitalOut>(ED_MECH_PISTON_PORT)};

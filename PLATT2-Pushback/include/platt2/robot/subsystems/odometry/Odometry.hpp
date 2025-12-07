@@ -92,7 +92,7 @@ namespace odometry{
          * 
          * @param vex_imu The unique pointer to a vex IMU sensor object.
          */
-        Odometry(std::unique_ptr<pros::IMU> vex_imu);
+        Odometry(std::unique_ptr<pros::IMU> vex_imu, double x, double y);
     };
 
 };

@@ -69,6 +69,12 @@ class PurpleConfig : public IConfig {
     // ** VEX IMU Port **
     static constexpr int VEX_IMU_PORT{11};
 
+    // ** Odometry Offsets **
+    static constexpr double COMP_X_OFFSET{0.0};
+    static constexpr double COMP_Y_OFFSET{0.0};
+    static constexpr double SKILLS_X_OFFSET{0.0};
+    static constexpr double SKILLS_Y_OFFSET{0.0};
+
     // ** Linear PID Tuning Values **
     static constexpr double position_dt{0.01};
     static constexpr double position_max{0.4};

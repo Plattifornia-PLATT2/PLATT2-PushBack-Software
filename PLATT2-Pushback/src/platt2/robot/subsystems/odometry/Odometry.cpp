@@ -30,8 +30,8 @@ void Odometry::resetHeading() {
 
 }
 
-Odometry::Odometry(std::unique_ptr<pros::IMU> vex_imu)
-: otos(0.0, 0.0,  std::move(vex_imu)) 
+Odometry::Odometry(std::unique_ptr<pros::IMU> vex_imu, double x, double y)
+: otos(x, y,  std::move(vex_imu)) 
 {
    
 }
