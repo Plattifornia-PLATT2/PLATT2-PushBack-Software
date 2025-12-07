@@ -11,7 +11,7 @@ namespace robot{
 namespace subsystems{
 namespace holonomicDrive{
 
-void HolonomicControl::moveToPoint(double x_target, double y_target, double target_heading) {
+void HolonomicControl::moveToPoint(double x_target, double y_target, double target_heading, double rSpeed, double wSpeed, double timeout) {
 
     target_heading = target_heading*M_PI/180;
 
@@ -28,6 +28,8 @@ void HolonomicControl::moveToPoint(double x_target, double y_target, double targ
     avg rAve;
     avg wAve;
 
+    double startTime = pros::millis();
+
     while (true){
         
         x_error = x_target - odometry->getX();
@@ -41,9 +43,9 @@ void HolonomicControl::moveToPoint(double x_target, double y_target, double targ
             angle_error = -1 * sgn(angle_error) * (2*M_PI - std::abs(angle_error));
         }
         
-        motionVector.r = -1*(positionPID->calculate(0, p.r));
+        motionVector.r = std::clamp(-1*(positionPID->calculate(0, p.r)), -rSpeed, rSpeed);
         motionVector.theta = p.theta - odometry->getHeading()+(M_PI/2);
-        motionVector.w = headingPID->calculate(0, angle_error);
+        motionVector.w = std::clamp(headingPID->calculate(0, angle_error), -rSpeed, rSpeed);
 
         rAve = rollAverage(std::abs(motionVector.r), rArray);
         wAve = rollAverage(std::abs(motionVector.w), wArray);
@@ -51,6 +53,7 @@ void HolonomicControl::moveToPoint(double x_target, double y_target, double targ
         wArray = wAve.data;
 
         if (rAve.average < 0.05 && wAve.average < 00.05){break;}
+        if (pros::millis()-startTime>timeout*1000){break;}
         
         drivetrain->moveVector(motionVector);
         pros::delay(10);

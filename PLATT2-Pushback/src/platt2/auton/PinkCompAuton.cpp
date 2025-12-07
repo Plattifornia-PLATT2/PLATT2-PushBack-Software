@@ -18,8 +18,8 @@ void PinkCompAuton::init(
 
 void PinkCompAuton::run() {
     // TODO: Implementation goes here
-    holonomic_subsytem->moveToPoint(0, 24, 90);
-    holonomic_subsytem->moveToPoint(-24, 24,0);
+    //holonomic_subsytem->moveToPoint(0, 24, 90);
+    //holonomic_subsytem->moveToPoint(-24, 24,0);
 
 }
 

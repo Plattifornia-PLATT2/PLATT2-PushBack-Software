@@ -62,10 +62,10 @@ std::shared_ptr<robot::Robot> PinkConfig::buildRobot(robot::AutonConfig auton, r
 
     std::shared_ptr<robot::subsystems::odometry::Odometry> odom_subsystem;
     if(auton == robot::SKILLS_1){
-        odom_subsystem = std::make_shared<robot::subsystems::odometry::Odometry>(std::move(vex_imu), SKILLS_X_OFFSET, SKILLS_Y_OFFSET);
+        odom_subsystem = std::make_shared<robot::subsystems::odometry::Odometry>(std::move(vex_imu), SKILLS_X_OFFSET, SKILLS_Y_OFFSET, SKILLS_H_OFFSET);
     }
     else {
-        odom_subsystem = std::make_shared<robot::subsystems::odometry::Odometry>(std::move(vex_imu), COMP_X_OFFSET, COMP_Y_OFFSET);
+        odom_subsystem = std::make_shared<robot::subsystems::odometry::Odometry>(std::move(vex_imu), COMP_X_OFFSET, COMP_Y_OFFSET, COMP_Y_OFFSET);
     }
 
     // intake subsystem

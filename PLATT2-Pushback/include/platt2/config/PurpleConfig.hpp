@@ -72,21 +72,24 @@ class PurpleConfig : public IConfig {
     // ** Odometry Offsets **
     static constexpr double COMP_X_OFFSET{0.0};
     static constexpr double COMP_Y_OFFSET{0.0};
-    static constexpr double SKILLS_X_OFFSET{0.0};
-    static constexpr double SKILLS_Y_OFFSET{0.0};
+    static constexpr double COMP_H_OFFSET{90.0};
+
+    static constexpr double SKILLS_X_OFFSET{88.0};
+    static constexpr double SKILLS_Y_OFFSET{12.0};
+    static constexpr double SKILLS_H_OFFSET{270.0};
 
     // ** Linear PID Tuning Values **
     static constexpr double position_dt{0.01};
-    static constexpr double position_max{0.4};
-    static constexpr double position_min{-0.4};
+    static constexpr double position_max{1};
+    static constexpr double position_min{-1};
     static constexpr double position_Kp{0.09};
     static constexpr double position_Kd{0.006};
     static constexpr double position_Ki{0};
 
     // ** Angular PID Tuning Values **
     static constexpr double heading_dt{0.01};
-    static constexpr double heading_max{0.3};
-    static constexpr double heading_min{-0.3};
+    static constexpr double heading_max{1};
+    static constexpr double heading_min{-1};
     static constexpr double heading_Kp{0.3};
     static constexpr double heading_Kd{0.0};
     static constexpr double heading_Ki{0};

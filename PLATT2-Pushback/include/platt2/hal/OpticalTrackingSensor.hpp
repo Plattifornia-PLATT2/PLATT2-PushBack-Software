@@ -28,6 +28,8 @@ private:
 
     double yOffset;
 
+    double hOffset;
+
     double xPos;
 
     double yPos;
@@ -39,7 +41,7 @@ private:
     double getBoundedHeading();
 
 public:
-    OpticalTrackingSensor(double xOffset, double yOffset, std::unique_ptr<pros::IMU> vex_imu);
+    OpticalTrackingSensor(double xOffset, double yOffset, double hOffset, std::unique_ptr<pros::IMU> vex_imu);
 
     void readData();
 

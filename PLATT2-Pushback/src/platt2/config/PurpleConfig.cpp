@@ -1,4 +1,5 @@
 #include "platt2/config/PurpleConfig.hpp"
+#include "platt2/EAutonConfig.hpp"
 #include "platt2/auton/PurpleSkillsAuton.hpp"
 #include <memory>
 
@@ -53,10 +54,10 @@ std::shared_ptr<robot::Robot> PurpleConfig::buildRobot(robot::AutonConfig auton,
 
     std::shared_ptr<robot::subsystems::odometry::Odometry> odom_subsystem;
     if(auton == robot::SKILLS_1){
-        odom_subsystem = std::make_shared<robot::subsystems::odometry::Odometry>(std::move(vex_imu), SKILLS_X_OFFSET, SKILLS_Y_OFFSET);
+        odom_subsystem = std::make_shared<robot::subsystems::odometry::Odometry>(std::move(vex_imu), SKILLS_X_OFFSET, SKILLS_Y_OFFSET, SKILLS_H_OFFSET);
     }
     else {
-        odom_subsystem = std::make_shared<robot::subsystems::odometry::Odometry>(std::move(vex_imu), COMP_X_OFFSET, COMP_Y_OFFSET);
+        odom_subsystem = std::make_shared<robot::subsystems::odometry::Odometry>(std::move(vex_imu), COMP_X_OFFSET, COMP_Y_OFFSET, COMP_H_OFFSET);
     }
 
     // intake subsystem
@@ -104,14 +105,14 @@ std::shared_ptr<robot::Robot> PurpleConfig::buildRobot(robot::AutonConfig auton,
         // Build auton routine
     std::unique_ptr<auton::IAuton> auton_routine;
 
-    if(auton == robot::COMP_1 ){
-        std::unique_ptr<auton::PurpleCompAuton> purple_comp_auton = std::make_unique<auton::PurpleCompAuton>();
-        auton_routine = std::move(purple_comp_auton);
+    if(auton == robot::SKILLS_1 ){
+        std::unique_ptr<auton::PurpleSkillsAuton> purple_skills_auton = std::make_unique<auton::PurpleSkillsAuton>();
+        auton_routine = std::move(purple_skills_auton);
         auton_routine->init(holonomic_contol_subsystem, odom_subsystem, intake_subsystem, color_sort_subsystem);
     }
     else {
-        std::unique_ptr<auton::PurpleSkillsAuton> purple_skills_auton = std::make_unique<auton::PurpleSkillsAuton>();
-        auton_routine = std::move(purple_skills_auton);
+        std::unique_ptr<auton::PurpleCompAuton> purple_comp_auton = std::make_unique<auton::PurpleCompAuton>();
+        auton_routine = std::move(purple_comp_auton);
         auton_routine->init(holonomic_contol_subsystem, odom_subsystem, intake_subsystem, color_sort_subsystem);
     }
 
