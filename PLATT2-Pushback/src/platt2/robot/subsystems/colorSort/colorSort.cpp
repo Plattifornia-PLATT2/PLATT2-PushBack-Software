@@ -41,49 +41,49 @@ namespace colorsort{
 
     void ColorSortSubsystem::run() {
         optical_sensor->set_led_pwm(100);
-    while(true){
+        while(true){
     
 
-    pros::c::optical_rgb_s_t currentRGB = optical_sensor->get_rgb();
-    double currentR = currentRGB.red;
-    double currentB = currentRGB.blue;
+        pros::c::optical_rgb_s_t currentRGB = optical_sensor->get_rgb();
+        double currentR = currentRGB.red;
+        double currentB = currentRGB.blue;
 
-    switch(current_color)
-    {
-        case RED:
+        switch(current_color)
         {
+            case RED:
+            {
 
-         if(currentR > currentB)
-         {
-            intake_subsystem->tare_rear_motor_position();
-            intake_subsystem->move_rear_motor(intake::OUT);
+            if(currentR > currentB)
+            {
+                intake_subsystem->tare_rear_motor_position();
+                intake_subsystem->move_rear_motor(intake::OUT);
 
-            while(intake_subsystem->get_rear_motor_position() < BALL_REJECTION_THRESHOLD) {
-                pros::delay(10);
-            }
+                while(intake_subsystem->get_rear_motor_position() < BALL_REJECTION_THRESHOLD) {
+                    pros::delay(10);
+                }
 
             intake_subsystem->move_rear_motor(intake::STOP);
             break;
-        }
-        case BLUE:
-        {
-            if(currentB > currentR)
-         {
-            intake_subsystem->tare_rear_motor_position();
-            intake_subsystem->move_rear_motor(intake::OUT);
-
-            while(intake_subsystem->get_rear_motor_position() < BALL_REJECTION_THRESHOLD) {
-                pros::delay(10);
             }
+            case BLUE:
+            {
+                if(currentB > currentR)
+            {
+                intake_subsystem->tare_rear_motor_position();
+                intake_subsystem->move_rear_motor(intake::OUT);
 
-            intake_subsystem->move_rear_motor(intake::STOP);
-            break;
+                while(intake_subsystem->get_rear_motor_position() < BALL_REJECTION_THRESHOLD) {
+                    pros::delay(10);
+                }
+
+                intake_subsystem->move_rear_motor(intake::STOP);
+                break;
+            }
+            case OFF:
+            {
+                break;
+            }
         }
-        case OFF:
-        {
-            break;
-        }
-    }
     }
     pros::delay(10);
     }

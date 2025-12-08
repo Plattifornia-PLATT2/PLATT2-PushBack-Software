@@ -7,7 +7,9 @@
 #include "platt2/profiles/JonProfile.hpp"
 #include "platt2/profiles/QuinnProfile.hpp"
 #include "platt2/robot/subsystems/odometry/Odometry.hpp"
+#include "pros/abstract_motor.hpp"
 #include "pros/imu.hpp"
+#include "pros/motors.h"
 #include <memory>
 
 
@@ -40,6 +42,7 @@ std::shared_ptr<robot::Robot> PinkConfig::buildRobot(robot::AutonConfig auton, r
     std::unique_ptr<pros::Motor> middle_intake_motor{std::make_unique<pros::Motor>(MIDDLE_INTAKE_MOTOR_PORT, INTAKE_GEARSET)};
     std::unique_ptr<pros::Motor> rear_intake_motor{std::make_unique<pros::Motor>(REAR_INTAKE_MOTOR_PORT, INTAKE_GEARSET)};
     std::unique_ptr<pros::Motor> upper_conveyor_motor{std::make_unique<pros::Motor>(UPPER_CONVEYOR_MOTOR_PORT, INTAKE_GEARSET)};
+    std::unique_ptr<pros::Motor> lower_roller_motor{std::make_unique<pros::Motor>(LOWER_ROLLER_MOTOR_PORT, pros::MotorGears::green)};
 
     //X drive modules
     std::unique_ptr<platt2::robot::subsystems::holonomicDrive::XDriveModule> left_front_module{std::make_unique<platt2::robot::subsystems::holonomicDrive::XDriveModule>(left_front_top, left_front_bottom, deg_to_rad(45),deg_to_rad(135))};
@@ -82,6 +85,7 @@ std::shared_ptr<robot::Robot> PinkConfig::buildRobot(robot::AutonConfig auton, r
         std::move(middle_intake_motor), 
         std::move(rear_intake_motor), 
         std::move(upper_conveyor_motor),
+        std::move(lower_roller_motor),
         std::move(ed_mech_piston),
         std::move(upper_conveyor_height_piston),
         std::move(conveyor_stopper_piston),

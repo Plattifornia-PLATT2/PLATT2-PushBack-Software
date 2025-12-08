@@ -27,7 +27,7 @@ double Odometry::getHeading() { return otos.getHeading(); }
 double Odometry::getVexHeading() {return otos.getVexHeading();}
 
 void Odometry::resetHeading() {
-
+  vex_imu->set_heading(0);
 }
 
 Odometry::Odometry(std::unique_ptr<pros::IMU> vex_imu, double x, double y, double h)
