@@ -17,7 +17,9 @@ void PurpleCompAuton::init(
 }
 
 void PurpleCompAuton::run() {
-    
+    holonomic_subsytem->moveToPoint(88, 6, 270, 0.2, 0.2);
+    holonomic_subsytem->moveToPoint(88, 6, 0, 0.2, 0.2);
+
     //holonomic_subsytem->moveToPoint(118, 12, 270, 0.3);
     
     // TODO: Implementation goes here
