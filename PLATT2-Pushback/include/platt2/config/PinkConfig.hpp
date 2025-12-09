@@ -71,9 +71,9 @@ class PinkConfig : public IConfig {
     static constexpr double COMP_Y_OFFSET{0.0};
     static constexpr double COMP_H_OFFSET{90.0};
 
-    static constexpr double SKILLS_X_OFFSET{0.0};
-    static constexpr double SKILLS_Y_OFFSET{0.0};
-    static constexpr double SKILLS_H_OFFSET{270.0};
+    static constexpr double SKILLS_X_OFFSET{54.0};
+    static constexpr double SKILLS_Y_OFFSET{8.5};
+    static constexpr double SKILLS_H_OFFSET{90.0};
 
     // ** Linear PID Tuning Values **
     static constexpr double position_dt{0.01};
