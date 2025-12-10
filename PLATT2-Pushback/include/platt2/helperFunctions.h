@@ -103,4 +103,20 @@ inline avg rollAverage(double var, std::vector<double> data){
 
 }
 
+inline double distanceFromSecant(double x1, double y1,
+                          double x2, double y2,
+                          double x0, double y0)
+{
+    double vx = x2 - x1;
+    double vy = y2 - y1;
+
+    double wx = x0 - x1;
+    double wy = y0 - y1;
+
+    double cross = vx * wy - vy * wx;
+    double dist = std::abs(cross) / std::sqrt(vx*vx + vy*vy);
+
+    return dist;
+}
+
 #endif

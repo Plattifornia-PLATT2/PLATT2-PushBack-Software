@@ -54,7 +54,7 @@ public:
      * @param y_target Target Y value to move to.
      * @param heading_target Target heading to achieve at the end of the movement.
      */
-    void moveToPoint(double x_target, double y_target, double heading_target, double rSpeed = 0.3, double wSpeed = 0.3, double timeout = 7);
+    void moveToPoint(double x_target, double y_target, double heading_target, double rSpeed = 0.4, double wSpeed = 0.3, double timeout = 7);
 
     /**
      * @brief Used for debugging purposes.

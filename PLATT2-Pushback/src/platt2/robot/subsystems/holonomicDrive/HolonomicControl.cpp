@@ -5,6 +5,8 @@
 #include <memory>
 #include <utility>
 #include <vector>
+#include <fstream>
+
 
 namespace platt2{
 namespace robot{
@@ -29,6 +31,18 @@ void HolonomicControl::moveToPoint(double x_target, double y_target, double targ
     avg wAve;
 
     double startTime = pros::millis();
+
+    std::ofstream file("/usd/data.csv", std::ios::app); // Creates a new file named "data.csv"
+
+    double startPosX = odometry->getX();
+    double startPosY = odometry->getY();
+
+    double dev;
+    double accel;
+    double v2;
+
+    double startLoopTime = pros::millis();
+
 
     while (true){
         
@@ -58,9 +72,14 @@ void HolonomicControl::moveToPoint(double x_target, double y_target, double targ
         drivetrain->moveVector(motionVector);
         pros::delay(10);
 
+        dev = distanceFromSecant(startPosX, startPosY, x_target, y_target, odometry->getX(), odometry->getY());
+        accel = motionVector.r-v2;
+        v2 = motionVector.r;
+        file << angle_error << "," << x_error << "," << y_error << "," << dev << "," << accel << "," << motionVector.r << "," << motionVector.theta << "," << motionVector.w << ",0\n";
+        startLoopTime = pros::millis();
     } 
-
-    std::cout<<"I got to loop end"<<std::endl;
+    file.close();
+    //std::cout<<"I got to loop end"<<std::endl;
     motionVector.r = 0;
     motionVector.w = 0;
     motionVector.theta = 0;

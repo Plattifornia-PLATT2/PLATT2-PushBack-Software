@@ -52,6 +52,8 @@ namespace robot{
             //movement.w = 0.1;
             movement.w = rightX/127;
 
+            
+
             // Send to subsystem
             holonomicDrive_subsystem->moveVector(movement);
 

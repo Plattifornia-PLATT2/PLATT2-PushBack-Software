@@ -61,10 +61,10 @@ void PurpleSkillsAuton::run() {
     holonomic_subsytem->moveToPoint(93,67, 45);
     pros::delay(200);
     //color_sort_subsystem->setSortedColor(robot::subsystems::colorsort::OFF);
-    holonomic_subsytem->moveToPoint(128,67, 45, 0.15);
+    holonomic_subsytem->moveToPoint(128,67, 35, 0.15);
     pros::delay(200);
     intake_subsystem->move_intake(robot::subsystems::intake::STOP);
-    holonomic_subsytem->moveToPoint(132,107, 0, 0.2, 0.15);
+    holonomic_subsytem->moveToPoint(130,107, 0, 0.2, 0.15);
     pros::delay(200);
     intake_subsystem->toggle_upper_conveyor_height_piston();
     holonomic_subsytem->moveToPoint(119,107, 270,0.3,.15);
