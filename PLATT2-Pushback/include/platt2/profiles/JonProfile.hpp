@@ -22,7 +22,6 @@ namespace profiles{
         descore_toggle = pros::E_CONTROLLER_DIGITAL_A;
     }
     };
-
 }
 }
 

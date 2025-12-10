@@ -113,5 +113,9 @@ namespace robot{
         auton_routine->run();
     }
 
+    void Robot::init(){
+        odom_subsystem->initVexImu();
+    }
+
 }
 }

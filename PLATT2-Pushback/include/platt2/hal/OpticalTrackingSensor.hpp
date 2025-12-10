@@ -54,6 +54,8 @@ public:
     void resetHeading();
 
     double getVexHeading();
+
+    void initVexImu();
 };
 
 } // namespace hal

@@ -20,6 +20,7 @@
 #include "platt2/auton/PurpleSkillsAuton.hpp"
 
 #include "pros/motors.hpp"
+#include "pros/rotation.hpp"
 
 
 #include <memory>

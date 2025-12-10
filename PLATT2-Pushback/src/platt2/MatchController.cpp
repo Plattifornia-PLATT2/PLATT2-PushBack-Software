@@ -21,6 +21,10 @@ void MatchController::init(){
     }
     pros::screen::erase();
     robot = config->buildRobot(roboConfig.autonConfig, roboConfig.driverProfile, robot::NO_ALLIANCE);
+
+    if(robot){
+        robot->init();
+    }
 }
 
 void MatchController::driveControl(){

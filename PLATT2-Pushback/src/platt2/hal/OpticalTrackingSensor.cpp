@@ -50,8 +50,18 @@ double OpticalTrackingSensor::getHeading(){
 
 void OpticalTrackingSensor::resetHeading(){
     if(vex_imu){
-        vex_imu->set_heading(0);
-        localHeading = 0;
+        vex_imu->set_heading(90);
+        //localHeading = 90;
+    }
+}
+
+void OpticalTrackingSensor::initVexImu(){
+     if(vex_imu){
+        this->vex_imu->reset();
+        while(vex_imu->is_calibrating()){
+            pros::delay(10);
+        }
+        vex_imu->set_heading(90);
     }
 }
 
@@ -80,14 +90,6 @@ double OpticalTrackingSensor::getVexHeading(){
 }
 
 void OpticalTrackingSensor::readData() {
-    
-    if(vex_imu){
-        this->vex_imu->reset();
-        while(vex_imu->is_calibrating()){
-            pros::delay(10);
-        }
-        vex_imu->set_heading(hOffset);
-    }
 
     double tempHeading;
     std::string buffer;
@@ -145,6 +147,7 @@ void OpticalTrackingSensor::readData() {
     pros::screen::print(pros::E_TEXT_MEDIUM_CENTER, 1, "X Pos: %f", xPos);
     pros::screen::print(pros::E_TEXT_MEDIUM_CENTER, 2, "Y Pos: %f", yPos);
     pros::screen::print(pros::E_TEXT_MEDIUM_CENTER, 3, "Heading: %f", (heading * 180) / M_PI);
+    pros::screen::print(pros::E_TEXT_MEDIUM_CENTER, 4, "VEX Heading: %f", vex_imu->get_heading());
     pros::delay(10);
 }
 

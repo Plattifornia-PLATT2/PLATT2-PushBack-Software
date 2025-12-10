@@ -87,6 +87,8 @@ namespace odometry{
          */
         double getVexHeading();
 
+        void initVexImu();
+
         /**
          * @brief Construct a new Odometry object with a vex IMU sensor.
          * 

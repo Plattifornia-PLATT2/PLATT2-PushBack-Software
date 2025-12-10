@@ -74,6 +74,8 @@ namespace platt2
              */
             void driverControl();
 
+            void init();
+
             /**
              * @brief Construct a new Robot object with the given subsystems and parameters.
              * 
