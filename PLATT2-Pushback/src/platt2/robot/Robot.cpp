@@ -31,6 +31,7 @@ namespace robot{
     void Robot::driverControl(){
 
         pros::Controller controller{pros::Controller(pros::E_CONTROLLER_MASTER)};
+        controller.print(0, 0, "Sorted Color: %d", color_sort_subsystem->getSortedColor());
 
         while(true){
           // pros::screen::print(pros::E_TEXT_MEDIUM_CENTER,6, "IMU Heading %f", odom_subsystem->getHeading());
@@ -58,9 +59,11 @@ namespace robot{
             holonomicDrive_subsystem->moveVector(movement);
 
             if(controller.get_digital(driver_profile->frontIntake_IN)){
+                intake_subsystem->colorSortMode(color_sort_subsystem->isSortActive());
                 intake_subsystem->move_intake(subsystems::intake::IntakeDirection::IN);
             }
             else if(controller.get_digital(driver_profile->frontIntake_OUT)){
+                intake_subsystem->colorSortMode(color_sort_subsystem->isSortActive());
                 intake_subsystem->move_intake(subsystems::intake::IntakeDirection::OUT);
             }
             else{
@@ -93,6 +96,7 @@ namespace robot{
 
             if(controller.get_digital_new_press(driver_profile->colorSort_toggle)){
                 color_sort_subsystem->toggleSortedColor();
+                controller.print(0, 0, "Sorted Color: %d", color_sort_subsystem->getSortedColor());
             }
 
             if(controller.get_digital_new_press(driver_profile->descore_toggle)){

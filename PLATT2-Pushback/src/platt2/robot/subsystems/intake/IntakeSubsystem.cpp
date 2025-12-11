@@ -44,9 +44,10 @@ namespace intake{
     void IntakeSubsystem::move_intake(IntakeDirection direction){
         switch(direction){
             case IN:{
-                if(rear_intake_motor->get_target_velocity() == -intake_speed){
+                if(colorSort){
                     front_intake_motor->move_velocity(intake_speed);
                     middle_intake_motor->move_velocity(intake_speed);
+                    rear_intake_motor->move_velocity(-intake_speed);
                     upper_conveyor_motor->move_velocity(intake_speed);
                     lower_roller_motor->move_velocity(intake_speed);
                 }
@@ -121,7 +122,6 @@ namespace intake{
             }
             case OUT:{
                 rear_intake_motor->move_velocity(-intake_speed);
-                lower_roller_motor->move_velocity(-intake_speed);
                 break;   
             }
             case STOP:{
@@ -153,6 +153,11 @@ namespace intake{
     bool IntakeSubsystem::is_auto_unload_active(){
         return auto_unload_active;
     }
+
+    void IntakeSubsystem::colorSortMode(bool state){
+        colorSort = state;
+    }
+    
 }
 }
 }

@@ -77,6 +77,7 @@ namespace intake{
         bool rake_mech_piston_state = false;
         bool auto_unload_active = false;
         bool descore_piston_state = false;
+        bool colorSort = false;
 
         const double MAX_DISTANCE{100.0};
 
@@ -150,6 +151,8 @@ namespace intake{
          * 
          */
         void toggle_descore_piston();
+
+        void colorSortMode(bool state);
 
         /**
          * @brief Construct a new Intake Subsystem object

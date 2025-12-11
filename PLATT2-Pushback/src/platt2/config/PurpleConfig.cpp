@@ -71,8 +71,8 @@ std::shared_ptr<robot::Robot> PurpleConfig::buildRobot(robot::AutonConfig auton,
 
     std::shared_ptr<robot::subsystems::intake::IntakeSubsystem> intake_subsystem = std::make_shared<robot::subsystems::intake::IntakeSubsystem>(
         std::move(front_intake_motor), 
-        std::move(middle_intake_motor), 
         std::move(rear_intake_motor), 
+        std::move(middle_intake_motor), 
         std::move(upper_conveyor_motor),
         std::move(lower_roller_motor),
         std::move(ed_mech_piston),
