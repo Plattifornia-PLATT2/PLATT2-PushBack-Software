@@ -75,7 +75,7 @@ void HolonomicControl::moveToPoint(double x_target, double y_target, double targ
         dev = distanceFromSecant(startPosX, startPosY, x_target, y_target, odometry->getX(), odometry->getY());
         accel = motionVector.r-v2;
         v2 = motionVector.r;
-        file << angle_error << "," << x_error << "," << y_error << "," << dev << "," << accel << "," << motionVector.r << "," << motionVector.theta << "," << motionVector.w << ",0\n";
+        //file << angle_error << "," << x_error << "," << y_error << "," << dev << "," << accel << "," << motionVector.r << "," << motionVector.theta << "," << motionVector.w << ",0\n";
         startLoopTime = pros::millis();
     } 
     file.close();

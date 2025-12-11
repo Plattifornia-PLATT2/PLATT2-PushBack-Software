@@ -84,7 +84,7 @@ class PurpleConfig : public IConfig {
     static constexpr double position_dt{0.01};
     static constexpr double position_max{1};
     static constexpr double position_min{-1};
-    static constexpr double position_Kp{0.09};
+    static constexpr double position_Kp{0.085};
     static constexpr double position_Kd{0.006};
     static constexpr double position_Ki{0};
 
