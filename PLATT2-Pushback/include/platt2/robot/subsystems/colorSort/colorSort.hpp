@@ -57,7 +57,7 @@ namespace colorsort{
         std::unique_ptr<pros::Optical> optical_sensor;
 
         BallColor current_color = OFF;
-        double BALL_REJECTION_THRESHOLD = -1.5;
+        double BALL_REJECTION_THRESHOLD = -0.6;
         double BALL_DISTANCE_THRESHOLD = 250;
         bool isActive = false;
 
