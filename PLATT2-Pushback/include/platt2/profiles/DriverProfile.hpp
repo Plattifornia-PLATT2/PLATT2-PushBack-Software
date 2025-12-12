@@ -37,6 +37,10 @@ namespace profiles{
         // Field Oriented Drive
         pros::controller_digital_e_t fieldOriented_toggle;
         pros::controller_digital_e_t heading_reset;
+
+        // Score Macros
+        pros::controller_digital_e_t scoreHighMacro;
+        pros::controller_digital_e_t scoreMiddleHighMacro;
     };
 }
 }

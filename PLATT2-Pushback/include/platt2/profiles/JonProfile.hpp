@@ -33,6 +33,8 @@ namespace profiles{
         fieldOriented_toggle = pros::E_CONTROLLER_DIGITAL_RIGHT;
         heading_reset = pros::E_CONTROLLER_DIGITAL_B;
         descore_toggle = pros::E_CONTROLLER_DIGITAL_A;
+        scoreHighMacro = pros::E_CONTROLLER_DIGITAL_X;
+        scoreMiddleHighMacro = pros::E_CONTROLLER_DIGITAL_LEFT;
     }
     };
 }

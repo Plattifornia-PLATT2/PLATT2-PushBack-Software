@@ -108,6 +108,17 @@ namespace robot{
                     pros::Task([this]{ intake_subsystem->auto_unload(); });
                 }
             }
+
+            if(controller.get_digital_new_press(driver_profile->scoreHighMacro)){
+                intake_subsystem->toggle_upper_conveyor_height_piston();
+                intake_subsystem->toggle_conveyor_stopper_piston();  
+            }
+
+            if(controller.get_digital_new_press(driver_profile->scoreMiddleHighMacro)){
+                intake_subsystem->toggle_ed_mech_piston();
+                intake_subsystem->toggle_conveyor_stopper_piston();
+            }
+            
             pros::delay(10);
         }
     
