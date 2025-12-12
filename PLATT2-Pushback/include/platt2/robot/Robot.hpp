@@ -74,6 +74,10 @@ namespace platt2
              */
             void driverControl();
 
+            /**
+             * @brief Initalizes robot sensors and subsystems.
+             * 
+             */
             void init();
 
             /**
