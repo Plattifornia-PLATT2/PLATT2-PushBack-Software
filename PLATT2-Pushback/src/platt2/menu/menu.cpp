@@ -21,6 +21,8 @@ static const lv_color_t COLOR_SKILLS  = lv_color_hex(0x6647A5);
 static const lv_color_t COLOR_SAVE    = lv_color_hex(0x4ABAC2);
 static const lv_color_t BORDER_SELECTED = lv_color_white();
 static const lv_color_t BORDER_DEFAULT  = lv_color_hex(0x555555);
+static const lv_color_t COLOR_RED_ALLIANCE = lv_color_hex(0xD22630);
+static const lv_color_t COLOR_BLUE_ALLIANCE = lv_color_hex(0x0077C8);
 
 // ---------- Helper: set button style ----------
 void RobotConfigMenu::applyColorTheme(lv_obj_t* btn, lv_color_t color) {
@@ -87,6 +89,9 @@ void RobotConfigMenu::updateButtonStates() {
     // Auton
     setButtonChecked(btn_comp,   auton_mode == robot::COMP_1, COLOR_COMP);
     setButtonChecked(btn_skills, auton_mode == robot::SKILLS_1, COLOR_SKILLS);
+
+    setButtonChecked(btn_red,   alliance_color == robot::RED, COLOR_RED_ALLIANCE);
+    setButtonChecked(btn_blue, alliance_color == robot::BLUE, COLOR_BLUE_ALLIANCE);
 }
 
 // ---------- Static callbacks ----------
@@ -112,6 +117,14 @@ void RobotConfigMenu::cbAutonMode(lv_event_t* e) {
     lv_obj_t* target = static_cast<lv_obj_t*>(lv_event_get_target(e));
     if (target == self->btn_comp)   self->auton_mode = robot::COMP_1;
     else                             self->auton_mode = robot::SKILLS_1;
+    self->updateButtonStates();
+}
+
+void RobotConfigMenu::cbAlliance(lv_event_t* e) {
+    RobotConfigMenu* self = static_cast<RobotConfigMenu*>(lv_event_get_user_data(e));
+    lv_obj_t* target = static_cast<lv_obj_t*>(lv_event_get_target(e));
+    if (target == self->btn_red)   self->alliance_color = robot::RED;
+    else                             self->alliance_color = robot::BLUE;
     self->updateButtonStates();
 }
 
@@ -147,38 +160,52 @@ void RobotConfigMenu::build() {
     lv_obj_set_align(title, LV_ALIGN_TOP_MID);
 
     // --- Robot color row ---
-    lv_obj_t* row1 = makeRow(48);
+    lv_obj_t* row1 = makeRow(32);
     lv_obj_remove_flag(row1, LV_OBJ_FLAG_SCROLLABLE);
     btn_pink = lv_button_create(row1);
-    lv_obj_set_size(btn_pink, 220, 48);
+    lv_obj_set_size(btn_pink, 220, 32);
     applyColorTheme(btn_pink, COLOR_PINK);
     lv_obj_add_event_cb(btn_pink, cbRobotConfig, LV_EVENT_CLICKED, this);
     lv_obj_t* lbl_pink = lv_label_create(btn_pink);
     lv_label_set_text(lbl_pink, "Pink");
 
     btn_purple = lv_button_create(row1);
-    lv_obj_set_size(btn_purple, 220, 48);
+    lv_obj_set_size(btn_purple, 220, 32);
     applyColorTheme(btn_purple, COLOR_PURPLE);
     lv_obj_add_event_cb(btn_purple, cbRobotConfig, LV_EVENT_CLICKED, this);
     lv_obj_t* lbl_purple = lv_label_create(btn_purple);
     lv_label_set_text(lbl_purple, "Purple");
 
+    btn_red = lv_button_create(row1);
+    lv_obj_set_size(btn_red, 220, 32);
+    applyColorTheme(btn_red, COLOR_RED_ALLIANCE);
+    lv_obj_add_event_cb(btn_red, cbAlliance, LV_EVENT_CLICKED, this);
+    lv_obj_t* lbl_red = lv_label_create(btn_red);
+    lv_label_set_text(lbl_red, "Red");
+
     // --- Driver profile row ---
     lv_obj_t* row2 = makeRow(48);
     lv_obj_remove_flag(row2, LV_OBJ_FLAG_SCROLLABLE);
     btn_jon = lv_button_create(row2);
-    lv_obj_set_size(btn_jon, 220, 48);
+    lv_obj_set_size(btn_jon, 220, 32);
     applyColorTheme(btn_jon, COLOR_JON);
     lv_obj_add_event_cb(btn_jon, cbDriverProfile, LV_EVENT_CLICKED, this);
     lv_obj_t* lbl_jon = lv_label_create(btn_jon);
     lv_label_set_text(lbl_jon, "Jon");
 
     btn_quinn = lv_button_create(row2);
-    lv_obj_set_size(btn_quinn, 220, 48);
+    lv_obj_set_size(btn_quinn, 220, 32);
     applyColorTheme(btn_quinn, COLOR_QUINN);
     lv_obj_add_event_cb(btn_quinn, cbDriverProfile, LV_EVENT_CLICKED, this);
     lv_obj_t* lbl_quinn = lv_label_create(btn_quinn);
     lv_label_set_text(lbl_quinn, "Quinn");
+
+    btn_blue = lv_button_create(row1);
+    lv_obj_set_size(btn_blue, 220, 32);
+    applyColorTheme(btn_blue, COLOR_BLUE_ALLIANCE);
+    lv_obj_add_event_cb(btn_blue, cbAlliance, LV_EVENT_CLICKED, this);
+    lv_obj_t* lbl_blue = lv_label_create(btn_blue);
+    lv_label_set_text(lbl_blue, "Blue");
 
     // --- Auton row ---
     lv_obj_t* row3 = makeRow(48);

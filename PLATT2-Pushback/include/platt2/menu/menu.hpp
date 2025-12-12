@@ -91,6 +91,7 @@ private:
     robot::RobotConfig robot_config = robot::NO_ROBOT;
     robot::DriverProfile driver_profile = robot::NO_DRIVER;
     robot::AutonConfig auton_mode = robot::NO_AUTON;
+    robot::AllianceConfig alliance_color = robot::NO_ALLIANCE;
 
     // LVGL objects
     lv_obj_t* btn_pink   = nullptr;
@@ -99,6 +100,8 @@ private:
     lv_obj_t* btn_quinn  = nullptr;
     lv_obj_t* btn_comp   = nullptr;
     lv_obj_t* btn_skills = nullptr;
+    lv_obj_t* btn_red   = nullptr;
+    lv_obj_t* btn_blue = nullptr;
     lv_obj_t* btn_save   = nullptr;
 
     // helpers
@@ -110,9 +113,11 @@ private:
     void loadStartMenu();
 
     // static event callbacks (forward to instance via user_data)
+
     static void cbRobotConfig(lv_event_t* e);
     static void cbDriverProfile(lv_event_t* e);
     static void cbAutonMode(lv_event_t* e);
+    static void cbAlliance(lv_event_t* e);
     static void cbSave(lv_event_t* e);
 
     bool isInUse = true;
