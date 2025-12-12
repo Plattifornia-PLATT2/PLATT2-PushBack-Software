@@ -1,6 +1,7 @@
 #ifndef IAUTON_HPP
 #define IAUTON_HPP
 
+#include "platt2/EAllianceConfig.hpp"
 #include "platt2/robot/subsystems/holonomicDrive/XDrive.hpp"
 #include "platt2/robot/subsystems/holonomicDrive/HolonomicControl.hpp"
 #include "platt2/robot/subsystems/odometry/Odometry.hpp"
@@ -24,7 +25,8 @@ class IAuton{
     virtual void init(std::shared_ptr<robot::subsystems::holonomicDrive::HolonomicControl> holonomic_subsytem, 
         std::shared_ptr<robot::subsystems::odometry::Odometry> odometry_subsystem, 
         std::shared_ptr<robot::subsystems::intake::IntakeSubsystem> intake_subsystem,
-        std::shared_ptr<robot::subsystems::colorsort::ColorSortSubsystem> color_sort_subsystem
+        std::shared_ptr<robot::subsystems::colorsort::ColorSortSubsystem> color_sort_subsystem,
+        robot::AllianceConfig alliance_color
     ) = 0;
 
     virtual void run() = 0;

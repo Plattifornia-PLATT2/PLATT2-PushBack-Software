@@ -110,12 +110,12 @@ std::shared_ptr<robot::Robot> PurpleConfig::buildRobot(robot::AutonConfig auton,
     if(auton == robot::SKILLS_1 ){
         std::unique_ptr<auton::PurpleSkillsAuton> purple_skills_auton = std::make_unique<auton::PurpleSkillsAuton>();
         auton_routine = std::move(purple_skills_auton);
-        auton_routine->init(holonomic_contol_subsystem, odom_subsystem, intake_subsystem, color_sort_subsystem);
+        auton_routine->init(holonomic_contol_subsystem, odom_subsystem, intake_subsystem, color_sort_subsystem, alliance);
     }
     else {
         std::unique_ptr<auton::PurpleCompAuton> purple_comp_auton = std::make_unique<auton::PurpleCompAuton>();
         auton_routine = std::move(purple_comp_auton);
-        auton_routine->init(holonomic_contol_subsystem, odom_subsystem, intake_subsystem, color_sort_subsystem);
+        auton_routine->init(holonomic_contol_subsystem, odom_subsystem, intake_subsystem, color_sort_subsystem, alliance);
     }
 
     // build robot object
