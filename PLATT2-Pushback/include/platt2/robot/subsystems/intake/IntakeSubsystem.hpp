@@ -152,16 +152,27 @@ namespace intake{
          */
         void toggle_descore_piston();
 
+        /**
+         * @brief Sets the intake subsystem to color sort mode, or disables it.
+         * 
+         * @param state True for color sort enabled, false for color sort disabled.
+         */
         void colorSortMode(bool state);
 
         /**
          * @brief Construct a new Intake Subsystem object
          * 
-         * @param ed_mech_piston ED Mech piston object
-         * @param upper_conveyor_height_piston Upper conveyor height piston object
-         * @param conveyor_stopper_piston Conveyor stopper piston object
-         * @param rake_mech_piston Rake mechanism piston object
-         * @param distance_sensor Distance sensor object
+         * @param front_intake Front intake motor
+         * @param rear_intake Rear intake motor
+         * @param mid_intake Middle intake motor
+         * @param upper_conveyor Upper conveyor motor
+         * @param lower_roller Lower roller motor
+         * @param ed_mech_piston ED mechanism piston
+         * @param upper_conveyor_height_piston Upper conveyor height piston
+         * @param conveyor_stopper_piston Conveyor stopper piston
+         * @param rake_mech_piston Rake mechanism piston
+         * @param descore_piston Descore piston
+         * @param distance_sensor Distance sensor
          */
         IntakeSubsystem(
             std::unique_ptr<pros::Motor>front_intake, 

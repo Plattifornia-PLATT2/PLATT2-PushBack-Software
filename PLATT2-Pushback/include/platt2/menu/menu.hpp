@@ -5,31 +5,85 @@
 #include "platt2/EAutonConfig.hpp"
 #include "platt2/ERobotConfig.hpp"
 #include "platt2/EDriverConfig.hpp"
-#include "liblvgl/lvgl.h"
 #include "platt2/robot/Robot.hpp"
+
+#include "liblvgl/lvgl.h"
+
 #include <stdio.h>
 
+/**
+ * @brief Namespace for all PLATT2 library code.
+ * @authors PLATT2 Development Team.
+ */
 namespace platt2{
+
+/**
+ * @brief Namespace for config menu screen.
+ * @author Dominic Young
+ */
 namespace menu{
+    /**
+     * @brief A struct for all the necessary config enums
+     * @author Dominic Young
+     */
     struct FullConfig{
     robot::AutonConfig autonConfig;
     robot::RobotConfig robotConfig;
     robot::DriverProfile driverProfile;
-};
+    };
 
+/**
+ * @brief A class for the config menu to set the robot configuration
+ * @author Dominic Young
+ */
 class RobotConfigMenu {
 public:
+    /**
+     * @brief Construct a new Robot Config Menu object
+     * 
+     */
     RobotConfigMenu() = default;
-    // build UI and load config
+
+    /**
+     * @brief Displays the menu on screen
+     * 
+     */
     void build();
 
-    // getters for other code (opcontrol/auton)
+    /**
+     * @brief Get the Robot Config enum state
+     * 
+     * @return int Enum as an integer
+     */
     int getRobotConfig() const { return robot_config; }    // 0 Pink, 1 Purple
+
+    /**
+     * @brief Get the Driver Profile enum state
+     * 
+     * @return int Enum as an integer
+     */
     int getDriverProfile() const { return driver_profile; } // 0 Jon, 1 Quinn
+
+    /**
+     * @brief Get the Auton Mode enum state
+     * 
+     * @return int Enum as an integer
+     */
     int getAutonMode() const { return auton_mode; }         // 0 Comp, 1 Skills
     
+    /**
+     * @brief Check if the menu is currently in use
+     * 
+     * @return true If the menu is in use
+     * @return false If the menu is not in use
+     */
     bool menuInUse();
 
+    /**
+     * @brief Get the Full Config struct with current values
+     * 
+     * @return FullConfig The full configuration of the robot
+     */
     FullConfig getFullConfig();
 
 private:

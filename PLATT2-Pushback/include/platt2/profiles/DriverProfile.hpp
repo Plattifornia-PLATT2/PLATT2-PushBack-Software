@@ -3,7 +3,16 @@
 
 #include "pros/misc.h"
 
+/**
+ * @brief Namespace for all PLATT2 library code.
+ * @author PLATT2 Development Team
+ */
 namespace platt2{
+
+/**
+ * @brief Namespace for controller profile code.
+ * @author Dominic Young
+ */
 namespace profiles{
 
     struct DriverProfile{

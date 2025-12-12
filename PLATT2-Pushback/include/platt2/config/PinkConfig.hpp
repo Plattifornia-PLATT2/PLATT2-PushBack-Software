@@ -1,6 +1,7 @@
 #ifndef PINKCONFIG_HPP
 #define PINKCONFIG_HPP
 
+// ** PLATT2 Library Includes **
 #include "platt2/config/IConfig.hpp"
 #include "platt2/robot/Robot.hpp"
 #include "platt2/robot/pid/pid.hpp"
@@ -15,17 +16,30 @@
 #include "platt2/auton/PinkSkillsAuton.hpp"
 #include "platt2/robot/subsystems/colorSort/colorSort.hpp"
 
+// ** PROS API Includes **
 #include "pros/motors.hpp"
 
-
+// ** Standard C++ Library Includes **
 #include <memory>
 #include <vector>
 #include <cmath>
 
+/**
+ * @brief Namespace for all PLATT2 Library Code
+ * @authors PLATT2 Development team
+ */
 namespace platt2{
 
+/**
+ * @brief Namespace for all Robot configuration related code
+ * @author Dominic Young
+ */
 namespace config{
 
+/**
+ * @brief Class for the pink robot's configuration
+ * @author Dominic Young
+ */
 class PinkConfig : public IConfig {
     private:
     static constexpr pros::MotorGears DRIVE_GEARSET{pros::MotorGears::blue};
@@ -93,6 +107,14 @@ class PinkConfig : public IConfig {
 
     public:
 
+    /**
+     * @brief Builds the pink robot with given config values
+     * 
+     * @param auton The auton route to use
+     * @param profile The driver profile to use
+     * @param alliance The alliance to use
+     * @return std::shared_ptr<robot::Robot> The built robot object
+     */
     std::shared_ptr<robot::Robot> buildRobot(robot::AutonConfig auton, robot::DriverProfile profile, robot::AllianceConfig alliance) override;
 };
 }

@@ -1,6 +1,7 @@
 #ifndef PURPLECONFIG_HPP
 #define PURPLECONFIG_HPP
 
+// ** PLATT2 Library Includes **
 #include "platt2/config/IConfig.hpp"
 #include "platt2/robot/Robot.hpp"
 #include "platt2/robot/pid/pid.hpp"
@@ -15,22 +16,34 @@
 #include "platt2/profiles/JonProfile.hpp"
 #include "platt2/profiles/DriverProfile.hpp"
 #include "platt2/profiles/QuinnProfile.hpp"
-
 #include "platt2/auton/PurpleCompAuton.hpp"
 #include "platt2/auton/PurpleSkillsAuton.hpp"
 
+// ** Pros API Includes **
 #include "pros/motors.hpp"
 #include "pros/rotation.hpp"
 
-
+// ** Standard C++ Library Includes **
 #include <memory>
 #include <vector>
 #include <cmath>
 
+/**
+ * @brief Namespace for all PLATT2 library code
+ * @authors PLATT2 devlopment team
+ */
 namespace platt2{
 
+/**
+ * @brief Namespace for all Robot configuration related code
+ * @author Dominic Young
+ */
 namespace config{
 
+/**
+ * @brief Class for the purple robot's configuration
+ * @author Dominic Young
+ */
 class PurpleConfig : public IConfig {
     private:
     static constexpr pros::MotorGears DRIVE_GEARSET{pros::MotorGears::blue};
@@ -98,6 +111,14 @@ class PurpleConfig : public IConfig {
 
     public:
 
+    /**
+     * @brief Builds the purple robot with given config values
+     * 
+     * @param auton The auton route to use
+     * @param profile The driver profile to use
+     * @param alliance The alliance to use
+     * @return std::shared_ptr<robot::Robot> The built robot object
+     */
     std::shared_ptr<robot::Robot> buildRobot(robot::AutonConfig auton, robot::DriverProfile profile, robot::AllianceConfig alliance) override;
 };
 }

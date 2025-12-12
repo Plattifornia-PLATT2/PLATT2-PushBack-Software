@@ -4,9 +4,22 @@
 #include "platt2/profiles/DriverProfile.hpp"
 #include "pros/misc.h"
 
+/**
+ * @brief Namespace for all PLATT2 library code.
+ * @author PLATT2 Development Team
+ */
 namespace platt2{
+
+/**
+ * @brief Namespace for controller profile code.
+ * @author Dominic Young
+ */
 namespace profiles{
 
+    /**
+     * @brief A struct for Jon's controller mappings
+     * 
+     */
     struct JonProfile : public DriverProfile{
     JonProfile() {
         frontIntake_IN = pros::E_CONTROLLER_DIGITAL_L1;
