@@ -105,7 +105,10 @@ void OpticalTrackingSensor::readData() {
     }
 
     // --- READ SERIAL INTO BUFFER ---
-    while (!m_serialInterface.get_read_avail()) pros::delay(10);
+    while (!m_serialInterface.get_read_avail()){ 
+        pros::screen::print(pros::E_TEXT_MEDIUM_CENTER, 4, "VEX Heading: %f", vex_imu->get_heading());
+        pros::delay(10);
+    }
     while (m_serialInterface.get_read_avail()) {
         char byteRead = static_cast<char>(m_serialInterface.read_byte());
         buffer.push_back(byteRead);
@@ -147,7 +150,6 @@ void OpticalTrackingSensor::readData() {
     pros::screen::print(pros::E_TEXT_MEDIUM_CENTER, 1, "X Pos: %f", xPos);
     pros::screen::print(pros::E_TEXT_MEDIUM_CENTER, 2, "Y Pos: %f", yPos);
     pros::screen::print(pros::E_TEXT_MEDIUM_CENTER, 3, "Heading: %f", (heading * 180) / M_PI);
-    pros::screen::print(pros::E_TEXT_MEDIUM_CENTER, 4, "VEX Heading: %f", vex_imu->get_heading());
     pros::delay(10);
 }
 

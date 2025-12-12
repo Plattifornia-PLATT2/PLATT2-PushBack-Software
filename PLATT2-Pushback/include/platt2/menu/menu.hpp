@@ -30,6 +30,7 @@ namespace menu{
     robot::AutonConfig autonConfig;
     robot::RobotConfig robotConfig;
     robot::DriverProfile driverProfile;
+    robot::AllianceConfig allianceColor;
     };
 
 /**

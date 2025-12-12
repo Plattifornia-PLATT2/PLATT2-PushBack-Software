@@ -3,6 +3,7 @@
 #include "liblvgl/misc/lv_color.h"
 #include "liblvgl/misc/lv_types.h"
 #include "liblvgl/widgets/buttonmatrix/lv_buttonmatrix.h"
+#include "platt2/EAllianceConfig.hpp"
 #include "platt2/EAutonConfig.hpp"
 #include "platt2/ERobotConfig.hpp"
 
@@ -54,7 +55,8 @@ FullConfig RobotConfigMenu::getFullConfig() {
     return FullConfig{
         .autonConfig = static_cast<robot::AutonConfig>(auton_mode),
         .robotConfig = static_cast<robot::RobotConfig>(robot_config),
-        .driverProfile = static_cast<robot::DriverProfile>(driver_profile)
+        .driverProfile = static_cast<robot::DriverProfile>(driver_profile),
+        .allianceColor = static_cast<robot::AllianceConfig>(alliance_color)
     };
 }
 
@@ -160,24 +162,24 @@ void RobotConfigMenu::build() {
     lv_obj_set_align(title, LV_ALIGN_TOP_MID);
 
     // --- Robot color row ---
-    lv_obj_t* row1 = makeRow(32);
+    lv_obj_t* row1 = makeRow(48);
     lv_obj_remove_flag(row1, LV_OBJ_FLAG_SCROLLABLE);
     btn_pink = lv_button_create(row1);
-    lv_obj_set_size(btn_pink, 220, 32);
+    lv_obj_set_size(btn_pink, 146, 48);
     applyColorTheme(btn_pink, COLOR_PINK);
     lv_obj_add_event_cb(btn_pink, cbRobotConfig, LV_EVENT_CLICKED, this);
     lv_obj_t* lbl_pink = lv_label_create(btn_pink);
     lv_label_set_text(lbl_pink, "Pink");
 
     btn_purple = lv_button_create(row1);
-    lv_obj_set_size(btn_purple, 220, 32);
+    lv_obj_set_size(btn_purple, 146, 48);
     applyColorTheme(btn_purple, COLOR_PURPLE);
     lv_obj_add_event_cb(btn_purple, cbRobotConfig, LV_EVENT_CLICKED, this);
     lv_obj_t* lbl_purple = lv_label_create(btn_purple);
     lv_label_set_text(lbl_purple, "Purple");
 
     btn_red = lv_button_create(row1);
-    lv_obj_set_size(btn_red, 220, 32);
+    lv_obj_set_size(btn_red, 146, 48);
     applyColorTheme(btn_red, COLOR_RED_ALLIANCE);
     lv_obj_add_event_cb(btn_red, cbAlliance, LV_EVENT_CLICKED, this);
     lv_obj_t* lbl_red = lv_label_create(btn_red);
@@ -187,21 +189,21 @@ void RobotConfigMenu::build() {
     lv_obj_t* row2 = makeRow(48);
     lv_obj_remove_flag(row2, LV_OBJ_FLAG_SCROLLABLE);
     btn_jon = lv_button_create(row2);
-    lv_obj_set_size(btn_jon, 220, 32);
+    lv_obj_set_size(btn_jon, 146, 48);
     applyColorTheme(btn_jon, COLOR_JON);
     lv_obj_add_event_cb(btn_jon, cbDriverProfile, LV_EVENT_CLICKED, this);
     lv_obj_t* lbl_jon = lv_label_create(btn_jon);
     lv_label_set_text(lbl_jon, "Jon");
 
     btn_quinn = lv_button_create(row2);
-    lv_obj_set_size(btn_quinn, 220, 32);
+    lv_obj_set_size(btn_quinn, 146, 48);
     applyColorTheme(btn_quinn, COLOR_QUINN);
     lv_obj_add_event_cb(btn_quinn, cbDriverProfile, LV_EVENT_CLICKED, this);
     lv_obj_t* lbl_quinn = lv_label_create(btn_quinn);
     lv_label_set_text(lbl_quinn, "Quinn");
 
-    btn_blue = lv_button_create(row1);
-    lv_obj_set_size(btn_blue, 220, 32);
+    btn_blue = lv_button_create(row2);
+    lv_obj_set_size(btn_blue, 146, 48);
     applyColorTheme(btn_blue, COLOR_BLUE_ALLIANCE);
     lv_obj_add_event_cb(btn_blue, cbAlliance, LV_EVENT_CLICKED, this);
     lv_obj_t* lbl_blue = lv_label_create(btn_blue);
