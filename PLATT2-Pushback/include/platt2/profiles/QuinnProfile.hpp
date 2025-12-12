@@ -24,16 +24,16 @@ namespace profiles{
         QuinnProfile() {
             frontIntake_IN = pros::E_CONTROLLER_DIGITAL_L1;
             frontIntake_OUT = pros::E_CONTROLLER_DIGITAL_L2;
-            auto_unload_button = pros::E_CONTROLLER_DIGITAL_Y;
+            auto_unload_button = pros::E_CONTROLLER_DIGITAL_X;
             edMech_toggle = pros::E_CONTROLLER_DIGITAL_R1;
             highScore_toggle = pros::E_CONTROLLER_DIGITAL_R2;
-            stopper_toggle = pros::E_CONTROLLER_DIGITAL_UP;
+            stopper_toggle = pros::E_CONTROLLER_DIGITAL_RIGHT;
             colorSort_toggle = pros::E_CONTROLLER_DIGITAL_DOWN;
-            rakeMech_toggle = pros::E_CONTROLLER_DIGITAL_LEFT;
-            fieldOriented_toggle = pros::E_CONTROLLER_DIGITAL_RIGHT;
+            rakeMech_toggle = pros::E_CONTROLLER_DIGITAL_UP;
+            fieldOriented_toggle = pros::E_CONTROLLER_DIGITAL_UP;
             heading_reset = pros::E_CONTROLLER_DIGITAL_B;
             descore_toggle = pros::E_CONTROLLER_DIGITAL_A;
-            scoreHighMacro = pros::E_CONTROLLER_DIGITAL_X;
+            scoreHighMacro = pros::E_CONTROLLER_DIGITAL_Y;
             scoreMiddleHighMacro = pros::E_CONTROLLER_DIGITAL_LEFT;
         }
     };
