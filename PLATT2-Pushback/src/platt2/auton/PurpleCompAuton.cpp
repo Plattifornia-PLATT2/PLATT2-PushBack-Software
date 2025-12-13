@@ -61,6 +61,7 @@ void PurpleCompAuton::run() {
     intake_subsystem->move_intake(robot::subsystems::intake::OUT);
     pros::delay(200);
     intake_subsystem->move_intake(robot::subsystems::intake::IN);
+    /*
     pros::delay(1000);    
     color_sort_subsystem->setSortedColor(robot::subsystems::colorsort::OFF);
     holonomic_subsytem->moveToPoint(86, 57, 130, 0.3, 0.3, 5);
@@ -69,7 +70,7 @@ void PurpleCompAuton::run() {
     intake_subsystem->move_intake(robot::subsystems::intake::IN);
      pros::delay(200);
     intake_subsystem->move_intake(robot::subsystems::intake::OUT_LOW_GOAL);
-
+    */
     //holonomic_subsytem->moveToPoint(118, 12, 270, 0.3);
     
     // TODO: Implementation goes here
