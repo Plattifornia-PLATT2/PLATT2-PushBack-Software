@@ -22,7 +22,7 @@ void PinkSkillsAuton::init(
 }
 
 void PinkSkillsAuton::run() {
-    // TODO: Implementation goes here
+    /*// TODO: Implementation goes here
     //holonomic_subsytem->moveToPoint(0, 24, 90);
     holonomic_subsytem->moveToPoint(54, 19, 90, 0.2, 0.2, 2);
     //intake_subsystem->toggle_rake_mech_piston();
@@ -89,13 +89,11 @@ void PinkSkillsAuton::run() {
     intake_subsystem->move_intake(robot::subsystems::intake::OUT_LOW_GOAL);
     pros::delay(2000);
     intake_subsystem->move_intake(robot::subsystems::intake::STOP);
+    */
     
-    
-    
-    
-    
-    
-
+    intake_subsystem->toggle_rake_mech_piston();
+    pros::delay(5000);
+    holonomic_subsytem->moveToPointInternalHeading(0, 0, 180);
 }
 
 }

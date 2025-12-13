@@ -56,6 +56,8 @@ public:
      */
     void moveToPoint(double x_target, double y_target, double heading_target, double rSpeed = 0.4, double wSpeed = 0.3, double timeout = 7);
 
+    void moveToPointInternalHeading(double x_target, double y_target, double heading_target, double rSpeed = 0.4, double wSpeed = 0.3, double timeout = 7);
+
     /**
      * @brief Used for debugging purposes.
      */
