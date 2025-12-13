@@ -23,10 +23,10 @@ void PurpleSkillsAuton::init(
 
 void PurpleSkillsAuton::run() {
     // TODO: Implementation goes here
-    //intake_subsystem->toggle_rake_mech_piston();
+    intake_subsystem->toggle_rake_mech_piston();
     pros::delay(200);
     holonomic_subsytem->moveToPoint(88, 19, 270, 0.2, 0.2);
-    //intake_subsystem->toggle_rake_mech_piston();
+    intake_subsystem->toggle_rake_mech_piston();
     intake_subsystem->toggle_upper_conveyor_height_piston();
     holonomic_subsytem->moveToPoint(118, 20, 275);
     intake_subsystem->move_intake(robot::subsystems::intake::IN);
