@@ -24,17 +24,17 @@ namespace profiles{
     JonProfile() {
         frontIntake_IN = pros::E_CONTROLLER_DIGITAL_L1;
         frontIntake_OUT = pros::E_CONTROLLER_DIGITAL_L2;
-        auto_unload_button = pros::E_CONTROLLER_DIGITAL_Y;
-        edMech_toggle = pros::E_CONTROLLER_DIGITAL_R1;
-        highScore_toggle = pros::E_CONTROLLER_DIGITAL_R2;
-        stopper_toggle = pros::E_CONTROLLER_DIGITAL_UP;
-        colorSort_toggle = pros::E_CONTROLLER_DIGITAL_DOWN;
-        rakeMech_toggle = pros::E_CONTROLLER_DIGITAL_LEFT;
-        fieldOriented_toggle = pros::E_CONTROLLER_DIGITAL_RIGHT;
-        heading_reset = pros::E_CONTROLLER_DIGITAL_B;
-        descore_toggle = pros::E_CONTROLLER_DIGITAL_A;
-        scoreHighMacro = pros::E_CONTROLLER_DIGITAL_X;
-        scoreMiddleHighMacro = pros::E_CONTROLLER_DIGITAL_LEFT;
+        auto_unload_button = pros::E_CONTROLLER_DIGITAL_X;
+        edMech_toggle = pros::E_CONTROLLER_DIGITAL_Y;
+        highScore_toggle = pros::E_CONTROLLER_DIGITAL_A;
+        stopper_toggle = pros::E_CONTROLLER_DIGITAL_DOWN;
+        colorSort_toggle = pros::E_CONTROLLER_DIGITAL_RIGHT;
+        rakeMech_toggle = pros::E_CONTROLLER_DIGITAL_UP;
+        fieldOriented_toggle = pros::E_CONTROLLER_DIGITAL_UP;
+        heading_reset = pros::E_CONTROLLER_DIGITAL_LEFT;
+        descore_toggle = pros::E_CONTROLLER_DIGITAL_B;
+        scoreHighMacro = pros::E_CONTROLLER_DIGITAL_R1;
+        scoreMiddleHighMacro = pros::E_CONTROLLER_DIGITAL_R2;
     }
     };
 }

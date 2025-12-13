@@ -27,10 +27,10 @@ namespace profiles{
             auto_unload_button = pros::E_CONTROLLER_DIGITAL_X;
             edMech_toggle = pros::E_CONTROLLER_DIGITAL_R1;
             highScore_toggle = pros::E_CONTROLLER_DIGITAL_R2;
-            stopper_toggle = pros::E_CONTROLLER_DIGITAL_RIGHT;
+            stopper_toggle = pros::E_CONTROLLER_DIGITAL_UP;
             colorSort_toggle = pros::E_CONTROLLER_DIGITAL_DOWN;
-            rakeMech_toggle = pros::E_CONTROLLER_DIGITAL_UP;
-            fieldOriented_toggle = pros::E_CONTROLLER_DIGITAL_UP;
+            rakeMech_toggle = pros::E_CONTROLLER_DIGITAL_X;
+            fieldOriented_toggle = pros::E_CONTROLLER_DIGITAL_RIGHT;
             heading_reset = pros::E_CONTROLLER_DIGITAL_B;
             descore_toggle = pros::E_CONTROLLER_DIGITAL_A;
             scoreHighMacro = pros::E_CONTROLLER_DIGITAL_Y;
