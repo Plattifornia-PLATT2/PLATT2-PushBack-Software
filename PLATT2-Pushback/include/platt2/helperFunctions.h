@@ -4,6 +4,11 @@
 #include <cmath>
 #include <numeric>
 #include <vector>
+
+/**
+ * @brief A struct to represent a cartesian coordinate.
+ * @author Logan Wolf
+ */
 struct cart {
 
     double x;
@@ -11,6 +16,10 @@ struct cart {
 
 };
 
+/**
+ * @brief A struct to represent a polar coordinate.
+ * @author Logan Wolf
+ */
 struct polar {
 
     double theta;
@@ -18,15 +27,32 @@ struct polar {
 
 };
 
+/**
+ * @brief A struct to hold a rolling average.
+ * @author Logan Wolf
+ */
 struct avg {
     double average;
     std::vector<double> data;
 };
 
+/**
+ * @brief Returns the sign of a given value.
+ * 
+ * @param val The value to check.
+ * @return int Returns 1 if positive, -1 if negative, and 0 if zero.
+ */
 inline int sgn(double val) {
     return ((0) < val) - (val < (0));
 }
 
+/**
+ * @brief Converts polar coordinates to cartesian coordinates.
+ * 
+ * @param r The radius or distance from the origin.
+ * @param theta The angle in radians.
+ * @return cart The corresponding cartesian coordinates.
+ */
 inline cart PtoC(double r, double theta){
     
     cart p;
@@ -38,6 +64,13 @@ inline cart PtoC(double r, double theta){
 
 }
 
+/**
+ * @brief Converts cartesian coordinates to polar coordinates.
+ * 
+ * @param x The x-coordinate.
+ * @param y The y-coordinate.
+ * @return polar The corresponding polar coordinates.
+ */
 inline polar CtoP(double x, double y)  {
 
     polar p;
@@ -49,7 +82,13 @@ inline polar CtoP(double x, double y)  {
 
 }
 
-
+/**
+ * @brief Calculates a rolling average by adding a new value and removing the oldest one.
+ * 
+ * @param var The new value to add.
+ * @param data The current data set.
+ * @return avg The updated rolling average and data set.
+ */
 inline avg rollAverage(double var, std::vector<double> data){
 
     data.emplace_back(var);
@@ -62,6 +101,22 @@ inline avg rollAverage(double var, std::vector<double> data){
 
     return result;
 
+}
+
+inline double distanceFromSecant(double x1, double y1,
+                          double x2, double y2,
+                          double x0, double y0)
+{
+    double vx = x2 - x1;
+    double vy = y2 - y1;
+
+    double wx = x0 - x1;
+    double wy = y0 - y1;
+
+    double cross = vx * wy - vy * wx;
+    double dist = std::abs(cross) / std::sqrt(vx*vx + vy*vy);
+
+    return dist;
 }
 
 #endif

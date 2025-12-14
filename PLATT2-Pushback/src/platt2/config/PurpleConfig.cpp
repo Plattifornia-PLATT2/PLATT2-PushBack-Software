@@ -1,4 +1,7 @@
 #include "platt2/config/PurpleConfig.hpp"
+#include "platt2/EAutonConfig.hpp"
+#include "platt2/auton/PurpleSkillsAuton.hpp"
+#include <memory>
 
 namespace platt2{
 namespace config{
@@ -29,6 +32,7 @@ std::shared_ptr<robot::Robot> PurpleConfig::buildRobot(robot::AutonConfig auton,
     std::unique_ptr<pros::Motor> middle_intake_motor{std::make_unique<pros::Motor>(MIDDLE_INTAKE_MOTOR_PORT, INTAKE_GEARSET)};
     std::unique_ptr<pros::Motor> rear_intake_motor{std::make_unique<pros::Motor>(REAR_INTAKE_MOTOR_PORT, INTAKE_GEARSET)};
     std::unique_ptr<pros::Motor> upper_conveyor_motor{std::make_unique<pros::Motor>(UPPER_CONVEYOR_MOTOR_PORT, INTAKE_GEARSET)};
+    std::unique_ptr<pros::Motor> lower_roller_motor{std::make_unique<pros::Motor>(LOWER_ROLLER_MOTOR_PORT, pros::MotorGears::green)};
 
     //X drive modules
     std::unique_ptr<platt2::robot::subsystems::holonomicDrive::XDriveModule> left_front_module{std::make_unique<platt2::robot::subsystems::holonomicDrive::XDriveModule>(left_front_top, left_front_bottom, deg_to_rad(45),deg_to_rad(135))};
@@ -47,10 +51,41 @@ std::shared_ptr<robot::Robot> PurpleConfig::buildRobot(robot::AutonConfig auton,
     std::shared_ptr<platt2::robot::subsystems::holonomicDrive::XDrive> XDrive_subsystem = std::make_shared<platt2::robot::subsystems::holonomicDrive::XDrive>(std::move(modules));
 
     // odom subsystem
-    std::shared_ptr<robot::subsystems::odometry::Odometry> odom_subsystem = std::make_shared<robot::subsystems::odometry::Odometry>();
+    std::unique_ptr<pros::IMU> vex_imu = std::make_unique<pros::IMU>(VEX_IMU_PORT);
+
+    std::shared_ptr<robot::subsystems::odometry::Odometry> odom_subsystem;
+    if(auton == robot::SKILLS_1){
+        odom_subsystem = std::make_shared<robot::subsystems::odometry::Odometry>(std::move(vex_imu), SKILLS_X_OFFSET, SKILLS_Y_OFFSET, SKILLS_H_OFFSET);
+    }
+    else {
+        odom_subsystem = std::make_shared<robot::subsystems::odometry::Odometry>(std::move(vex_imu), COMP_X_OFFSET, COMP_Y_OFFSET, COMP_H_OFFSET);
+    }
 
     // intake subsystem
-    std::shared_ptr<robot::subsystems::intake::IntakeSubsystem> intake_subsystem = std::make_shared<robot::subsystems::intake::IntakeSubsystem>(std::move(front_intake_motor), std::move(middle_intake_motor), std::move(rear_intake_motor), std::move(upper_conveyor_motor));
+    std::unique_ptr<pros::adi::DigitalOut> ed_mech_piston{std::make_unique<pros::adi::DigitalOut>(ED_MECH_PISTON_PORT)};
+    std::unique_ptr<pros::adi::DigitalOut> upper_conveyor_height_piston{std::make_unique<pros::adi::DigitalOut>(UPPER_CONVEYOR_HEIGHT_PISTON_PORT)};
+    std::unique_ptr<pros::adi::DigitalOut> conveyor_stopper_piston{std::make_unique<pros::adi::DigitalOut>(CONVEYOR_STOPPER_PISTON_PORT)};
+    std::unique_ptr<pros::adi::DigitalOut> rake_mech_piston{std::make_unique<pros::adi::DigitalOut>(RAKE_MECH_PISTON_PORT)};
+    std::unique_ptr<pros::adi::DigitalOut> descore_piston{std::make_unique<pros::adi::DigitalOut>(DESCORE_PISTON_PORT)};
+    std::unique_ptr<pros::Distance> distance_sensor{std::make_unique<pros::Distance>(DISTANCE_SENSOR_PORT)};
+
+    std::shared_ptr<robot::subsystems::intake::IntakeSubsystem> intake_subsystem = std::make_shared<robot::subsystems::intake::IntakeSubsystem>(
+        std::move(front_intake_motor), 
+        std::move(rear_intake_motor), 
+        std::move(middle_intake_motor), 
+        std::move(upper_conveyor_motor),
+        std::move(lower_roller_motor),
+        std::move(ed_mech_piston),
+        std::move(upper_conveyor_height_piston),
+        std::move(conveyor_stopper_piston),
+        std::move(rake_mech_piston),
+        std::move(descore_piston),
+        std::move(distance_sensor)
+    );
+
+    // Color sort subsystem
+    std::unique_ptr<pros::Optical> optical_sensor{std::make_unique<pros::Optical>(OPTICAL_SENSOR_PORT)};
+    std::shared_ptr<robot::subsystems::colorsort::ColorSortSubsystem> color_sort_subsystem = std::make_shared<robot::subsystems::colorsort::ColorSortSubsystem>(intake_subsystem,std::move(optical_sensor));
 
     //holonomic control system
     std::unique_ptr<robot::pid::PID>position_pid = std::make_unique<robot::pid::PID>(position_dt, position_max, position_min, position_Kp, position_Kd, position_Ki);
@@ -73,12 +108,14 @@ std::shared_ptr<robot::Robot> PurpleConfig::buildRobot(robot::AutonConfig auton,
     std::unique_ptr<auton::IAuton> auton_routine;
 
     if(auton == robot::SKILLS_1 ){
-        std::unique_ptr<auton::PurpleCompAuton> purple_comp_auton = std::make_unique<auton::PurpleCompAuton>();
-        auton_routine = std::move(purple_comp_auton);
-        auton_routine->init(holonomic_contol_subsystem, odom_subsystem, intake_subsystem);
+        std::unique_ptr<auton::PurpleSkillsAuton> purple_skills_auton = std::make_unique<auton::PurpleSkillsAuton>();
+        auton_routine = std::move(purple_skills_auton);
+        auton_routine->init(holonomic_contol_subsystem, odom_subsystem, intake_subsystem, color_sort_subsystem, alliance);
     }
     else {
-        
+        std::unique_ptr<auton::PurpleCompAuton> purple_comp_auton = std::make_unique<auton::PurpleCompAuton>();
+        auton_routine = std::move(purple_comp_auton);
+        auton_routine->init(holonomic_contol_subsystem, odom_subsystem, intake_subsystem, color_sort_subsystem, alliance);
     }
 
     // build robot object
@@ -91,7 +128,8 @@ std::shared_ptr<robot::Robot> PurpleConfig::buildRobot(robot::AutonConfig auton,
         platt2::robot::RobotConfig::PURPLE, 
         auton, 
         driver_profile,
-        auton_routine
+        auton_routine,
+        color_sort_subsystem
     )};
 
     return robot;
