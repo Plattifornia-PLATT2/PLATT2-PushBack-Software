@@ -17,7 +17,6 @@
 #include "platt2/profiles/DriverProfile.hpp"
 #include "platt2/profiles/QuinnProfile.hpp"
 #include "platt2/auton/PurpleCompAuton.hpp"
-#include "platt2/auton/PurpleSkillsAuton.hpp"
 
 // ** Pros API Includes **
 #include "pros/motors.hpp"

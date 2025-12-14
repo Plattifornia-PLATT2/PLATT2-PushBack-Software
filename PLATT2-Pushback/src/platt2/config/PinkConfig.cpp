@@ -2,7 +2,6 @@
 #include "platt2/EAutonConfig.hpp"
 #include "platt2/EDriverConfig.hpp"
 #include "platt2/auton/PinkCompAuton.hpp"
-#include "platt2/auton/PinkSkillsAuton.hpp"
 #include "platt2/profiles/DriverProfile.hpp"
 #include "platt2/profiles/JonProfile.hpp"
 #include "platt2/profiles/QuinnProfile.hpp"
@@ -117,7 +116,7 @@ std::shared_ptr<robot::Robot> PinkConfig::buildRobot(robot::AutonConfig auton, r
     // Build auton routine
     std::unique_ptr<auton::IAuton> auton_routine;
 
-    if(auton == robot::COMP_1 ){
+    if(auton == robot::SKILLS_1 ){
         std::unique_ptr<auton::PinkCompAuton> pink_comp_auton = std::make_unique<auton::PinkCompAuton>();
         auton_routine = std::move(pink_comp_auton);
         auton_routine->init(holonomic_contol_subsystem, odom_subsystem, intake_subsystem, color_sort_subsystem, alliance);
