@@ -56,6 +56,7 @@ namespace intake{
         std::unique_ptr<pros::Motor> rear_intake_motor;
         std::unique_ptr<pros::Motor> middle_intake_motor;
         std::unique_ptr<pros::Motor> upper_conveyor_motor;
+        std::unique_ptr<pros::Motor> lower_roller_motor;
 
         // ** Solenoids **
         std::unique_ptr<pros::adi::DigitalOut> ed_mech_piston;
@@ -76,6 +77,7 @@ namespace intake{
         bool rake_mech_piston_state = false;
         bool auto_unload_active = false;
         bool descore_piston_state = false;
+        bool colorSort = false;
 
         const double MAX_DISTANCE{100.0};
 
@@ -151,19 +153,33 @@ namespace intake{
         void toggle_descore_piston();
 
         /**
+         * @brief Sets the intake subsystem to color sort mode, or disables it.
+         * 
+         * @param state True for color sort enabled, false for color sort disabled.
+         */
+        void colorSortMode(bool state);
+
+        /**
          * @brief Construct a new Intake Subsystem object
          * 
-         * @param ed_mech_piston ED Mech piston object
-         * @param upper_conveyor_height_piston Upper conveyor height piston object
-         * @param conveyor_stopper_piston Conveyor stopper piston object
-         * @param rake_mech_piston Rake mechanism piston object
-         * @param distance_sensor Distance sensor object
+         * @param front_intake Front intake motor
+         * @param rear_intake Rear intake motor
+         * @param mid_intake Middle intake motor
+         * @param upper_conveyor Upper conveyor motor
+         * @param lower_roller Lower roller motor
+         * @param ed_mech_piston ED mechanism piston
+         * @param upper_conveyor_height_piston Upper conveyor height piston
+         * @param conveyor_stopper_piston Conveyor stopper piston
+         * @param rake_mech_piston Rake mechanism piston
+         * @param descore_piston Descore piston
+         * @param distance_sensor Distance sensor
          */
         IntakeSubsystem(
             std::unique_ptr<pros::Motor>front_intake, 
             std::unique_ptr<pros::Motor>rear_intake, 
             std::unique_ptr<pros::Motor>mid_intake, 
             std::unique_ptr<pros::Motor>upper_conveyor,
+            std::unique_ptr<pros::Motor>lower_roller,
             std::unique_ptr<pros::adi::DigitalOut> ed_mech_piston,
             std::unique_ptr<pros::adi::DigitalOut> upper_conveyor_height_piston,
             std::unique_ptr<pros::adi::DigitalOut> conveyor_stopper_piston,

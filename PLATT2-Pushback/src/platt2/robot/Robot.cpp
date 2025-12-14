@@ -31,6 +31,7 @@ namespace robot{
     void Robot::driverControl(){
 
         pros::Controller controller{pros::Controller(pros::E_CONTROLLER_MASTER)};
+        controller.print(0, 0, "Sorted Color: %d", color_sort_subsystem->getSortedColor());
 
         while(true){
           // pros::screen::print(pros::E_TEXT_MEDIUM_CENTER,6, "IMU Heading %f", odom_subsystem->getHeading());
@@ -38,21 +39,32 @@ namespace robot{
             double leftX = double(controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_X));
             double leftY = double(controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y));
             double rightX = double(controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X));
+
+            // right stick deadzone to eliminate stick drift issues with heading
+            if(rightX < 0.05 && rightX > -0.05){
+                rightX = 0;
+            }
+
             // Create movement vector
             subsystems::holonomicDrive::MovementVector movement;   
 
-            movement.theta = atan2(leftY, leftX)-((odom_subsystem->getHeading())-(M_PI/2));
+
+            movement.theta = atan2(leftY, leftX)-((odom_subsystem->getVexHeading())-(M_PI/2));
             movement.r = std::clamp(sqrt(leftX*leftX + leftY*leftY)/127, -1.0,1.0);
             //movement.w = 0.1;
             movement.w = rightX/127;
+
+            
 
             // Send to subsystem
             holonomicDrive_subsystem->moveVector(movement);
 
             if(controller.get_digital(driver_profile->frontIntake_IN)){
+                intake_subsystem->colorSortMode(color_sort_subsystem->isSortActive());
                 intake_subsystem->move_intake(subsystems::intake::IntakeDirection::IN);
             }
             else if(controller.get_digital(driver_profile->frontIntake_OUT)){
+                intake_subsystem->colorSortMode(color_sort_subsystem->isSortActive());
                 intake_subsystem->move_intake(subsystems::intake::IntakeDirection::OUT);
             }
             else{
@@ -85,6 +97,7 @@ namespace robot{
 
             if(controller.get_digital_new_press(driver_profile->colorSort_toggle)){
                 color_sort_subsystem->toggleSortedColor();
+                controller.print(0, 0, "Sorted Color: %d", color_sort_subsystem->getSortedColor());
             }
 
             if(controller.get_digital_new_press(driver_profile->descore_toggle)){
@@ -96,6 +109,17 @@ namespace robot{
                     pros::Task([this]{ intake_subsystem->auto_unload(); });
                 }
             }
+
+            if(controller.get_digital_new_press(driver_profile->scoreHighMacro)){
+                intake_subsystem->toggle_upper_conveyor_height_piston();
+                intake_subsystem->toggle_conveyor_stopper_piston();  
+            }
+
+            if(controller.get_digital_new_press(driver_profile->scoreMiddleHighMacro)){
+                intake_subsystem->toggle_ed_mech_piston();
+                intake_subsystem->toggle_conveyor_stopper_piston();
+            }
+            
             pros::delay(10);
         }
     
@@ -103,6 +127,10 @@ namespace robot{
 
     void Robot::autonControl(){
         auton_routine->run();
+    }
+
+    void Robot::init(){
+        odom_subsystem->initVexImu();
     }
 
 }

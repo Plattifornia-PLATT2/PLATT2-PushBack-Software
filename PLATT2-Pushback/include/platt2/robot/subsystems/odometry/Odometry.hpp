@@ -87,12 +87,14 @@ namespace odometry{
          */
         double getVexHeading();
 
+        void initVexImu();
+
         /**
          * @brief Construct a new Odometry object with a vex IMU sensor.
          * 
          * @param vex_imu The unique pointer to a vex IMU sensor object.
          */
-        Odometry(std::unique_ptr<pros::IMU> vex_imu);
+        Odometry(std::unique_ptr<pros::IMU> vex_imu, double x, double y, double h);
     };
 
 };

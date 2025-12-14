@@ -3,7 +3,16 @@
 
 #include "pros/misc.h"
 
+/**
+ * @brief Namespace for all PLATT2 library code.
+ * @author PLATT2 Development Team
+ */
 namespace platt2{
+
+/**
+ * @brief Namespace for controller profile code.
+ * @author Dominic Young
+ */
 namespace profiles{
 
     struct DriverProfile{
@@ -28,6 +37,10 @@ namespace profiles{
         // Field Oriented Drive
         pros::controller_digital_e_t fieldOriented_toggle;
         pros::controller_digital_e_t heading_reset;
+
+        // Score Macros
+        pros::controller_digital_e_t scoreHighMacro;
+        pros::controller_digital_e_t scoreMiddleHighMacro;
     };
 }
 }

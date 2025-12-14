@@ -23,23 +23,17 @@ static void taskThunk(void *p) {
     reinterpret_cast<OpticalTrackingSensor*>(p)->readData();
 }
 
-OpticalTrackingSensor::OpticalTrackingSensor(double xOffset, double yOffset, std::unique_ptr<pros::IMU> vex_imu):
+OpticalTrackingSensor::OpticalTrackingSensor(double xOffset, double yOffset, double hOffset, std::unique_ptr<pros::IMU> vex_imu):
  m_otosTask(taskThunk, this),
  vex_imu(std::move(vex_imu))
 {
     this->xOffset = xOffset;
     this->yOffset = yOffset;
+    this->hOffset = hOffset;
+    
     xPos = 0;
     yPos = 0;
     heading = 0;
-
-    if(vex_imu){
-        this->vex_imu->reset();
-        while(vex_imu->is_calibrating()){
-            pros::delay(10);
-        }
-        vex_imu->set_heading(90.0);
-    }
 }
 
 double OpticalTrackingSensor::getXPosition(){
@@ -56,8 +50,18 @@ double OpticalTrackingSensor::getHeading(){
 
 void OpticalTrackingSensor::resetHeading(){
     if(vex_imu){
-        vex_imu->set_heading(0);
-        localHeading = 0;
+        vex_imu->set_heading(90);
+        //localHeading = 90;
+    }
+}
+
+void OpticalTrackingSensor::initVexImu(){
+     if(vex_imu){
+        this->vex_imu->reset();
+        while(vex_imu->is_calibrating()){
+            pros::delay(10);
+        }
+        vex_imu->set_heading(90);
     }
 }
 
@@ -85,99 +89,71 @@ double OpticalTrackingSensor::getVexHeading(){
     return getBoundedHeading();
 }
 
-void OpticalTrackingSensor::readData(){
+void OpticalTrackingSensor::readData() {
 
     double tempHeading;
-    double imuHeading;
-    std::string fullRead = "";
+    std::string buffer;
     std::string writeString = "";
-    while(true){
-        pros::screen::erase();
-        writeString = "";
-        imuHeading = vex_imu->get_heading();
-        imuHeading = std::round(imuHeading * 100.0) / 100.0;
 
-        if (imuHeading > 180) {
-            imuHeading -= 360;
-        }
-
-        std::cout<<"IMU Heading"<<imuHeading<<std::endl;
-        writeString = "/H:" + std::to_string(imuHeading) + ";";
-        std::vector<uint8_t> writeData (writeString.begin(), writeString.end());
-        std::cout<<writeData.data()<<std::endl;
-        if(m_serialInterface.get_write_free() > 0){
-            m_serialInterface.write(reinterpret_cast<uint8_t*>(writeData.data()), writeData.size());
-            pros::delay(5);
-        }
-
-        fullRead = "";
-        std::string xPosStr = "";
-        std::string yPosStr = "";
-        std::string hPosStr = "";
-        while(!m_serialInterface.get_read_avail()){
-            pros::delay(10);
-        }
-
-        while(m_serialInterface.get_read_avail()){
-            char byteRead = static_cast<char>(m_serialInterface.read_byte());
-            fullRead.push_back(byteRead);
-        }
-        std::cout<<"Full Read"<<fullRead<<std::endl; 
-        if(fullRead.find('/') != std::string::npos){
-                fullRead = fullRead.substr(fullRead.find('/'));
-        if(fullRead.size() > 0){
-        int xIndexFront = fullRead.find("X");
-        int xIndexBack = fullRead.find(";", xIndexFront+1);
-        xPosStr = fullRead.substr(xIndexFront+2, xIndexBack-(xIndexFront+2));
-
-        int yIndexFront = fullRead.find("Y");
-        int yIndexBack = fullRead.find(";", yIndexFront+1);
-        yPosStr = fullRead.substr(yIndexFront+2, yIndexBack-(yIndexFront+2));
-
-        int hIndexFront = fullRead.find("H");
-        int hIndexBack = fullRead.find(";", hIndexFront+1);
-        hPosStr = fullRead.substr(hIndexFront+2, hIndexBack-(hIndexFront+2));
-        std::cout<<hPosStr<<std::endl; 
-        }
-
-        try{
-        xPos = std::stod(xPosStr);
-        }
-        catch( std::exception e){
-
-        }
-        try{
-        yPos = std::stod(yPosStr);
-        } catch (std::exception e){
-
-        }
-        try{
-
-        tempHeading = (std::stod(hPosStr)*M_PI/180)+(M_PI/2);
-        if (tempHeading<0){
-            tempHeading = tempHeading+(2*M_PI);
-        }
-        heading = tempHeading;
-
-        } catch (std::exception e) {
-
-        }
-
-    } else {
-        m_serialInterface.flush();
-        std::cout<< "Flushed serial interface due to missing data." << std::endl;
+    while (true) {
+    // --- WRITE TO SERIAL ---
+    writeString = "/H:000;";
+    std::vector<uint8_t> writeData(writeString.begin(), writeString.end());
+    if (m_serialInterface.get_write_free() > 0) {
+        m_serialInterface.write(reinterpret_cast<uint8_t*>(writeData.data()), writeData.size());
+        pros::delay(5);
     }
 
-        //std::cout << xPosStr << yPosStr << hPosStr << std::endl;
-        pros::screen::print(pros::E_TEXT_MEDIUM_CENTER, 1, "X Pos: %s", xPosStr);
-        pros::screen::print(pros::E_TEXT_MEDIUM_CENTER, 2, "Y Pos: %s", yPosStr);
-        pros::screen::print(pros::E_TEXT_MEDIUM_CENTER, 3, "Heading: %f", heading);
-        pros::screen::print(pros::E_TEXT_MEDIUM_CENTER, 4, "Write String: %f", imuHeading);
-
+    // --- READ SERIAL INTO BUFFER ---
+    while (!m_serialInterface.get_read_avail()){ 
+        pros::screen::print(pros::E_TEXT_MEDIUM_CENTER, 4, "VEX Heading: %f", vex_imu->get_heading());
         pros::delay(10);
-        
-    
+    }
+    while (m_serialInterface.get_read_avail()) {
+        char byteRead = static_cast<char>(m_serialInterface.read_byte());
+        buffer.push_back(byteRead);
+    }
+
+    // --- EXTRACT FULL PACKET ---
+    size_t start = buffer.find('/');
+    size_t end   = buffer.find_last_of(';');
+
+    if (start != std::string::npos && end != std::string::npos && end > start) {
+        std::string packet = buffer.substr(start, end - start + 1);
+        buffer.erase(0, end + 1);  // remove the packet from buffer
+
+        //std::cout << "Full Read: " << packet << std::endl;
+
+        // --- PARSE VALUES ---
+        auto getValue = [&](const std::string &label) -> std::string {
+            size_t i = packet.find(label);
+            if (i == std::string::npos) return "";
+            size_t j = packet.find(";", i);
+            if (j == std::string::npos) return "";
+            return packet.substr(i + 2, j - (i + 2));
+        };
+
+        std::string xPosStr = getValue("X:");
+        std::string yPosStr = getValue("Y:");
+        std::string hPosStr = getValue("H:");
+
+        try { xPos = std::stod(xPosStr) + xOffset; } catch (...) {}
+        try { yPos = std::stod(yPosStr) + yOffset; } catch (...) {}
+        try {
+            tempHeading = (std::stod(hPosStr) * M_PI / 180) + ((hOffset * M_PI) / 180);
+            if (tempHeading < 0) tempHeading += (2 * M_PI);
+            heading = tempHeading;
+        } catch (...) {}
+    }
+
+    pros::screen::erase();
+    pros::screen::print(pros::E_TEXT_MEDIUM_CENTER, 1, "X Pos: %f", xPos);
+    pros::screen::print(pros::E_TEXT_MEDIUM_CENTER, 2, "Y Pos: %f", yPos);
+    pros::screen::print(pros::E_TEXT_MEDIUM_CENTER, 3, "Heading: %f", (heading * 180) / M_PI);
+    pros::delay(10);
+}
+
 }
 }
 } // namespace hal
-} // namespace platt2
+ // namespace platt2

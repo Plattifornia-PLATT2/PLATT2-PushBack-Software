@@ -68,6 +68,14 @@ namespace holonomicDrive{
         //double get_rpm();
         //double getAngleFromZero();
 
+        /**
+         * @brief Construct a new XDriveModule object
+         * 
+         * @param motor_l Top motor object
+         * @param motor_r Bottom motor object
+         * @param theta The angle between N the turning center and the center of the wheel
+         * @param phi The angle between N the turning center and the direction the wheel is facing
+         */
         XDriveModule(std::unique_ptr<pros::Motor>& motor_l, std::unique_ptr<pros::Motor>& motor_r, double theta, double phi);
         // theta refers to the angle between N the turning center and the center of the wheel
         // phi refers to the angle between N the turning center and the direction the wheel is faceing 

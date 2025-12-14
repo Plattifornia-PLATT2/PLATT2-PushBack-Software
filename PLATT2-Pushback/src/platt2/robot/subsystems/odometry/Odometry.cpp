@@ -25,13 +25,14 @@ double Odometry::getX() { return otos.getXPosition(); }
 double Odometry::getY() { return otos.getYPosition(); }
 double Odometry::getHeading() { return otos.getHeading(); }
 double Odometry::getVexHeading() {return otos.getVexHeading();}
+void Odometry::initVexImu() {return otos.initVexImu();}
 
 void Odometry::resetHeading() {
-
+  otos.resetHeading();
 }
 
-Odometry::Odometry(std::unique_ptr<pros::IMU> vex_imu)
-: otos(0.0, 0.0,  std::move(vex_imu)) 
+Odometry::Odometry(std::unique_ptr<pros::IMU> vex_imu, double x, double y, double h)
+: otos(x, y, h,  std::move(vex_imu)) 
 {
    
 }

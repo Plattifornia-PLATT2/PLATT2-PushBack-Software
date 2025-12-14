@@ -1,6 +1,7 @@
 #ifndef PINKCONFIG_HPP
 #define PINKCONFIG_HPP
 
+// ** PLATT2 Library Includes **
 #include "platt2/config/IConfig.hpp"
 #include "platt2/robot/Robot.hpp"
 #include "platt2/robot/pid/pid.hpp"
@@ -15,17 +16,30 @@
 #include "platt2/auton/PinkSkillsAuton.hpp"
 #include "platt2/robot/subsystems/colorSort/colorSort.hpp"
 
+// ** PROS API Includes **
 #include "pros/motors.hpp"
 
-
+// ** Standard C++ Library Includes **
 #include <memory>
 #include <vector>
 #include <cmath>
 
+/**
+ * @brief Namespace for all PLATT2 Library Code
+ * @authors PLATT2 Development team
+ */
 namespace platt2{
 
+/**
+ * @brief Namespace for all Robot configuration related code
+ * @author Dominic Young
+ */
 namespace config{
 
+/**
+ * @brief Class for the pink robot's configuration
+ * @author Dominic Young
+ */
 class PinkConfig : public IConfig {
     private:
     static constexpr pros::MotorGears DRIVE_GEARSET{pros::MotorGears::blue};
@@ -48,8 +62,9 @@ class PinkConfig : public IConfig {
     static constexpr int FRONT_INTAKE_MOTOR_PORT{14};
     static constexpr int MIDDLE_INTAKE_MOTOR_PORT{13};
     static constexpr int REAR_INTAKE_MOTOR_PORT{-15};
+    static constexpr int LOWER_ROLLER_MOTOR_PORT{8};
     static constexpr int UPPER_CONVEYOR_MOTOR_PORT{16};
-    static constexpr int DISTANCE_SENSOR_PORT{8};
+    static constexpr int DISTANCE_SENSOR_PORT{7};
     static constexpr pros::MotorGears INTAKE_GEARSET{pros::MotorGears::blue};
 
     // ** Color Sort Ports **
@@ -65,24 +80,41 @@ class PinkConfig : public IConfig {
     // ** VEX IMU Port **
     static constexpr int VEX_IMU_PORT{11};
 
+    // ** Odometry Offsets **
+    static constexpr double COMP_X_OFFSET{0.0};
+    static constexpr double COMP_Y_OFFSET{0.0};
+    static constexpr double COMP_H_OFFSET{90.0};
+
+    static constexpr double SKILLS_X_OFFSET{54.0};
+    static constexpr double SKILLS_Y_OFFSET{8.5};
+    static constexpr double SKILLS_H_OFFSET{90.0};
+
     // ** Linear PID Tuning Values **
     static constexpr double position_dt{0.01};
-    static constexpr double position_max{0.4};
-    static constexpr double position_min{-0.4};
-    static constexpr double position_Kp{0.09};
-    static constexpr double position_Kd{0.006};
+    static constexpr double position_max{1};
+    static constexpr double position_min{-1};
+    static constexpr double position_Kp{0.085};
+    static constexpr double position_Kd{0.007};
     static constexpr double position_Ki{0};
 
     // ** Angular PID Tuning Values **
     static constexpr double heading_dt{0.01};
-    static constexpr double heading_max{0.3};
-    static constexpr double heading_min{-0.3};
+    static constexpr double heading_max{1};
+    static constexpr double heading_min{-1};
     static constexpr double heading_Kp{0.3};
     static constexpr double heading_Kd{0.0};
     static constexpr double heading_Ki{0};
 
     public:
 
+    /**
+     * @brief Builds the pink robot with given config values
+     * 
+     * @param auton The auton route to use
+     * @param profile The driver profile to use
+     * @param alliance The alliance to use
+     * @return std::shared_ptr<robot::Robot> The built robot object
+     */
     std::shared_ptr<robot::Robot> buildRobot(robot::AutonConfig auton, robot::DriverProfile profile, robot::AllianceConfig alliance) override;
 };
 }

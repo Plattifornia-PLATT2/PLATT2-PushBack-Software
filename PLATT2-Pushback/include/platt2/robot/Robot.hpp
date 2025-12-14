@@ -75,6 +75,12 @@ namespace platt2
             void driverControl();
 
             /**
+             * @brief Initalizes robot sensors and subsystems.
+             * 
+             */
+            void init();
+
+            /**
              * @brief Construct a new Robot object with the given subsystems and parameters.
              * 
              * @param xdrive_subsystem Shared pointer to an Xdrive subsystem object

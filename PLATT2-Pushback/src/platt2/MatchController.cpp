@@ -19,11 +19,17 @@ void MatchController::init(){
         std::unique_ptr<config::PurpleConfig> purple{std::make_unique<config::PurpleConfig>()};
         config = std::move(purple);
     }
+
+    robot = config->buildRobot(roboConfig.autonConfig, roboConfig.driverProfile, roboConfig.allianceColor);
+    std::cout << roboConfig.allianceColor <<std::endl;
+    if(robot){
+        robot->init();
+    }
     pros::screen::erase();
-    robot = config->buildRobot(roboConfig.autonConfig, roboConfig.driverProfile, robot::NO_ALLIANCE);
 }
 
 void MatchController::driveControl(){
+    pros::screen::erase();
    robot->driverControl();
 }
 

@@ -57,7 +57,9 @@ namespace colorsort{
         std::unique_ptr<pros::Optical> optical_sensor;
 
         BallColor current_color = OFF;
-        double BALL_REJECTION_THRESHOLD = 10;
+        double BALL_REJECTION_THRESHOLD = -0.6;
+        double BALL_DISTANCE_THRESHOLD = 250;
+        bool isActive = false;
 
         pros::Task color_sort_task;
         public:
@@ -68,6 +70,15 @@ namespace colorsort{
          * @param color Enumeration to set the current color
          */
         void setSortedColor(BallColor color);
+
+        /**
+         * @brief Get the currently sorted color
+         * 
+         * @return BallColor The enum for the color being sorted
+         */
+        BallColor getSortedColor();
+
+        bool isSortActive();
 
         /**
          * @brief Step through the color options
