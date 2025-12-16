@@ -1,4 +1,5 @@
 #include "platt2/robot/subsystems/odometry/TrackingWheelPositionTracker.hpp"
+#include "OdometryPosition.hpp"
 
 namespace platt2{
 namespace robot{
@@ -7,6 +8,12 @@ namespace odometry{
 
     OdometryPosition TrackingWheelPositionTracker::getPos(){
         return current_position;
+    }
+
+    void TrackingWheelPositionTracker::setPos(OdometryPosition pos){
+        current_position.x = pos.x;
+        current_position.y = pos.y;
+        current_position.heading = pos.heading;
     }
 
     double TrackingWheelPositionTracker::getX(){

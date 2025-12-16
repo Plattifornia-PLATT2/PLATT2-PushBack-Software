@@ -1,6 +1,7 @@
 #ifndef ODOMETRY_HPP
 #define ODOMETRY_HPP
 
+#include "platt2/robot/subsystems/odometry/IPositionTracker.hpp"
 #include "platt2/hal/OpticalTrackingSensor.hpp"
 #include "platt2/robot/subsystems/odometry/OdometryPosition.hpp"
 
@@ -38,12 +39,8 @@ namespace odometry{
      */
     class Odometry{
         private:
-        /**
-         * @brief The sparkfun Optical Tracking Odometry Sensor
-         */
-        hal::OpticalTrackingSensor otos;
 
-        std::unique_ptr<pros::IMU> vex_imu;
+        std::unique_ptr<IPositionTracker> position_tracker;
 
         public:
         /**
@@ -52,6 +49,11 @@ namespace odometry{
          * @return OdometryPosition Struct containing x, y, and heading of the robot.
          */
         OdometryPosition getPos();
+
+        /**
+        * @brief Sets the position of the odometry system.
+        */
+        void setPos(OdometryPosition pos);
 
         /**
          * @brief Gets the current x position of the robot.
@@ -88,6 +90,7 @@ namespace odometry{
         double getVexHeading();
 
         void initVexImu();
+
 
         /**
          * @brief Construct a new Odometry object with a vex IMU sensor.

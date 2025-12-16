@@ -42,6 +42,8 @@ namespace odometry{
          */
         virtual OdometryPosition getPos() = 0;
 
+        virtual void setPos(OdometryPosition pos) = 0;
+
         /**
          * @brief Gets the current x position of the robot.
          * 

@@ -13,29 +13,28 @@ namespace subsystems {
 namespace odometry {
 
 OdometryPosition Odometry::getPos() {
-  OdometryPosition curPos;
-  curPos.x = otos.getXPosition();
-  curPos.y = otos.getYPosition();
-  curPos.heading = otos.getHeading();
-
-  return curPos;
+  return position_tracker->getPos();
 }
 
-double Odometry::getX() { return otos.getXPosition(); }
-double Odometry::getY() { return otos.getYPosition(); }
-double Odometry::getHeading() { return otos.getHeading(); }
-double Odometry::getVexHeading() {return otos.getVexHeading();}
-void Odometry::initVexImu() {return otos.initVexImu();}
+double Odometry::getX() { return position_tracker->getX(); }
+double Odometry::getY() { return position_tracker->getY(); }
+double Odometry::getHeading() { return position_tracker->getHeading(); }
+double Odometry::getVexHeading() {return 0;}
+void Odometry::initVexImu() {}
+
+void Odometry::setPos(OdometryPosition pos){
+  position_tracker->setPos(pos);
+}
 
 void Odometry::resetHeading() {
-  otos.resetHeading();
+  // TODO
 }
 
 Odometry::Odometry(std::unique_ptr<pros::IMU> vex_imu, double x, double y, double h)
-: otos(x, y, h,  std::move(vex_imu)) 
 {
    
 }
+
 } // namespace odometry
 } // namespace subsystems
 } // namespace robot

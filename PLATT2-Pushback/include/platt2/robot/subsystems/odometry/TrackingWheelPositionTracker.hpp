@@ -57,6 +57,12 @@ namespace odometry{
         OdometryPosition getPos() override;
 
         /**
+        * @brief Sets the postion of the odometry subsystem.
+        * @param OdometryPosition the position struct of the new position.
+        */
+        void setPos(OdometryPosition pos) override;
+
+        /**
          * @brief Gets the current x position of the robot.
          * 
          * @return double The x position in inches.
