@@ -65,10 +65,18 @@ namespace odometry{
 
         /**
          * @brief Sets the offsets for the position tracker.
-         * 
-         * @param offsets The struct containing new offset values.
+         * @param x_offset The x offset in inches.
+         * @param y_offset The y offset in inches.
+         * @param heading_offset The heading offset in degrees.
          */
-        virtual void setOffsets(OdometryPosition offsets) = 0;
+        virtual void setOffsets(double x_offset, double y_offset, double heading_offset) = 0;
+
+        /**
+         * @brief Initializes the position tracker.
+         */
+        virtual void init() = 0;
+
+        virtual void updatePosition() = 0;
     };
 
 }}}}
