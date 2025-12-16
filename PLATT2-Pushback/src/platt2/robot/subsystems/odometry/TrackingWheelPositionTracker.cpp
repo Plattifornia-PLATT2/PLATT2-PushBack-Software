@@ -37,6 +37,104 @@ namespace odometry{
         }
     }
 
+    void TrackingWheelPositionTracker::updatePosition(){
+            
+    //init variables
+    current_position.heading  = 360 - imu->get_heading();
+    double oldHeading = current_position.heading ;
+    double deltaTheta = (current_position.heading  - oldHeading) * (M_PI/180);
+
+    double hWheel = x_wheel->getPosition();
+    double oldHWheel = hWheel;
+    double deltaHWheel = hWheel - oldHWheel;
+
+    double vWheel = y_wheel->getPosition();
+    double oldVWheel = vWheel;
+    double deltaVWheel = vWheel - oldVWheel;
+
+    double deltaX = 0;
+    double deltaY = 0;
+
+    double hyp = 0;
+    double theta = 0;
+    double points[2] = {0,0};
+    double zero[2] = {0,0};
+
+    while(true){
+
+        //update variables each iteration of loop
+        current_position.heading  = 360 - imu->get_heading();
+        deltaTheta = (current_position.heading  - oldHeading) * (M_PI/180);
+        hWheel = x_wheel->getPosition();
+        deltaHWheel = hWheel - oldHWheel;
+        vWheel = y_wheel->getPosition();
+        deltaVWheel = vWheel - oldVWheel;
+
+        //deltaTheta = 0;
+
+        //determins if the angle has changed and does relevent math 
+        if(deltaTheta == 0){
+           
+            points[0] = deltaHWheel;
+            points[1] = deltaVWheel;
+        
+        }else{
+ 
+            points[0] = ((2*sin(deltaTheta/(2)))*((deltaHWheel/deltaTheta)+x_offset));
+            points[1] = ((2*sin(deltaTheta/(2)))*((deltaVWheel/deltaTheta)+y_offset));
+
+        }
+
+        //convert local vector to the global oriantation
+        hyp = pythag(zero, points);
+
+        if (hyp < 0.001){hyp = 0;}
+
+        if (deltaHWheel == 0){
+
+            if(deltaVWheel != 0){
+
+                if(deltaVWheel > 0){
+
+                    theta = 90;
+
+                }else{
+
+                    theta = 270;
+
+                }
+            }
+
+                theta = theta*(M_PI/180) - ((90-current_position.heading)*(M_PI/180) + (deltaTheta/2));
+
+        }else{
+
+            theta = atan2(points[1],points[0]) - ((90-current_position.heading)*(M_PI/180) + (deltaTheta/2));
+                
+        }
+
+        deltaX = hyp*sin(theta);
+        deltaY = hyp*cos(theta);
+
+        //update poition using calculated vector
+        current_position.x = current_position.x + deltaX;
+        current_position.y = current_position.y + deltaY;
+     
+        //update variable for next loop
+        oldHeading = current_position.heading;
+        oldHWheel = hWheel;
+        oldVWheel = vWheel;
+
+        current_position.heading = (current_position.heading-180) + 180;
+
+        if (current_position.heading<0){
+            current_position.heading += 360;
+        }
+
+        pros::delay(10);
+        }
+    }
+
     TrackingWheelPositionTracker::TrackingWheelPositionTracker(
         std::unique_ptr<hal::TrackingWheel> x_wheel,
         std::unique_ptr<hal::TrackingWheel> y_wheel,
@@ -46,7 +144,7 @@ namespace odometry{
           y_wheel(std::move(y_wheel)),
           imu(std::move(imu)) 
     {
-        
+
     }
 
 }}}}

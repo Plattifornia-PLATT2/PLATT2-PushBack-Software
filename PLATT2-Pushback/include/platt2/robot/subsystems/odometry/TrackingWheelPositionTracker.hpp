@@ -1,11 +1,14 @@
 #ifndef TRACKING_WHEEL_POSITION_TRACKER_HPP
 #define TRACKING_WHEEL_POSITION_TRACKER_HPP
 
-#include "OdometryPosition.hpp"
+#include "platt2/robot/subsystems/odometry/OdometryPosition.hpp"
 #include "platt2/hal/TrackingWheel.hpp"
 #include "platt2/robot/subsystems/odometry/IPositionTracker.hpp"
+#include "platt2/helperFunctions.h"
+
 #include "pros/imu.hpp"
 #include "pros/rotation.hpp"
+
 #include <memory>
 
 /**
