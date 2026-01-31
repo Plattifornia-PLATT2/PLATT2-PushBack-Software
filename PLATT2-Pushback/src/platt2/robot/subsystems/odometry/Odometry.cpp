@@ -1,6 +1,8 @@
 #include "platt2/robot/subsystems/odometry/Odometry.hpp"
+#include "IPositionTracker.hpp"
 #include "OdometryPosition.hpp"
 #include <memory>
+#include "TrackingWheelPositionTracker.hpp"
 #include "pros/rtos.hpp"
 #include <math.h>
 
@@ -30,9 +32,9 @@ void Odometry::resetHeading() {
   // TODO
 }
 
-Odometry::Odometry(std::unique_ptr<pros::IMU> vex_imu, double x, double y, double h)
+Odometry::Odometry(std::unique_ptr<IPositionTracker> position_tracker, double x, double y, double h)
 {
-   
+   this->position_tracker = std::move(position_tracker);
 }
 
 } // namespace odometry

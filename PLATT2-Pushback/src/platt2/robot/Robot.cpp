@@ -49,7 +49,7 @@ namespace robot{
             subsystems::holonomicDrive::MovementVector movement;   
 
 
-            movement.theta = atan2(leftY, leftX)-((odom_subsystem->getVexHeading())-(M_PI/2));
+            movement.theta = atan2(leftY, leftX)-((odom_subsystem->getHeading())-(M_PI/2));
             movement.r = std::clamp(sqrt(leftX*leftX + leftY*leftY)/127, -1.0,1.0);
             //movement.w = 0.1;
             movement.w = rightX/127;

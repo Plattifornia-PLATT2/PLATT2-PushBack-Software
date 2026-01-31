@@ -15,6 +15,8 @@
 #include "platt2/profiles/JonProfile.hpp"
 #include "platt2/auton/PinkSkillsAuton.hpp"
 #include "platt2/robot/subsystems/colorSort/colorSort.hpp"
+#include "platt2/hal/TrackingWheel.hpp"
+#include "platt2/robot/subsystems/odometry/TrackingWheelPositionTracker.hpp"
 
 // ** PROS API Includes **
 #include "pros/motors.hpp"
@@ -81,6 +83,10 @@ class PinkConfig : public IConfig {
     static constexpr int VEX_IMU_PORT{11};
 
     // ** Odometry Offsets **
+    static constexpr int HORIZONTAL_ENCODER_PORT{6};
+    static constexpr int VERTICAL_ENCODER_PORT{7};
+    static constexpr double TRACKING_WHEEL_DIAMETER{2.2725};
+
     static constexpr double COMP_X_OFFSET{0.0};
     static constexpr double COMP_Y_OFFSET{0.0};
     static constexpr double COMP_H_OFFSET{90.0};
