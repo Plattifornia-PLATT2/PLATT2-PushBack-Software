@@ -61,18 +61,18 @@ class PinkConfig : public IConfig {
     static constexpr int RIGHT_REAR_MODULE_BOTTOM_PORT{-10};
 
     // ** Intake Ports **
-    static constexpr int FRONT_INTAKE_MOTOR_PORT{15};
-    static constexpr int MIDDLE_INTAKE_MOTOR_PORT{16};
-    static constexpr int REAR_INTAKE_MOTOR_PORT{-17};
-    static constexpr int LOWER_ROLLER_MOTOR_PORT{18};
-    static constexpr int UPPER_CONVEYOR_MOTOR_PORT{19};
-    static constexpr int REAR_INTAKE_LEFT_MOTOR_PORT{21};
-    static constexpr int REAR_INTAKE_RIGHT_MOTOR_PORT{20};
-    static constexpr int DISTANCE_SENSOR_PORT{3};
+    static constexpr int FRONT_INTAKE_MOTOR_PORT{5};
+    static constexpr int MIDDLE_INTAKE_MOTOR_PORT{4};
+    static constexpr int REAR_INTAKE_MOTOR_PORT{3};
+    static constexpr int LOWER_ROLLER_MOTOR_PORT{17};
+    static constexpr int UPPER_CONVEYOR_MOTOR_PORT{20};
+    static constexpr int REAR_INTAKE_LEFT_MOTOR_PORT{};
+    static constexpr int REAR_INTAKE_RIGHT_MOTOR_PORT{18};
+    static constexpr int DISTANCE_SENSOR_PORT{15};
     static constexpr pros::MotorGears INTAKE_GEARSET{pros::MotorGears::blue};
 
     // ** Color Sort Ports **
-    static constexpr int OPTICAL_SENSOR_PORT{4};
+    static constexpr int OPTICAL_SENSOR_PORT{16};
 
     // ** Pneumatics **
     static constexpr int ED_MECH_PISTON_PORT{1};
