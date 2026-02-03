@@ -20,7 +20,7 @@ namespace platt2{
 namespace hal{
 
 static void taskThunk(void *p) {
-    reinterpret_cast<OpticalTrackingSensor*>(p)->readData();
+    //reinterpret_cast<OpticalTrackingSensor*>(p)->readData();
 }
 
 OpticalTrackingSensor::OpticalTrackingSensor(double xOffset, double yOffset, double hOffset, std::unique_ptr<pros::IMU> vex_imu):

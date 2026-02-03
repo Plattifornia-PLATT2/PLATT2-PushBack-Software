@@ -30,9 +30,9 @@ namespace odometry{
      */
     struct OdometryPosition{
         public:
-        double x;
-        double y;
-        double heading;
+        double x = 0;
+        double y = 0;
+        double heading = 0;
     };
 }
 }

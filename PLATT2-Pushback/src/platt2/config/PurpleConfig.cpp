@@ -64,12 +64,7 @@ std::shared_ptr<robot::Robot> PurpleConfig::buildRobot(robot::AutonConfig auton,
     std::unique_ptr<robot::subsystems::odometry::TrackingWheelPositionTracker> position_tracker = std::make_unique<robot::subsystems::odometry::TrackingWheelPositionTracker>(std::move(horizontal_tracking_wheel), std::move(vertical_tracking_wheel), std::move(vex_imu));
 
     std::shared_ptr<robot::subsystems::odometry::Odometry> odom_subsystem;
-    if(auton == robot::SKILLS_1){
-        odom_subsystem = std::make_shared<robot::subsystems::odometry::Odometry>(std::move(position_tracker), SKILLS_X_OFFSET, SKILLS_Y_OFFSET, SKILLS_H_OFFSET);
-    }
-    else {
-        odom_subsystem = std::make_shared<robot::subsystems::odometry::Odometry>(std::move(position_tracker), COMP_X_OFFSET, COMP_Y_OFFSET, COMP_H_OFFSET);
-    }
+    odom_subsystem = std::make_shared<robot::subsystems::odometry::Odometry>(std::move(position_tracker));
 
     // intake subsystem
     std::unique_ptr<pros::adi::DigitalOut> ed_mech_piston{std::make_unique<pros::adi::DigitalOut>(ED_MECH_PISTON_PORT)};

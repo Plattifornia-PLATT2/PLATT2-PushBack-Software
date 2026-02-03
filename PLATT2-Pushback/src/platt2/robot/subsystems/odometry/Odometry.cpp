@@ -14,6 +14,10 @@ namespace subsystems {
 
 namespace odometry {
 
+static void taskThunk(void *p) {
+    reinterpret_cast<Odometry*>(p)->startTracking();
+}
+
 OdometryPosition Odometry::getPos() {
   return position_tracker->getPos();
 }
@@ -32,7 +36,16 @@ void Odometry::resetHeading() {
   // TODO
 }
 
-Odometry::Odometry(std::unique_ptr<IPositionTracker> position_tracker, double x, double y, double h)
+void Odometry::startTracking(){
+  position_tracker->updatePosition();
+}
+
+void Odometry::setOffsets(double x, double y, double h){
+  position_tracker->setOffsets(x, y, h);
+}
+
+Odometry::Odometry(std::unique_ptr<IPositionTracker> position_tracker):
+m_trackingTask(taskThunk, this)
 {
    this->position_tracker = std::move(position_tracker);
 }

@@ -14,6 +14,7 @@ namespace odometry{
         current_position.x = pos.x;
         current_position.y = pos.y;
         current_position.heading = pos.heading;
+        imu->set_heading(360 - pos.heading);
     }
 
     double TrackingWheelPositionTracker::getX(){
@@ -47,7 +48,7 @@ namespace odometry{
     void TrackingWheelPositionTracker::updatePosition(){
             
     //init variables
-    current_position.heading  = 360 - imu->get_heading();
+    current_position.heading  = 360 -imu->get_heading();
     double oldHeading = current_position.heading ;
     double deltaTheta = (current_position.heading  - oldHeading) * (M_PI/180);
 
@@ -70,7 +71,7 @@ namespace odometry{
     while(true){
 
         //update variables each iteration of loop
-        current_position.heading  = 360 - imu->get_heading();
+        current_position.heading  = 360 -imu->get_heading();
         deltaTheta = (current_position.heading  - oldHeading) * (M_PI/180);
         hWheel = x_wheel->getPosition();
         deltaHWheel = hWheel - oldHWheel;
@@ -80,20 +81,20 @@ namespace odometry{
         //deltaTheta = 0;
 
         //determins if the angle has changed and does relevent math 
-        if(deltaTheta == 0){
-           
+       const double EPS = 1e-6;
+
+        if (fabs(deltaTheta) < EPS) {
             points[0] = deltaHWheel;
             points[1] = deltaVWheel;
-        
-        }else{
- 
-            points[0] = ((2*sin(deltaTheta/(2)))*((deltaHWheel/deltaTheta)+x_offset));
-            points[1] = ((2*sin(deltaTheta/(2)))*((deltaVWheel/deltaTheta)+y_offset));
-
-        }
+        } else {
+            points[0] = (2 * sin(deltaTheta / 2.0)) * ((deltaHWheel / deltaTheta) + x_offset);
+            points[1] = (2 * sin(deltaTheta / 2.0)) * ((deltaVWheel / deltaTheta) + y_offset);
+    }
 
         //convert local vector to the global oriantation
         hyp = pythag(zero, points);
+
+        //std::cout<<hyp<<std::endl;
 
         if (hyp < 0.001){hyp = 0;}
 
@@ -123,20 +124,20 @@ namespace odometry{
         deltaX = hyp*sin(theta);
         deltaY = hyp*cos(theta);
 
+        //std::cout<<deltaX<<std::endl;
+
         //update poition using calculated vector
         current_position.x = current_position.x + deltaX;
         current_position.y = current_position.y + deltaY;
+
+        //std::cout<<current_position.x<<std::endl;
+
+        //std::cout<<current_position.x<<" "<<current_position.y<<std::endl;
      
         //update variable for next loop
         oldHeading = current_position.heading;
         oldHWheel = hWheel;
         oldVWheel = vWheel;
-
-        current_position.heading = (current_position.heading-180) + 180;
-
-        if (current_position.heading<0){
-            current_position.heading += 360;
-        }
 
         pros::delay(10);
         }
