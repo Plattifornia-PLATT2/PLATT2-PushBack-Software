@@ -67,6 +67,8 @@ class PurpleConfig : public IConfig {
     static constexpr int REAR_INTAKE_MOTOR_PORT{-15};
     static constexpr int LOWER_ROLLER_MOTOR_PORT{8};
     static constexpr int UPPER_CONVEYOR_MOTOR_PORT{16};
+    static constexpr int REAR_INTAKE_LEFT_MOTOR_PORT{21};
+    static constexpr int REAR_INTAKE_RIGHT_MOTOR_PORT{20};
     static constexpr int DISTANCE_SENSOR_PORT{7};
     static constexpr pros::MotorGears INTAKE_GEARSET{pros::MotorGears::blue};
 
@@ -84,13 +86,11 @@ class PurpleConfig : public IConfig {
     static constexpr int VEX_IMU_PORT{11};
 
  // ** Odometry Offsets **
-    static constexpr double COMP_X_OFFSET{88.0};
-    static constexpr double COMP_Y_OFFSET{6.0};
-    static constexpr double COMP_H_OFFSET{270.0};
-
-    static constexpr double SKILLS_X_OFFSET{88.0};
-    static constexpr double SKILLS_Y_OFFSET{6.0};
-    static constexpr double SKILLS_H_OFFSET{270.0};
+    static constexpr int HORIZONTAL_ENCODER_PORT{6};
+    static constexpr int VERTICAL_ENCODER_PORT{7};
+    static constexpr double TRACKING_WHEEL_DIAMETER{2.2725};
+    static constexpr double HORIZONTAL_TRACKING_WHEEL_OFFSET{0.0};
+    static constexpr double VERTICAL_TRACKING_WHEEL_OFFSET{0.0};
 
     // ** Linear PID Tuning Values **
     static constexpr double position_dt{0.01};

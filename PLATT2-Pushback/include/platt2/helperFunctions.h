@@ -119,4 +119,15 @@ inline double distanceFromSecant(double x1, double y1,
     return dist;
 }
 
+inline double pythag(double P1[2], double P2[2]){
+
+    double X = P2[0] - P1[0];
+    double Y = P2[1] - P1[1];
+
+    double hyp = std::sqrt(pow(X,2)+pow(Y,2));
+
+    return hyp;
+
+}
+
 #endif

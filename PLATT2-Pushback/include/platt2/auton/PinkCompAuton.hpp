@@ -34,10 +34,12 @@ class PinkCompAuton : public auton::IAuton {
     std::shared_ptr<robot::subsystems::intake::IntakeSubsystem> intake_subsystem;
     std::shared_ptr<robot::subsystems::colorsort::ColorSortSubsystem> color_sort_subsystem;
     robot::AllianceConfig alliance_color;
+
+    
     
     public:
     /**
-     * @brief Initalizes the autonomous routine
+     * @brief Initalizes the autonomous routine()
      * 
      * @param holonomic_subsytem The holonomic subsystem to use
      * @param odometry_subsystem The odometry subsystem to use

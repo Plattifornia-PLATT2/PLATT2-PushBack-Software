@@ -57,7 +57,7 @@ namespace colorsort{
         double currentR = currentRGB.red;
         double currentB = currentRGB.blue;
         double currentDistance = optical_sensor->get_proximity();
-        std::cout<<"R: "<<currentR<<" B: "<<currentB<<" Distance: "<<currentDistance<<std::endl;
+        //std::cout<<"R: "<<currentR<<" B: "<<currentB<<" Distance: "<<currentDistance<<std::endl;
 
         switch(current_color)
         {
@@ -67,10 +67,10 @@ namespace colorsort{
             if(currentR > currentB && currentDistance > BALL_DISTANCE_THRESHOLD)
             {
                 isActive = true;
-                std::cout<<"r>b"<<std::endl;
+                //std::cout<<"r>b"<<std::endl;
                 intake_subsystem->tare_rear_motor_position();
                 intake_subsystem->move_rear_motor(intake::OUT);
-                std::cout<<intake_subsystem->get_rear_motor_position()<<std::endl;
+                //std::cout<<intake_subsystem->get_rear_motor_position()<<std::endl;
 
                 while(intake_subsystem->get_rear_motor_position() > BALL_REJECTION_THRESHOLD) {
                     std::cout<<intake_subsystem->get_rear_motor_position()<<std::endl;
@@ -86,7 +86,7 @@ namespace colorsort{
                 if(currentB > currentR && currentDistance > BALL_DISTANCE_THRESHOLD)
                 {
                 isActive = true;
-                std::cout<<"b>r"<<std::endl;
+                //std::cout<<"b>r"<<std::endl;
                 intake_subsystem->tare_rear_motor_position();
                 intake_subsystem->move_rear_motor(intake::OUT);
 

@@ -6,9 +6,11 @@
 #include "platt2/profiles/JonProfile.hpp"
 #include "platt2/profiles/QuinnProfile.hpp"
 #include "platt2/robot/subsystems/odometry/Odometry.hpp"
+#include "platt2/robot/subsystems/odometry/OdometryPosition.hpp"
 #include "pros/abstract_motor.hpp"
 #include "pros/imu.hpp"
 #include "pros/motors.h"
+#include "pros/motors.hpp"
 #include <memory>
 
 
@@ -42,6 +44,8 @@ std::shared_ptr<robot::Robot> PinkConfig::buildRobot(robot::AutonConfig auton, r
     std::unique_ptr<pros::Motor> rear_intake_motor{std::make_unique<pros::Motor>(REAR_INTAKE_MOTOR_PORT, INTAKE_GEARSET)};
     std::unique_ptr<pros::Motor> upper_conveyor_motor{std::make_unique<pros::Motor>(UPPER_CONVEYOR_MOTOR_PORT, INTAKE_GEARSET)};
     std::unique_ptr<pros::Motor> lower_roller_motor{std::make_unique<pros::Motor>(LOWER_ROLLER_MOTOR_PORT, pros::MotorGears::green)};
+    std::unique_ptr<pros::Motor> rear_intake_left_motor{std::make_unique<pros::Motor>(REAR_INTAKE_LEFT_MOTOR_PORT, pros::MotorGears::green)};
+    std::unique_ptr<pros::Motor> rear_intake_right_motor{std::make_unique<pros::Motor>(REAR_INTAKE_RIGHT_MOTOR_PORT, pros::MotorGears::green)};
 
     //X drive modules
     std::unique_ptr<platt2::robot::subsystems::holonomicDrive::XDriveModule> left_front_module{std::make_unique<platt2::robot::subsystems::holonomicDrive::XDriveModule>(left_front_top, left_front_bottom, deg_to_rad(45),deg_to_rad(135))};
@@ -61,14 +65,19 @@ std::shared_ptr<robot::Robot> PinkConfig::buildRobot(robot::AutonConfig auton, r
 
     // odom subsystem
     std::unique_ptr<pros::IMU> vex_imu = std::make_unique<pros::IMU>(VEX_IMU_PORT);
+    std::unique_ptr<pros::Rotation> horiontal_encoder = std::make_unique<pros::Rotation>(HORIZONTAL_ENCODER_PORT);
+    std::unique_ptr<pros::Rotation> vertical_encoder = std::make_unique<pros::Rotation>(VERTICAL_ENCODER_PORT);
 
+    std::unique_ptr<hal::TrackingWheel> horizontal_tracking_wheel = std::make_unique<hal::TrackingWheel>(std::move(horiontal_encoder), TRACKING_WHEEL_DIAMETER);
+    std::unique_ptr<hal::TrackingWheel> vertical_tracking_wheel = std::make_unique<hal::TrackingWheel>(std::move(vertical_encoder), TRACKING_WHEEL_DIAMETER);
+
+    std::unique_ptr<robot::subsystems::odometry::TrackingWheelPositionTracker> position_tracker = std::make_unique<robot::subsystems::odometry::TrackingWheelPositionTracker>(std::move(horizontal_tracking_wheel), std::move(vertical_tracking_wheel), std::move(vex_imu));
+    position_tracker->setOffsets(HORIZONTAL_TRACKING_WHEEL_OFFSET, VERTICAL_TRACKING_WHEEL_OFFSET);
     std::shared_ptr<robot::subsystems::odometry::Odometry> odom_subsystem;
-    if(auton == robot::SKILLS_1){
-        odom_subsystem = std::make_shared<robot::subsystems::odometry::Odometry>(std::move(vex_imu), SKILLS_X_OFFSET, SKILLS_Y_OFFSET, SKILLS_H_OFFSET);
-    }
-    else {
-        odom_subsystem = std::make_shared<robot::subsystems::odometry::Odometry>(std::move(vex_imu), COMP_X_OFFSET, COMP_Y_OFFSET, COMP_Y_OFFSET);
-    }
+    odom_subsystem = std::make_shared<robot::subsystems::odometry::Odometry>(std::move(position_tracker));
+   
+    robot::subsystems::odometry::OdometryPosition startingPos = {0,0,90};
+    odom_subsystem->setPos(startingPos);
 
     // intake subsystem
     std::unique_ptr<pros::adi::DigitalOut> ed_mech_piston{std::make_unique<pros::adi::DigitalOut>(ED_MECH_PISTON_PORT)};
@@ -77,6 +86,8 @@ std::shared_ptr<robot::Robot> PinkConfig::buildRobot(robot::AutonConfig auton, r
     std::unique_ptr<pros::adi::DigitalOut> rake_mech_piston{std::make_unique<pros::adi::DigitalOut>(RAKE_MECH_PISTON_PORT)};
     std::unique_ptr<pros::adi::DigitalOut> descore_piston{std::make_unique<pros::adi::DigitalOut>(DESCORE_PISTON_PORT)};
     std::unique_ptr<pros::Distance> distance_sensor{std::make_unique<pros::Distance>(DISTANCE_SENSOR_PORT)};
+    std::unique_ptr<pros::Motor> matchload_left_motor{std::make_unique<pros::Motor>(REAR_INTAKE_LEFT_MOTOR_PORT, pros::MotorGears::blue)};
+    std::unique_ptr<pros::Motor> matchload_right_motor{std::make_unique<pros::Motor>(REAR_INTAKE_RIGHT_MOTOR_PORT, pros::MotorGears::blue)};
 
 
     std::shared_ptr<robot::subsystems::intake::IntakeSubsystem> intake_subsystem = std::make_shared<robot::subsystems::intake::IntakeSubsystem>(
@@ -85,6 +96,8 @@ std::shared_ptr<robot::Robot> PinkConfig::buildRobot(robot::AutonConfig auton, r
         std::move(middle_intake_motor), 
         std::move(upper_conveyor_motor),
         std::move(lower_roller_motor),
+        std::move(matchload_left_motor),
+        std::move(matchload_right_motor),
         std::move(ed_mech_piston),
         std::move(upper_conveyor_height_piston),
         std::move(conveyor_stopper_piston),
@@ -117,13 +130,13 @@ std::shared_ptr<robot::Robot> PinkConfig::buildRobot(robot::AutonConfig auton, r
     std::unique_ptr<auton::IAuton> auton_routine;
 
     if(auton == robot::SKILLS_1 ){
-        std::unique_ptr<auton::PinkCompAuton> pink_comp_auton = std::make_unique<auton::PinkCompAuton>();
-        auton_routine = std::move(pink_comp_auton);
+        std::unique_ptr<auton::PinkSkillsAuton> pink_skills_auton = std::make_unique<auton::PinkSkillsAuton>();
+        auton_routine = std::move(pink_skills_auton);
         auton_routine->init(holonomic_contol_subsystem, odom_subsystem, intake_subsystem, color_sort_subsystem, alliance);
     }
     else {
-        std::unique_ptr<auton::PinkSkillsAuton> pink_skills_auton = std::make_unique<auton::PinkSkillsAuton>();
-        auton_routine = std::move(pink_skills_auton);
+        std::unique_ptr<auton::PinkCompAuton> pink_comp_auton = std::make_unique<auton::PinkCompAuton>();
+        auton_routine = std::move(pink_comp_auton);
         auton_routine->init(holonomic_contol_subsystem, odom_subsystem, intake_subsystem, color_sort_subsystem, alliance);
     }
 

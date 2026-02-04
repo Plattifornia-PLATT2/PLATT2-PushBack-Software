@@ -57,7 +57,9 @@ namespace intake{
         std::unique_ptr<pros::Motor> middle_intake_motor;
         std::unique_ptr<pros::Motor> upper_conveyor_motor;
         std::unique_ptr<pros::Motor> lower_roller_motor;
-
+        std::unique_ptr<pros::Motor> matchload_left_motor;
+        std::unique_ptr<pros::Motor> matchload_right_motor;
+ 
         // ** Solenoids **
         std::unique_ptr<pros::adi::DigitalOut> ed_mech_piston;
         std::unique_ptr<pros::adi::DigitalOut> upper_conveyor_height_piston;
@@ -180,6 +182,8 @@ namespace intake{
             std::unique_ptr<pros::Motor>mid_intake, 
             std::unique_ptr<pros::Motor>upper_conveyor,
             std::unique_ptr<pros::Motor>lower_roller,
+            std::unique_ptr<pros::Motor> matchload_left_motor,
+            std::unique_ptr<pros::Motor> matchload_right_motor,
             std::unique_ptr<pros::adi::DigitalOut> ed_mech_piston,
             std::unique_ptr<pros::adi::DigitalOut> upper_conveyor_height_piston,
             std::unique_ptr<pros::adi::DigitalOut> conveyor_stopper_piston,

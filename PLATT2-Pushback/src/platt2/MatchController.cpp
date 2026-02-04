@@ -10,7 +10,7 @@ void MatchController::init(){
     }
 
     menu::FullConfig roboConfig =  menu.getFullConfig();
-
+    std::cout<<roboConfig.robotConfig<<std::endl;
     if(roboConfig.robotConfig == robot::PINK) {
         std::unique_ptr<config::PinkConfig> pink{std::make_unique<config::PinkConfig>()};
         config = std::move(pink);
@@ -21,7 +21,6 @@ void MatchController::init(){
     }
 
     robot = config->buildRobot(roboConfig.autonConfig, roboConfig.driverProfile, roboConfig.allianceColor);
-    std::cout << roboConfig.allianceColor <<std::endl;
     if(robot){
         robot->init();
     }
@@ -34,6 +33,7 @@ void MatchController::driveControl(){
 }
 
 void MatchController::autonControl(){
+   pros::screen::erase();
    robot->autonControl();
 }
 }
