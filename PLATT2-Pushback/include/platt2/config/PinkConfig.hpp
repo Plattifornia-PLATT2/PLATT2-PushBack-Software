@@ -88,8 +88,11 @@ class PinkConfig : public IConfig {
     static constexpr int HORIZONTAL_ENCODER_PORT{6};
     static constexpr int VERTICAL_ENCODER_PORT{13};
     static constexpr double TRACKING_WHEEL_DIAMETER{2.2725};
-    static constexpr double HORIZONTAL_TRACKING_WHEEL_OFFSET{0.0};
-    static constexpr double VERTICAL_TRACKING_WHEEL_OFFSET{0.0};
+    static constexpr double HORIZONTAL_TRACKING_WHEEL_OFFSET{0};
+    static constexpr double VERTICAL_TRACKING_WHEEL_OFFSET{0};
+    
+    //static constexpr double HORIZONTAL_TRACKING_WHEEL_OFFSET{0.75};
+    //static constexpr double VERTICAL_TRACKING_WHEEL_OFFSET{3.625};
 
     // ** Linear PID Tuning Values **
     static constexpr double position_dt{0.01};

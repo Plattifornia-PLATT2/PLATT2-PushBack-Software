@@ -32,7 +32,7 @@ void HolonomicControl::moveToPoint(double x_target, double y_target, double targ
 
     double startTime = pros::millis();
 
-    std::ofstream file("/usd/data.csv", std::ios::app); // Creates a new file named "data.csv"
+    //std::ofstream file("/usd/data.csv", std::ios::app); // Creates a new file named "data.csv"
 
     double startPosX = odometry->getX();
     double startPosY = odometry->getY();
@@ -51,14 +51,15 @@ void HolonomicControl::moveToPoint(double x_target, double y_target, double targ
 
         p = CtoP(x_error, y_error);
 
-        angle_error = target_heading - odometry->getHeading();
+        angle_error = target_heading - (odometry->getHeading()*M_PI/180);
 
         if(angle_error > M_PI || angle_error < -M_PI){
             angle_error = -1 * sgn(angle_error) * (2*M_PI - std::abs(angle_error));
         }
-        
+        std::cout<<angle_error<<std::endl;
         motionVector.r = std::clamp(-1*(positionPID->calculate(0, p.r)), -rSpeed, rSpeed);
-        motionVector.theta = p.theta - odometry->getHeading()+(M_PI/2);
+        motionVector.theta = p.theta - (odometry->getHeading()*M_PI/180)+(M_PI/2);
+
         motionVector.w = std::clamp(headingPID->calculate(0, angle_error), -rSpeed, rSpeed);
 
         rAve = rollAverage(std::abs(motionVector.r), rArray);
@@ -78,7 +79,7 @@ void HolonomicControl::moveToPoint(double x_target, double y_target, double targ
         //file << angle_error << "," << x_error << "," << y_error << "," << dev << "," << accel << "," << motionVector.r << "," << motionVector.theta << "," << motionVector.w << ",0\n";
         startLoopTime = pros::millis();
     } 
-    file.close();
+    //file.close();
     //std::cout<<"I got to loop end"<<std::endl;
     motionVector.r = 0;
     motionVector.w = 0;

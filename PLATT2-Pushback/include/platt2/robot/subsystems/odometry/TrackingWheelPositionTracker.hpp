@@ -6,6 +6,7 @@
 #include "platt2/robot/subsystems/odometry/IPositionTracker.hpp"
 #include "platt2/helperFunctions.h"
 
+#include "pros/screen.hpp"
 #include "pros/imu.hpp"
 #include "pros/rotation.hpp"
 
@@ -89,7 +90,7 @@ namespace odometry{
          * 
          * @param offsets The struct containing new offset values.
          */
-        void setOffsets(double x_offset, double y_offset, double heading_offset) override;
+        void setOffsets(double x_offset, double y_offset) override;
 
         /**
         * @brief Initializes the position tracker.

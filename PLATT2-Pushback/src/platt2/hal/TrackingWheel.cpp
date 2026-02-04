@@ -5,7 +5,7 @@ namespace platt2{
 namespace hal{
 
 double TrackingWheel::getPosition(){
-    return ((double)(rotation_sensor->get_position() / (double)CENTIDEGREES_CONVERSION_FACTOR) / wheel_circumference);
+    return ((double)(rotation_sensor->get_position() / (double)CENTIDEGREES_CONVERSION_FACTOR) * wheel_circumference);
 }
 
 void TrackingWheel::setPosition(double pos){

@@ -72,7 +72,7 @@ std::shared_ptr<robot::Robot> PinkConfig::buildRobot(robot::AutonConfig auton, r
     std::unique_ptr<hal::TrackingWheel> vertical_tracking_wheel = std::make_unique<hal::TrackingWheel>(std::move(vertical_encoder), TRACKING_WHEEL_DIAMETER);
 
     std::unique_ptr<robot::subsystems::odometry::TrackingWheelPositionTracker> position_tracker = std::make_unique<robot::subsystems::odometry::TrackingWheelPositionTracker>(std::move(horizontal_tracking_wheel), std::move(vertical_tracking_wheel), std::move(vex_imu));
-    position_tracker->setOffsets(HORIZONTAL_TRACKING_WHEEL_OFFSET, VERTICAL_TRACKING_WHEEL_OFFSET, 0.0);
+    position_tracker->setOffsets(HORIZONTAL_TRACKING_WHEEL_OFFSET, VERTICAL_TRACKING_WHEEL_OFFSET);
     std::shared_ptr<robot::subsystems::odometry::Odometry> odom_subsystem;
     odom_subsystem = std::make_shared<robot::subsystems::odometry::Odometry>(std::move(position_tracker));
    
@@ -130,13 +130,13 @@ std::shared_ptr<robot::Robot> PinkConfig::buildRobot(robot::AutonConfig auton, r
     std::unique_ptr<auton::IAuton> auton_routine;
 
     if(auton == robot::SKILLS_1 ){
-        std::unique_ptr<auton::PinkCompAuton> pink_comp_auton = std::make_unique<auton::PinkCompAuton>();
-        auton_routine = std::move(pink_comp_auton);
+        std::unique_ptr<auton::PinkSkillsAuton> pink_skills_auton = std::make_unique<auton::PinkSkillsAuton>();
+        auton_routine = std::move(pink_skills_auton);
         auton_routine->init(holonomic_contol_subsystem, odom_subsystem, intake_subsystem, color_sort_subsystem, alliance);
     }
     else {
-        std::unique_ptr<auton::PinkSkillsAuton> pink_skills_auton = std::make_unique<auton::PinkSkillsAuton>();
-        auton_routine = std::move(pink_skills_auton);
+        std::unique_ptr<auton::PinkCompAuton> pink_comp_auton = std::make_unique<auton::PinkCompAuton>();
+        auton_routine = std::move(pink_comp_auton);
         auton_routine->init(holonomic_contol_subsystem, odom_subsystem, intake_subsystem, color_sort_subsystem, alliance);
     }
 

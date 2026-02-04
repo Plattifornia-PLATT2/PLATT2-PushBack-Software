@@ -26,7 +26,7 @@ double Odometry::getX() { return position_tracker->getX(); }
 double Odometry::getY() { return position_tracker->getY(); }
 double Odometry::getHeading() { return position_tracker->getHeading(); }
 double Odometry::getVexHeading() {return 0;}
-void Odometry::initVexImu() {}
+void Odometry::initVexImu() {position_tracker->init();}
 
 void Odometry::setPos(OdometryPosition pos){
   position_tracker->setPos(pos);
@@ -40,8 +40,8 @@ void Odometry::startTracking(){
   position_tracker->updatePosition();
 }
 
-void Odometry::setOffsets(double x, double y, double h){
-  position_tracker->setOffsets(x, y, h);
+void Odometry::setOffsets(double x, double y){
+  position_tracker->setOffsets(x, y);
 }
 
 Odometry::Odometry(std::unique_ptr<IPositionTracker> position_tracker):

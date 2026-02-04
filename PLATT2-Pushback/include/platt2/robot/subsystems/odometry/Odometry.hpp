@@ -92,7 +92,7 @@ namespace odometry{
 
         void initVexImu();
 
-        void setOffsets(double x, double y, double h);
+        void setOffsets(double x, double y);
 
         void startTracking();
 

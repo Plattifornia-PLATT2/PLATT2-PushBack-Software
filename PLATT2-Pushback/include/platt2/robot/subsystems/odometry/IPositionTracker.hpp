@@ -71,7 +71,7 @@ namespace odometry{
          * @param y_offset The y offset in inches.
          * @param heading_offset The heading offset in degrees.
          */
-        virtual void setOffsets(double x_offset, double y_offset, double heading_offset) = 0;
+        virtual void setOffsets(double x_offset, double y_offset) = 0;
 
         /**
          * @brief Initializes the position tracker.

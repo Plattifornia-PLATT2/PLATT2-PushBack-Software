@@ -36,9 +36,6 @@ namespace robot{
         
         while(true){
             pros::screen::erase();
-            pros::screen::print(pros::E_TEXT_MEDIUM_CENTER, 1, "X Pos: %f", odom_subsystem->getX());
-            pros::screen::print(pros::E_TEXT_MEDIUM_CENTER, 2, "Y Pos: %f", odom_subsystem->getY());
-            pros::screen::print(pros::E_TEXT_MEDIUM_CENTER, 3, "Heading: %f", (odom_subsystem->getHeading()));
 
           // pros::screen::print(pros::E_TEXT_MEDIUM_CENTER,6, "IMU Heading %f", odom_subsystem->getHeading());
            // std::cout << "IMU Heading: " << odom_subsystem->getHeading() << std::endl;

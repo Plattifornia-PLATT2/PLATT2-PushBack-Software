@@ -1,5 +1,8 @@
 #include "platt2/robot/subsystems/odometry/TrackingWheelPositionTracker.hpp"
 #include "OdometryPosition.hpp"
+#include "pros/screen.hpp"
+#include <cmath>
+#include <iostream>
 
 namespace platt2{
 namespace robot{
@@ -29,10 +32,9 @@ namespace odometry{
         return current_position.heading;
     }
 
-    void TrackingWheelPositionTracker::setOffsets(double x_offset, double y_offset, double heading_offset){
+    void TrackingWheelPositionTracker::setOffsets(double x_offset, double y_offset){
         this->x_offset = x_offset;
         this->y_offset = y_offset;
-        this->heading_offset = heading_offset;
     }
 
     void TrackingWheelPositionTracker::init(){
@@ -48,11 +50,13 @@ namespace odometry{
     void TrackingWheelPositionTracker::updatePosition(){
             
     //init variables
-    current_position.heading  = 360 -imu->get_heading();
+    current_position.heading  = 360 - imu->get_heading();
     double oldHeading = current_position.heading ;
     double deltaTheta = (current_position.heading  - oldHeading) * (M_PI/180);
 
     double hWheel = x_wheel->getPosition();
+
+    std::cout<<current_position.x<<std::endl;
     double oldHWheel = hWheel;
     double deltaHWheel = hWheel - oldHWheel;
 
@@ -68,10 +72,30 @@ namespace odometry{
     double points[2] = {0,0};
     double zero[2] = {0,0};
 
+
+
     while(true){
+        theta = 0;
+        static double lastX = NAN;
+
+
+        pros::screen::erase();
+        pros::screen::print(pros::E_TEXT_MEDIUM_CENTER, 1,"X Pos: %.3f", current_position.x);
+
+
+
+        pros::screen::print(pros::E_TEXT_MEDIUM_CENTER, 2,"Y Pos: %.3f", current_position.y);
+
+
+        pros::screen::print(pros::E_TEXT_MEDIUM_CENTER, 3,"Heading: %.2f", current_position.heading);
+
 
         //update variables each iteration of loop
-        current_position.heading  = 360 -imu->get_heading();
+        double imuHeading  = 360 -imu->get_heading();
+        if(!std::isfinite(imuHeading)){
+            continue;
+        }
+        current_position.heading = imuHeading;
         deltaTheta = (current_position.heading  - oldHeading) * (M_PI/180);
         hWheel = x_wheel->getPosition();
         deltaHWheel = hWheel - oldHWheel;
@@ -89,7 +113,7 @@ namespace odometry{
         } else {
             points[0] = (2 * sin(deltaTheta / 2.0)) * ((deltaHWheel / deltaTheta) + x_offset);
             points[1] = (2 * sin(deltaTheta / 2.0)) * ((deltaVWheel / deltaTheta) + y_offset);
-    }
+        }
 
         //convert local vector to the global oriantation
         hyp = pythag(zero, points);
@@ -121,8 +145,8 @@ namespace odometry{
                 
         }
 
-        deltaX = hyp*sin(theta);
-        deltaY = hyp*cos(theta);
+        deltaX = hyp*cos(theta);
+        deltaY = hyp*sin(theta);
 
         //std::cout<<deltaX<<std::endl;
 
@@ -138,6 +162,7 @@ namespace odometry{
         oldHeading = current_position.heading;
         oldHWheel = hWheel;
         oldVWheel = vWheel;
+
 
         pros::delay(10);
         }
