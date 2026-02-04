@@ -74,12 +74,18 @@ std::shared_ptr<robot::Robot> PurpleConfig::buildRobot(robot::AutonConfig auton,
     std::unique_ptr<pros::adi::DigitalOut> descore_piston{std::make_unique<pros::adi::DigitalOut>(DESCORE_PISTON_PORT)};
     std::unique_ptr<pros::Distance> distance_sensor{std::make_unique<pros::Distance>(DISTANCE_SENSOR_PORT)};
 
+    std::unique_ptr<pros::Motor> matchload_left_motor{std::make_unique<pros::Motor>(REAR_INTAKE_LEFT_MOTOR_PORT, pros::MotorGears::blue)};
+    std::unique_ptr<pros::Motor> matchload_right_motor{std::make_unique<pros::Motor>(REAR_INTAKE_RIGHT_MOTOR_PORT, pros::MotorGears::blue)};
+
+
     std::shared_ptr<robot::subsystems::intake::IntakeSubsystem> intake_subsystem = std::make_shared<robot::subsystems::intake::IntakeSubsystem>(
         std::move(front_intake_motor), 
         std::move(rear_intake_motor), 
         std::move(middle_intake_motor), 
         std::move(upper_conveyor_motor),
         std::move(lower_roller_motor),
+        std::move(matchload_left_motor),
+        std::move(matchload_right_motor),
         std::move(ed_mech_piston),
         std::move(upper_conveyor_height_piston),
         std::move(conveyor_stopper_piston),
