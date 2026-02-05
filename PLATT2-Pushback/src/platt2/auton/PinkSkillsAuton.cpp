@@ -22,6 +22,9 @@ void PinkSkillsAuton::init(
 
     if(odometry_subsystem){
         robot::subsystems::odometry::OdometryPosition startingPos;
+        startingPos.x = STARTING_X_POSITION;
+        startingPos.y = STARTING_Y_POSITION;
+        startingPos.heading = STARTING_HEADING;
         odometry_subsystem->setPos(startingPos);
     }
 }
@@ -96,9 +99,15 @@ void PinkSkillsAuton::run() {
     intake_subsystem->move_intake(robot::subsystems::intake::STOP);
     */
     
-    intake_subsystem->toggle_rake_mech_piston();
-    pros::delay(5000);
-    holonomic_subsytem->moveToPointInternalHeading(0, 0, 180);
+    //intake_subsystem->toggle_rake_mech_piston();
+    //pros::delay(5000);
+    //holonomic_subsytem->moveToPoint(70, 31, 90);
+    //holonomic_subsytem->moveToPoint(70, 28, 90,0.3);
+    //holonomic_subsytem->moveToPoint(12, 24, 180);
+    holonomic_subsytem->moveToPoint(70, 22.5, 270);
+
+
+
 }
 
 }

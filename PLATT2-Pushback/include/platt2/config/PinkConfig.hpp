@@ -88,17 +88,14 @@ class PinkConfig : public IConfig {
     static constexpr int HORIZONTAL_ENCODER_PORT{6};
     static constexpr int VERTICAL_ENCODER_PORT{13};
     static constexpr double TRACKING_WHEEL_DIAMETER{2.2725};
-    static constexpr double HORIZONTAL_TRACKING_WHEEL_OFFSET{0};
-    static constexpr double VERTICAL_TRACKING_WHEEL_OFFSET{0};
-    
-    //static constexpr double HORIZONTAL_TRACKING_WHEEL_OFFSET{0.75};
-    //static constexpr double VERTICAL_TRACKING_WHEEL_OFFSET{3.625};
+    static constexpr double HORIZONTAL_TRACKING_WHEEL_OFFSET{.90};
+    static constexpr double VERTICAL_TRACKING_WHEEL_OFFSET{3.25};
 
     // ** Linear PID Tuning Values **
-    static constexpr double position_dt{0.01};
+    static constexpr double position_dt{0.022};
     static constexpr double position_max{1};
     static constexpr double position_min{-1};
-    static constexpr double position_Kp{0.085};
+    static constexpr double position_Kp{0.067};
     static constexpr double position_Kd{0.007};
     static constexpr double position_Ki{0};
 
@@ -106,7 +103,7 @@ class PinkConfig : public IConfig {
     static constexpr double heading_dt{0.01};
     static constexpr double heading_max{1};
     static constexpr double heading_min{-1};
-    static constexpr double heading_Kp{0.3};
+    static constexpr double heading_Kp{0.4};
     static constexpr double heading_Kd{0.0};
     static constexpr double heading_Ki{0};
 
