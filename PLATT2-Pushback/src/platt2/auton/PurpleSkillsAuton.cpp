@@ -19,6 +19,11 @@ void PurpleSkillsAuton::init(
     this->intake_subsystem = intake_subsystem;
     this->color_sort_subsystem = color_sort_subsystem;
     this->alliance_color = alliance_color;
+
+    if(odometry_subsystem){
+        robot::subsystems::odometry::OdometryPosition startingPos;
+        odometry_subsystem->setPos(startingPos);
+    }
 }
 
 void PurpleSkillsAuton::run() {
