@@ -80,6 +80,7 @@ class PinkConfig : public IConfig {
     static constexpr int CONVEYOR_STOPPER_PISTON_PORT{3};
     static constexpr int RAKE_MECH_PISTON_PORT{4};
     static constexpr int DESCORE_PISTON_PORT{5};
+    static constexpr int REAR_INTAKE_PISTION {6};
 
     // ** VEX IMU Port **
     static constexpr int VEX_IMU_PORT{14};
@@ -118,6 +119,7 @@ class PinkConfig : public IConfig {
      * @return std::shared_ptr<robot::Robot> The built robot object
      */
     std::shared_ptr<robot::Robot> buildRobot(robot::AutonConfig auton, robot::DriverProfile profile, robot::AllianceConfig alliance) override;
+    //among us
 };
 }
 }
