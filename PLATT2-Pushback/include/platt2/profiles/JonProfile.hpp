@@ -25,11 +25,11 @@ namespace profiles{
         frontIntake_IN = pros::E_CONTROLLER_DIGITAL_L1;
         frontIntake_OUT = pros::E_CONTROLLER_DIGITAL_L2;
         auto_unload_button = pros::E_CONTROLLER_DIGITAL_X;
-        edMech_toggle = pros::E_CONTROLLER_DIGITAL_X;
+        edMech_toggle = pros::E_CONTROLLER_DIGITAL_R1;
         highScore_toggle = pros::E_CONTROLLER_DIGITAL_X;
         stopper_toggle = pros::E_CONTROLLER_DIGITAL_DOWN;
         colorSort_toggle = pros::E_CONTROLLER_DIGITAL_X;
-        rakeMech_toggle = pros::E_CONTROLLER_DIGITAL_X;
+        rakeMech_toggle = pros::E_CONTROLLER_DIGITAL_LEFT;
         fieldOriented_toggle = pros::E_CONTROLLER_DIGITAL_X;
         heading_reset = pros::E_CONTROLLER_DIGITAL_X;
         descore_toggle = pros::E_CONTROLLER_DIGITAL_B;

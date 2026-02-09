@@ -85,19 +85,18 @@ class PurpleConfig : public IConfig {
     // ** VEX IMU Port **
     static constexpr int VEX_IMU_PORT{11};
 
- // ** Odometry Offsets **
     static constexpr int HORIZONTAL_ENCODER_PORT{6};
-    static constexpr int VERTICAL_ENCODER_PORT{7};
+    static constexpr int VERTICAL_ENCODER_PORT{13};
     static constexpr double TRACKING_WHEEL_DIAMETER{2.2725};
-    static constexpr double HORIZONTAL_TRACKING_WHEEL_OFFSET{0.0};
-    static constexpr double VERTICAL_TRACKING_WHEEL_OFFSET{0.0};
+    static constexpr double HORIZONTAL_TRACKING_WHEEL_OFFSET{.90};
+    static constexpr double VERTICAL_TRACKING_WHEEL_OFFSET{3.25};
 
     // ** Linear PID Tuning Values **
-    static constexpr double position_dt{0.01};
+    static constexpr double position_dt{0.022};
     static constexpr double position_max{1};
     static constexpr double position_min{-1};
-    static constexpr double position_Kp{0.085};
-    static constexpr double position_Kd{0.008};
+    static constexpr double position_Kp{0.067};
+    static constexpr double position_Kd{0.007};
     static constexpr double position_Ki{0};
 
     // ** Angular PID Tuning Values **

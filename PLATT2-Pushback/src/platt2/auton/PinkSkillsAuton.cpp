@@ -100,11 +100,22 @@ void PinkSkillsAuton::run() {
     */
     
     //intake_subsystem->toggle_rake_mech_piston();
-    //pros::delay(5000);
-    //holonomic_subsytem->moveToPoint(70, 31, 90);
-    //holonomic_subsytem->moveToPoint(70, 28, 90,0.3);
-    //holonomic_subsytem->moveToPoint(12, 24, 180);
-    holonomic_subsytem->moveToPoint(70, 22.5, 270);
+    //pros::delay(2000);
+    holonomic_subsytem->moveToPoint(70, 31, 90);
+    holonomic_subsytem->moveToPoint(70, 28, 90,0.2);
+    //intake_subsystem->toggle_rake_mech_piston();
+    intake_subsystem->move_intake(robot::subsystems::intake::IN);
+    holonomic_subsytem->moveToPoint(10.75, 30, 190,0.5, 0.3, 4);
+    holonomic_subsytem->moveToPoint(10.75, 17, 190,0.3,0.3, 2);
+    holonomic_subsytem->moveToPoint(46, 48, 90);
+    holonomic_subsytem->moveToPoint(46.5, 73, 85,0.3);
+    holonomic_subsytem->moveToPoint(48, 48, 45,0.3);
+    //intake_subsystem->toggle_ed_mech();
+    holonomic_subsytem->moveToPoint(59.25, 60.75, 45,0.3);
+    holonomic_subsytem->moveToPoint(48, 75, 45,0.3);
+    holonomic_subsytem->moveToPoint(60, 87, 45,0.3);
+
+
 
 
 

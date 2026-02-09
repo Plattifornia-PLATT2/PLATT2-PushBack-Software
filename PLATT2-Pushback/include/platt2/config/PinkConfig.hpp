@@ -57,8 +57,8 @@ class PinkConfig : public IConfig {
     static constexpr int LEFT_REAR_MODULE_TOP_PORT{-11};
     static constexpr int LEFT_REAR_MODULE_BOTTOM_PORT{12}; 
 
-    static constexpr int RIGHT_REAR_MODULE_TOP_PORT{9};
-    static constexpr int RIGHT_REAR_MODULE_BOTTOM_PORT{-10};
+    static constexpr int RIGHT_REAR_MODULE_TOP_PORT{-9};
+    static constexpr int RIGHT_REAR_MODULE_BOTTOM_PORT{10};
 
     // ** Intake Ports **
     static constexpr int FRONT_INTAKE_MOTOR_PORT{-5};
@@ -68,7 +68,7 @@ class PinkConfig : public IConfig {
     static constexpr int UPPER_CONVEYOR_MOTOR_PORT{20};
     static constexpr int REAR_INTAKE_LEFT_MOTOR_PORT{-19};
     static constexpr int REAR_INTAKE_RIGHT_MOTOR_PORT{18};
-    static constexpr int DISTANCE_SENSOR_PORT{15};
+    static constexpr int DISTANCE_SENSOR_PORT{14};
     static constexpr pros::MotorGears INTAKE_GEARSET{pros::MotorGears::blue};
 
     // ** Color Sort Ports **
@@ -83,20 +83,20 @@ class PinkConfig : public IConfig {
     static constexpr int REAR_INTAKE_PISTION {6};
 
     // ** VEX IMU Port **
-    static constexpr int VEX_IMU_PORT{14};
+    static constexpr int VEX_IMU_PORT{15};
 
     // ** Odometry Offsets **
-    static constexpr int HORIZONTAL_ENCODER_PORT{6};
+    static constexpr int HORIZONTAL_ENCODER_PORT{21};
     static constexpr int VERTICAL_ENCODER_PORT{13};
     static constexpr double TRACKING_WHEEL_DIAMETER{2.2725};
-    static constexpr double HORIZONTAL_TRACKING_WHEEL_OFFSET{.90};
-    static constexpr double VERTICAL_TRACKING_WHEEL_OFFSET{3.25};
+    static constexpr double HORIZONTAL_TRACKING_WHEEL_OFFSET{.85};
+    static constexpr double VERTICAL_TRACKING_WHEEL_OFFSET{3.45};
 
     // ** Linear PID Tuning Values **
-    static constexpr double position_dt{0.022};
+    static constexpr double position_dt{0.026};
     static constexpr double position_max{1};
     static constexpr double position_min{-1};
-    static constexpr double position_Kp{0.067};
+    static constexpr double position_Kp{0.05325};
     static constexpr double position_Kd{0.007};
     static constexpr double position_Ki{0};
 
@@ -104,7 +104,7 @@ class PinkConfig : public IConfig {
     static constexpr double heading_dt{0.01};
     static constexpr double heading_max{1};
     static constexpr double heading_min{-1};
-    static constexpr double heading_Kp{0.4};
+    static constexpr double heading_Kp{0.3};
     static constexpr double heading_Kd{0.0};
     static constexpr double heading_Ki{0};
 
