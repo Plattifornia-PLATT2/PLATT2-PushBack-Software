@@ -123,6 +123,10 @@ namespace robot{
                 intake_subsystem->toggle_conveyor_stopper_piston();
             }
             
+            if(controller.get_digital_new_press(driver_profile->rearIntake_toggle)){
+                intake_subsystem->toggle_rear_intake_piston();
+            }
+            
             pros::delay(10);
         }
     

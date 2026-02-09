@@ -66,8 +66,8 @@ class PinkConfig : public IConfig {
     static constexpr int REAR_INTAKE_MOTOR_PORT{-3};
     static constexpr int LOWER_ROLLER_MOTOR_PORT{-17};
     static constexpr int UPPER_CONVEYOR_MOTOR_PORT{20};
-    static constexpr int REAR_INTAKE_LEFT_MOTOR_PORT{-19};
-    static constexpr int REAR_INTAKE_RIGHT_MOTOR_PORT{18};
+    static constexpr int REAR_INTAKE_LEFT_MOTOR_PORT{19};
+    static constexpr int REAR_INTAKE_RIGHT_MOTOR_PORT{-18};
     static constexpr int DISTANCE_SENSOR_PORT{14};
     static constexpr pros::MotorGears INTAKE_GEARSET{pros::MotorGears::blue};
 
@@ -80,7 +80,7 @@ class PinkConfig : public IConfig {
     static constexpr int CONVEYOR_STOPPER_PISTON_PORT{3};
     static constexpr int RAKE_MECH_PISTON_PORT{4};
     static constexpr int DESCORE_PISTON_PORT{5};
-    static constexpr int REAR_INTAKE_PISTION {6};
+    static constexpr int REAR_INTAKE_PISTON_PORT {6};
 
     // ** VEX IMU Port **
     static constexpr int VEX_IMU_PORT{15};

@@ -24,6 +24,7 @@ namespace intake{
         std::unique_ptr<pros::adi::DigitalOut> conveyor_stopper_piston,
         std::unique_ptr<pros::adi::DigitalOut> rake_mech_piston,
         std::unique_ptr<pros::adi::DigitalOut> descore_piston,
+        std::unique_ptr<pros::adi::DigitalOut> rear_intake_piston,
         std::unique_ptr<pros::Distance> distance_sensor
     )
         {
@@ -39,6 +40,7 @@ namespace intake{
         this->conveyor_stopper_piston = std::move(conveyor_stopper_piston);
         this->rake_mech_piston = std::move(rake_mech_piston);
         this->descore_piston = std::move(descore_piston);
+        this->rear_intake_piston = std::move(rear_intake_piston);
         this->distance_sensor = std::move(distance_sensor);
 
         if(rear_intake_motor){
@@ -172,6 +174,11 @@ namespace intake{
 
     void IntakeSubsystem::colorSortMode(bool state){
         colorSort = state;
+    }
+
+    void IntakeSubsystem::toggle_rear_intake_piston(){
+        rear_intake_piston_state = !rear_intake_piston_state;
+        rear_intake_piston->set_value(rear_intake_piston_state);
     }
     
 }

@@ -35,6 +35,7 @@ namespace profiles{
         descore_toggle = pros::E_CONTROLLER_DIGITAL_B;
         scoreHighMacro = pros::E_CONTROLLER_DIGITAL_R1;
         scoreMiddleHighMacro = pros::E_CONTROLLER_DIGITAL_R2;
+        rearIntake_toggle = pros::E_CONTROLLER_DIGITAL_UP;
     }
     };
 }
