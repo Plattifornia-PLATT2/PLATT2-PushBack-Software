@@ -98,22 +98,42 @@ void PinkSkillsAuton::run() {
     pros::delay(2000);
     intake_subsystem->move_intake(robot::subsystems::intake::STOP);
     */
-    
-    //intake_subsystem->toggle_rake_mech_piston();
-    //pros::delay(2000);
+    //Meets at middle goal at 18 and 24 seconds.
+    intake_subsystem->toggle_rake_mech_piston();
+    pros::delay(500);
     holonomic_subsytem->moveToPoint(70, 31, 90);
-    holonomic_subsytem->moveToPoint(70, 28, 90,0.2);
-    //intake_subsystem->toggle_rake_mech_piston();
     intake_subsystem->move_intake(robot::subsystems::intake::IN);
+    holonomic_subsytem->moveToPoint(70, 28, 90,0.1);
+    pros::delay(2000);
+    intake_subsystem->toggle_rake_mech_piston();
     holonomic_subsytem->moveToPoint(10.75, 30, 190,0.5, 0.3, 4);
     holonomic_subsytem->moveToPoint(10.75, 17, 190,0.3,0.3, 2);
     holonomic_subsytem->moveToPoint(46, 48, 90);
     holonomic_subsytem->moveToPoint(46.5, 73, 85,0.3);
+    intake_subsystem->move_intake(robot::subsystems::intake::STOP);
     holonomic_subsytem->moveToPoint(48, 48, 45,0.3);
     //intake_subsystem->toggle_ed_mech();
-    holonomic_subsytem->moveToPoint(59.25, 60.75, 45,0.3);
-    holonomic_subsytem->moveToPoint(48, 75, 45,0.3);
-    holonomic_subsytem->moveToPoint(60, 87, 45,0.3);
+    holonomic_subsytem->moveToPoint(59, 61, 45,0.3, 0.3, 2);
+    holonomic_subsytem->moveToPoint(38, 84, 45,0.3);
+    holonomic_subsytem->moveToPoint(58.5, 86.5, 45,0.3, 0.3, 4);
+    holonomic_subsytem->moveToPoint(27, 110, 270,0.3);
+    //Tube Point
+    holonomic_subsytem->moveToPoint(27, 140, 270, 0.2, 0.3, 2);
+    holonomic_subsytem->moveToPoint(12, 110, 90, 0.1, 0.2);
+    pros::delay(250);
+    holonomic_subsytem->moveToPoint(12, 40, 90);
+    holonomic_subsytem->moveToPoint(24, 24, 90, 0.1, 0.2);
+    holonomic_subsytem->moveToPoint(24, 24, 90, 0.1, 0.2);
+    holonomic_subsytem->moveToPoint(24, 44, 90, 0.2, 0.2, 2);
+    holonomic_subsytem->moveToPoint(24, 4, 90, 0.2, 0.2, 2);
+    holonomic_subsytem->moveToPoint(24, 44, 90, 0.2, 0.2, 2);
+
+
+
+
+
+
+
 
 
 

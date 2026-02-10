@@ -94,10 +94,10 @@ class PurpleConfig : public IConfig {
     static constexpr double VERTICAL_TRACKING_WHEEL_OFFSET{3.45};
 
     // ** Linear PID Tuning Values **
-    static constexpr double position_dt{0.026};
+    static constexpr double position_dt{0.022};
     static constexpr double position_max{1};
     static constexpr double position_min{-1};
-    static constexpr double position_Kp{0.05325};
+    static constexpr double position_Kp{0.067};
     static constexpr double position_Kd{0.007};
     static constexpr double position_Ki{0};
 
