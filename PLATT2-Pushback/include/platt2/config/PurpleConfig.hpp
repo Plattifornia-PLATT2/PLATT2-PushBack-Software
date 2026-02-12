@@ -87,7 +87,7 @@ class PurpleConfig : public IConfig {
     static constexpr int VEX_IMU_PORT{15};
 
     // ** Odometry Offsets **
-    static constexpr int HORIZONTAL_ENCODER_PORT{21};
+    static constexpr int HORIZONTAL_ENCODER_PORT{16};
     static constexpr int VERTICAL_ENCODER_PORT{13};
     static constexpr double TRACKING_WHEEL_DIAMETER{2.2725};
     static constexpr double HORIZONTAL_TRACKING_WHEEL_OFFSET{.85};
