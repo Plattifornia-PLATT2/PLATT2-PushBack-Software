@@ -34,8 +34,39 @@ void PurpleSkillsAuton::run() {
     intake_subsystem->toggle_rear_intake_piston();
     pros::delay(500);
     intake_subsystem->toggle_rear_intake_piston();
-    holonomic_subsytem->moveToPoint(52, 48, 180, 0.3);
-    holonomic_subsytem->moveToPoint(52, 120, 135);
+    holonomic_subsytem->moveToPoint(94, 48, 270, 0.3);
+    holonomic_subsytem->moveToPoint(94, 75, 270, 0.3);
+    intake_subsystem->move_intake(robot::subsystems::intake::STOP);
+    holonomic_subsytem->moveToPoint(66, 100, 270, 0.3, 0.3, 4);
+    holonomic_subsytem->moveToPoint(66, 117, 270, 0.3, 0.3, 4);
+    pros::delay(250);
+    intake_subsystem->toggle_rake_mech_piston();
+    pros::delay(500);
+    holonomic_subsytem->moveToPoint(66, 95, 270, 0.2, 0.9);
+    intake_subsystem->move_intake(robot::subsystems::intake::IN);
+    intake_subsystem->toggle_rake_mech_piston();
+    holonomic_subsytem->moveToPoint(86, 90, 270, 0.3, 0.3, 4);
+    holonomic_subsytem->moveToPoint(55, 105, 180, 0.3, 0.3, 4);
+    holonomic_subsytem->moveToPoint(79, 80, 220, 0.3, 0.3, 3);
+    holonomic_subsytem->moveToPoint(96, 55, 220, 0.3, 0.3, 3);
+    holonomic_subsytem->moveToPoint(76, 57, 305, 0.3, 0.3, 3);
+    intake_subsystem->move_intake(robot::subsystems::intake::OUT_LOW_GOAL);
+    pros::delay(3000);
+    intake_subsystem->move_intake(robot::subsystems::intake::STOP);
+    holonomic_subsytem->moveToPoint(94, 65, 305, 0.3, 0.3, 3);
+    holonomic_subsytem->moveToPoint(94, 100, 270, 0.3, 0.3, 3);
+    holonomic_subsytem->moveToPoint(122, 100, 270, 0.3, 0.3, 3);
+    holonomic_subsytem->moveToPoint(122, 126, 270, 0.3, 0.3, 3);
+    holonomic_subsytem->moveToPoint(136, 110, 270, 0.3, 0.3, 3);
+    holonomic_subsytem->moveToPoint(136, 48, 270, 0.3, 0.3, 3);
+    holonomic_subsytem->moveToPoint(122, 24, 270, 0.3, 0.3, 3);
+
+
+
+
+
+
+
 
 }
 

@@ -101,7 +101,7 @@ void PinkSkillsAuton::run() {
     //Meets at middle goal at 18 and 24 seconds.
     intake_subsystem->toggle_rake_mech_piston();
     pros::delay(750);
-    holonomic_subsytem->moveToPoint(70, 31, 90);
+    holonomic_subsytem->moveToPoint(70, 31, 90, 0.3, 0.7);
     intake_subsystem->move_intake(robot::subsystems::intake::IN);
     holonomic_subsytem->moveToPoint(70, 28, 90,0.1);
     pros::delay(1500);
@@ -109,26 +109,25 @@ void PinkSkillsAuton::run() {
     pros::delay(1500);
     intake_subsystem->toggle_rear_intake_piston();
     intake_subsystem->toggle_rake_mech_piston();
-    holonomic_subsytem->moveToPoint(10.25, 30, 190,0.5, 0.3, 4);
-    holonomic_subsytem->moveToPoint(10.25, 17, 190,0.2,0.3, 2);
-    holonomic_subsytem->moveToPoint(46, 48, 90);
-    holonomic_subsytem->moveToPoint(45, 73, 85,0.3);
+    holonomic_subsytem->moveToPoint(11, 30, 190,0.4, 0.3, 4);
+    holonomic_subsytem->moveToPoint(11, 17, 190,0.2,0.3, 2);
+    holonomic_subsytem->moveToPoint(44, 48, 270, 0.3);
+    holonomic_subsytem->moveToPoint(44, 73, 270,0.3);
     intake_subsystem->move_intake(robot::subsystems::intake::STOP);
     holonomic_subsytem->moveToPoint(48, 48, 45,0.3);
     intake_subsystem->toggle_ed_mech_piston();
     intake_subsystem->toggle_conveyor_stopper_piston();
-    holonomic_subsytem->moveToPoint(61, 60.5, 45,0.2, 0.3, 2);
+    holonomic_subsytem->moveToPoint(59.25, 61.25, 50,0.2, 0.7, 2);
     intake_subsystem->move_intake(robot::subsystems::intake::IN);
     pros::delay(3000);
-    holonomic_subsytem->moveToPoint(59, 48, 45,0.2, 0.3, 2);
     holonomic_subsytem->moveToPoint(38, 84, 45,0.3);
     intake_subsystem->toggle_conveyor_stopper_piston();
     intake_subsystem->toggle_ed_mech_piston();
     intake_subsystem->move_intake(robot::subsystems::intake::STOP);
     holonomic_subsytem->moveToPoint(59, 85, 45,0.3, 0.3, 4);
-    holonomic_subsytem->moveToPoint(27, 110, 270,0.3);
+    holonomic_subsytem->moveToPoint(26, 110, 270,0.3);
     //Tube Point
-    holonomic_subsytem->moveToPoint(27, 125, 270, 0.2, 0.3, 2);
+    holonomic_subsytem->moveToPoint(25.75, 124.5, 270, 0.2, 0.3, 2);
     intake_subsystem->toggle_rear_intake_piston();
     intake_subsystem->move_intake(robot::subsystems::intake::IN);
     pros::delay(1500);
@@ -142,7 +141,7 @@ void PinkSkillsAuton::run() {
     pros::delay(250);
     intake_subsystem->move_intake(robot::subsystems::intake::STOP);
     holonomic_subsytem->moveToPoint(12, 40, 90, 0.4);
-    holonomic_subsytem->moveToPoint(26.5, 18, 90, 0.5, 0.2);
+    holonomic_subsytem->moveToPoint(26.5, 18, 90, 0.2, 0.2);
     pros::delay(500);
     intake_subsystem->toggle_upper_conveyor_height_piston();
     intake_subsystem->toggle_conveyor_stopper_piston();
