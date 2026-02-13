@@ -84,11 +84,11 @@ namespace intake{
                 break;   
             }
             case OUT_LOW_GOAL:{
-                front_intake_motor->move_velocity(intake_speed/2);
-                middle_intake_motor->move_velocity(-intake_speed/2);
+                front_intake_motor->move_velocity(-intake_speed);
+                middle_intake_motor->move_velocity(-intake_speed);
                 rear_intake_motor->move_velocity(-intake_speed/2);
                 upper_conveyor_motor->move_velocity(-intake_speed/2);   
-                lower_roller_motor->move_velocity(-intake_speed/2);
+                lower_roller_motor->move_velocity(intake_speed);
                 matchload_left_motor->move_velocity(-intake_speed/2);
                 matchload_right_motor->move_velocity(-intake_speed/2);
                 break;

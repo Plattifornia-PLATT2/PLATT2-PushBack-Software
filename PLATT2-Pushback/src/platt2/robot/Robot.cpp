@@ -68,7 +68,7 @@ namespace robot{
             }
             else if(controller.get_digital(driver_profile->frontIntake_OUT)){
                 intake_subsystem->colorSortMode(color_sort_subsystem->isSortActive());
-                intake_subsystem->move_intake(subsystems::intake::IntakeDirection::OUT);
+                intake_subsystem->move_intake(subsystems::intake::IntakeDirection::OUT_LOW_GOAL);
             }
             else{
                 intake_subsystem->move_intake(subsystems::intake::IntakeDirection::STOP);

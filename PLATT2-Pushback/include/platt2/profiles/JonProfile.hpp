@@ -25,17 +25,17 @@ namespace profiles{
         frontIntake_IN = pros::E_CONTROLLER_DIGITAL_L1;
         frontIntake_OUT = pros::E_CONTROLLER_DIGITAL_L2;
         auto_unload_button = pros::E_CONTROLLER_DIGITAL_X;
-        edMech_toggle = pros::E_CONTROLLER_DIGITAL_R1;
-        highScore_toggle = pros::E_CONTROLLER_DIGITAL_R2;
-        stopper_toggle = pros::E_CONTROLLER_DIGITAL_DOWN;
+        edMech_toggle = pros::E_CONTROLLER_DIGITAL_R2;
+        highScore_toggle = pros::E_CONTROLLER_DIGITAL_R1;
+        stopper_toggle = pros::E_CONTROLLER_DIGITAL_Y;
         colorSort_toggle = pros::E_CONTROLLER_DIGITAL_X;
-        rakeMech_toggle = pros::E_CONTROLLER_DIGITAL_LEFT;
+        rakeMech_toggle = pros::E_CONTROLLER_DIGITAL_B;
         fieldOriented_toggle = pros::E_CONTROLLER_DIGITAL_X;
         heading_reset = pros::E_CONTROLLER_DIGITAL_X;
         descore_toggle = pros::E_CONTROLLER_DIGITAL_B;
         scoreHighMacro = pros::E_CONTROLLER_DIGITAL_R1;
         scoreMiddleHighMacro = pros::E_CONTROLLER_DIGITAL_R2;
-        rearIntake_toggle = pros::E_CONTROLLER_DIGITAL_UP;
+        rearIntake_toggle = pros::E_CONTROLLER_DIGITAL_DOWN;
     }
     };
 }
