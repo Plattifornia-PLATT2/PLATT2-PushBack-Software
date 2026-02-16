@@ -35,6 +35,10 @@ class PurpleSkillsAuton : public auton::IAuton {
     std::shared_ptr<robot::subsystems::colorsort::ColorSortSubsystem> color_sort_subsystem;
     robot::AllianceConfig alliance_color;
 
+    const double STARTING_X_POSITION {88.0};
+    const double STARTING_Y_POSITION {24.0};
+    const double STARTING_HEADING {0.0};  
+
     public:
 
     /**

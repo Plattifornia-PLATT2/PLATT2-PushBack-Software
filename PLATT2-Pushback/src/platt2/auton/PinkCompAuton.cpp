@@ -1,5 +1,6 @@
 #include "platt2/auton/PinkCompAuton.hpp"
 #include "platt2/robot/subsystems/holonomicDrive/HolonomicControl.hpp"
+#include "platt2/robot/subsystems/odometry/OdometryPosition.hpp"
 
 namespace platt2{
 namespace auton{
@@ -16,6 +17,11 @@ void PinkCompAuton::init(
     this->intake_subsystem = intake_subsystem;
     this->color_sort_subsystem = color_sort_subsystem;
     this->alliance_color= alliance_color;
+
+    if(odometry_subsystem){
+        robot::subsystems::odometry::OdometryPosition startingPos;
+        odometry_subsystem->setPos(startingPos);
+    }
 }
 
 void PinkCompAuton::run() {

@@ -49,31 +49,31 @@ class PurpleConfig : public IConfig {
 
 
     // ** Drive Ports **
-    static constexpr int LEFT_FRONT_MODULE_TOP_PORT{2};
-    static constexpr int LEFT_FRONT_MODULE_BOTTOM_PORT{-1};
+    static constexpr int LEFT_FRONT_MODULE_TOP_PORT{1};
+    static constexpr int LEFT_FRONT_MODULE_BOTTOM_PORT{-2};
 
-    static constexpr int RIGHT_FRONT_MODULE_TOP_PORT{-17};
-    static constexpr int RIGHT_FRONT_MODULE_BOTTOM_PORT{18};
+    static constexpr int RIGHT_FRONT_MODULE_TOP_PORT{-7};
+    static constexpr int RIGHT_FRONT_MODULE_BOTTOM_PORT{8};
 
-    static constexpr int LEFT_REAR_MODULE_TOP_PORT{9};
-    static constexpr int LEFT_REAR_MODULE_BOTTOM_PORT{-10};
+    static constexpr int LEFT_REAR_MODULE_TOP_PORT{-11};
+    static constexpr int LEFT_REAR_MODULE_BOTTOM_PORT{12}; 
 
-    static constexpr int RIGHT_REAR_MODULE_TOP_PORT{-19};
-    static constexpr int RIGHT_REAR_MODULE_BOTTOM_PORT{20};
+    static constexpr int RIGHT_REAR_MODULE_TOP_PORT{9};
+    static constexpr int RIGHT_REAR_MODULE_BOTTOM_PORT{-10};
 
     // ** Intake Ports **
-    static constexpr int FRONT_INTAKE_MOTOR_PORT{14};
-    static constexpr int MIDDLE_INTAKE_MOTOR_PORT{13};
-    static constexpr int REAR_INTAKE_MOTOR_PORT{-15};
-    static constexpr int LOWER_ROLLER_MOTOR_PORT{8};
-    static constexpr int UPPER_CONVEYOR_MOTOR_PORT{16};
-    static constexpr int REAR_INTAKE_LEFT_MOTOR_PORT{21};
-    static constexpr int REAR_INTAKE_RIGHT_MOTOR_PORT{20};
-    static constexpr int DISTANCE_SENSOR_PORT{7};
+    static constexpr int FRONT_INTAKE_MOTOR_PORT{-5};
+    static constexpr int MIDDLE_INTAKE_MOTOR_PORT{4};
+    static constexpr int REAR_INTAKE_MOTOR_PORT{-3};
+    static constexpr int LOWER_ROLLER_MOTOR_PORT{-17};
+    static constexpr int UPPER_CONVEYOR_MOTOR_PORT{20};
+    static constexpr int REAR_INTAKE_LEFT_MOTOR_PORT{19};
+    static constexpr int REAR_INTAKE_RIGHT_MOTOR_PORT{-18};
+    static constexpr int DISTANCE_SENSOR_PORT{14};
     static constexpr pros::MotorGears INTAKE_GEARSET{pros::MotorGears::blue};
 
     // ** Color Sort Ports **
-    static constexpr int OPTICAL_SENSOR_PORT{12};
+    static constexpr int OPTICAL_SENSOR_PORT{16};
 
     // ** Pneumatics **
     static constexpr int ED_MECH_PISTON_PORT{1};
@@ -81,23 +81,24 @@ class PurpleConfig : public IConfig {
     static constexpr int CONVEYOR_STOPPER_PISTON_PORT{3};
     static constexpr int RAKE_MECH_PISTON_PORT{4};
     static constexpr int DESCORE_PISTON_PORT{5};
+    static constexpr int REAR_INTAKE_PISTON_PORT {6};
 
     // ** VEX IMU Port **
-    static constexpr int VEX_IMU_PORT{11};
+    static constexpr int VEX_IMU_PORT{15};
 
- // ** Odometry Offsets **
-    static constexpr int HORIZONTAL_ENCODER_PORT{6};
-    static constexpr int VERTICAL_ENCODER_PORT{7};
+    // ** Odometry Offsets **
+    static constexpr int HORIZONTAL_ENCODER_PORT{16};
+    static constexpr int VERTICAL_ENCODER_PORT{13};
     static constexpr double TRACKING_WHEEL_DIAMETER{2.2725};
-    static constexpr double HORIZONTAL_TRACKING_WHEEL_OFFSET{0.0};
-    static constexpr double VERTICAL_TRACKING_WHEEL_OFFSET{0.0};
+    static constexpr double HORIZONTAL_TRACKING_WHEEL_OFFSET{.85};
+    static constexpr double VERTICAL_TRACKING_WHEEL_OFFSET{3.45};
 
     // ** Linear PID Tuning Values **
-    static constexpr double position_dt{0.01};
+    static constexpr double position_dt{0.022};
     static constexpr double position_max{1};
     static constexpr double position_min{-1};
-    static constexpr double position_Kp{0.085};
-    static constexpr double position_Kd{0.008};
+    static constexpr double position_Kp{0.067};
+    static constexpr double position_Kd{0.007};
     static constexpr double position_Ki{0};
 
     // ** Angular PID Tuning Values **
@@ -107,7 +108,7 @@ class PurpleConfig : public IConfig {
     static constexpr double heading_Kp{0.3};
     static constexpr double heading_Kd{0.0};
     static constexpr double heading_Ki{0};
-
+    
     public:
 
     /**

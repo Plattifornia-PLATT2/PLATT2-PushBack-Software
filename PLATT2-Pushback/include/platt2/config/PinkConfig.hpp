@@ -57,8 +57,8 @@ class PinkConfig : public IConfig {
     static constexpr int LEFT_REAR_MODULE_TOP_PORT{-11};
     static constexpr int LEFT_REAR_MODULE_BOTTOM_PORT{12}; 
 
-    static constexpr int RIGHT_REAR_MODULE_TOP_PORT{9};
-    static constexpr int RIGHT_REAR_MODULE_BOTTOM_PORT{-10};
+    static constexpr int RIGHT_REAR_MODULE_TOP_PORT{-9};
+    static constexpr int RIGHT_REAR_MODULE_BOTTOM_PORT{10};
 
     // ** Intake Ports **
     static constexpr int FRONT_INTAKE_MOTOR_PORT{-5};
@@ -66,9 +66,9 @@ class PinkConfig : public IConfig {
     static constexpr int REAR_INTAKE_MOTOR_PORT{-3};
     static constexpr int LOWER_ROLLER_MOTOR_PORT{-17};
     static constexpr int UPPER_CONVEYOR_MOTOR_PORT{20};
-    static constexpr int REAR_INTAKE_LEFT_MOTOR_PORT{-19};
-    static constexpr int REAR_INTAKE_RIGHT_MOTOR_PORT{18};
-    static constexpr int DISTANCE_SENSOR_PORT{15};
+    static constexpr int REAR_INTAKE_LEFT_MOTOR_PORT{19};
+    static constexpr int REAR_INTAKE_RIGHT_MOTOR_PORT{-18};
+    static constexpr int DISTANCE_SENSOR_PORT{14};
     static constexpr pros::MotorGears INTAKE_GEARSET{pros::MotorGears::blue};
 
     // ** Color Sort Ports **
@@ -80,25 +80,23 @@ class PinkConfig : public IConfig {
     static constexpr int CONVEYOR_STOPPER_PISTON_PORT{3};
     static constexpr int RAKE_MECH_PISTON_PORT{4};
     static constexpr int DESCORE_PISTON_PORT{5};
+    static constexpr int REAR_INTAKE_PISTON_PORT {6};
 
     // ** VEX IMU Port **
-    static constexpr int VEX_IMU_PORT{14};
+    static constexpr int VEX_IMU_PORT{15};
 
     // ** Odometry Offsets **
-    static constexpr int HORIZONTAL_ENCODER_PORT{6};
+    static constexpr int HORIZONTAL_ENCODER_PORT{21};
     static constexpr int VERTICAL_ENCODER_PORT{13};
     static constexpr double TRACKING_WHEEL_DIAMETER{2.2725};
-    static constexpr double HORIZONTAL_TRACKING_WHEEL_OFFSET{0};
-    static constexpr double VERTICAL_TRACKING_WHEEL_OFFSET{0};
-    
-    //static constexpr double HORIZONTAL_TRACKING_WHEEL_OFFSET{0.75};
-    //static constexpr double VERTICAL_TRACKING_WHEEL_OFFSET{3.625};
+    static constexpr double HORIZONTAL_TRACKING_WHEEL_OFFSET{.85};
+    static constexpr double VERTICAL_TRACKING_WHEEL_OFFSET{3.45};
 
     // ** Linear PID Tuning Values **
-    static constexpr double position_dt{0.01};
+    static constexpr double position_dt{0.026};
     static constexpr double position_max{1};
     static constexpr double position_min{-1};
-    static constexpr double position_Kp{0.085};
+    static constexpr double position_Kp{0.05325};
     static constexpr double position_Kd{0.007};
     static constexpr double position_Ki{0};
 
@@ -121,6 +119,7 @@ class PinkConfig : public IConfig {
      * @return std::shared_ptr<robot::Robot> The built robot object
      */
     std::shared_ptr<robot::Robot> buildRobot(robot::AutonConfig auton, robot::DriverProfile profile, robot::AllianceConfig alliance) override;
+    //among us
 };
 }
 }

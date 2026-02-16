@@ -68,7 +68,7 @@ namespace robot{
             }
             else if(controller.get_digital(driver_profile->frontIntake_OUT)){
                 intake_subsystem->colorSortMode(color_sort_subsystem->isSortActive());
-                intake_subsystem->move_intake(subsystems::intake::IntakeDirection::OUT);
+                intake_subsystem->move_intake(subsystems::intake::IntakeDirection::OUT_LOW_GOAL);
             }
             else{
                 intake_subsystem->move_intake(subsystems::intake::IntakeDirection::STOP);
@@ -121,6 +121,10 @@ namespace robot{
             if(controller.get_digital_new_press(driver_profile->scoreMiddleHighMacro)){
                 intake_subsystem->toggle_ed_mech_piston();
                 intake_subsystem->toggle_conveyor_stopper_piston();
+            }
+            
+            if(controller.get_digital_new_press(driver_profile->rearIntake_toggle)){
+                intake_subsystem->toggle_rear_intake_piston();
             }
             
             pros::delay(10);
