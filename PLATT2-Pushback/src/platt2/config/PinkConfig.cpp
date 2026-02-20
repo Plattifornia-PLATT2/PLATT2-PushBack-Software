@@ -74,6 +74,10 @@ std::shared_ptr<robot::Robot> PinkConfig::buildRobot(robot::AutonConfig auton, r
     std::unique_ptr<hal::TrackingWheel> y1_tracking_wheel = std::make_unique<hal::TrackingWheel>(std::move(y1_encoder), TRACKING_WHEEL_DIAMETER);
     std::unique_ptr<hal::TrackingWheel> y2_tracking_wheel = std::make_unique<hal::TrackingWheel>(std::move(y2_encoder), TRACKING_WHEEL_DIAMETER);
 
+    x_tracking_wheel->setPlacment(X_PLACMENT);
+    y1_tracking_wheel->setPlacment(Y1_PLACMENT);
+    y2_tracking_wheel->setPlacment(Y2_PLACMENT);
+
     std::unique_ptr<robot::subsystems::odometry::TriWheelPositionTracker> position_tracker = std::make_unique<robot::subsystems::odometry::TriWheelPositionTracker>(std::move(x_tracking_wheel), std::move(y1_tracking_wheel), std::move(y2_tracking_wheel), std::move(vex_imu));
     std::shared_ptr<robot::subsystems::odometry::Odometry> odom_subsystem;
     odom_subsystem = std::make_shared<robot::subsystems::odometry::Odometry>(std::move(position_tracker));

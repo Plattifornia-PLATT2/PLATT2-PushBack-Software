@@ -6,6 +6,7 @@
 #include <cmath>
 #include <iostream>
 #include <array>
+#include <ostream>
 
 namespace platt2{
 namespace robot{
@@ -61,34 +62,56 @@ namespace odometry{
     std::array<double, 3> dTheta;
     std::array<double, 3> dPos;
 
-    std::array<double, 3> w1 = x_wheel->getPlacment();
-    std::array<double, 3> w2 = y1_wheel->getPlacment();
-    std::array<double, 3> w3 = y2_wheel->getPlacment();
+    std::array<double, 3> w1 = y1_wheel->getPlacment();
+    std::array<double, 3> w2 = y2_wheel->getPlacment();
+    std::array<double, 3> w3 = x_wheel->getPlacment();
 
-    std::array<std::array<double,3>,3> offsets{{  {cos(w1[2]), sin(w1[2]), (w1[0]*sin(w1[2])-w1[1]*cos(w1[2]))}, 
-                                                  {cos(w2[2]), sin(w2[2]), (w2[0]*sin(w2[2])-w2[1]*cos(w2[2]))},
-                                                  {cos(w3[2]), sin(w3[2]), (w3[0]*sin(w1[2])-w3[1]*cos(w3[2]))}
+    std::cout << w1[1] << std::endl;
+
+    std::array<std::array<double,3>,3> offsets{{  {cos(w1[2]), sin(w1[2]), ((w1[0]*sin(w1[2]))-(w1[1]*cos(w1[2])))}, 
+                                                  {cos(w2[2]), sin(w2[2]), ((w2[0]*sin(w2[2]))-(w2[1]*cos(w2[2])))},
+                                                  {cos(w3[2]), sin(w3[2]), ((w3[0]*sin(w3[2]))-(w3[1]*cos(w3[2])))}
                                                 }};
+
+
+
    
-    std::array<std::array<double,3>,3> B = scale(inverse(offsets), 1/x_wheel->getR());
+    std::array<std::array<double,3>,3> B = scale(inverse(offsets), x_wheel->getR());
+
+    for (int i = 0; i < 3; ++i) { // Outer loop for rows
+        for (int j = 0; j < 3; ++j) { // Inner loop for columns
+            std::cout << B.at(i).at(j) << " "; // Print element followed by a space
+        }
+        std::cout << std::endl; // Move to the next line after each row
+    }
+    std::cout << w1[2] << std::endl;
     
-    std::array<double, 3> oldPos = {{x_wheel->getAngle(), y1_wheel->getAngle(), y2_wheel->getAngle()}};
+    std::array<double, 3> oldPos = {{y1_wheel->getAngle(), y2_wheel->getAngle(),x_wheel->getAngle(),}};
     std::array<double, 3> newPos;
 
     while(true){
 
-        newPos = {{x_wheel->getAngle(), y1_wheel->getAngle(), y2_wheel->getAngle()}};
+        pros::screen::erase();
+        pros::screen::print(pros::E_TEXT_MEDIUM_CENTER, 1,"X Pos: %.3f", current_position.x);
+
+        pros::screen::print(pros::E_TEXT_MEDIUM_CENTER, 2,"Y Pos: %.3f", current_position.y);
+
+        pros::screen::print(pros::E_TEXT_MEDIUM_CENTER, 3,"Heading: %.2f", current_position.heading);
+
+        newPos = {{ y1_wheel->getAngle(), y2_wheel->getAngle(),x_wheel->getAngle(),}};
 
         dTheta[0] = newPos[0] - oldPos[0];
         dTheta[1] = newPos[1] - oldPos[1];
         dTheta[2] = newPos[2] - oldPos[2];
 
+        //std::cout<<dTheta[2]<<std::endl;
+
 
         dPos = matrixMult(B, dTheta);
 
-        current_position.x = current_position.x + dPos[0];
+        current_position.x = current_position.x +   dPos[0];
         current_position.y = current_position.y + dPos[1];
-        current_position.heading = current_position.heading + dPos[2];
+        current_position.heading = current_position.heading + (dPos[2]*180/M_PI);
         
         
         oldPos = newPos;
