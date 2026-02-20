@@ -22,6 +22,9 @@ void PurpleCompAuton::init(
 
     if(odometry_subsystem){
         robot::subsystems::odometry::OdometryPosition startingPos;
+        startingPos.x = STARTING_X_POSITION;
+        startingPos.y = STARTING_Y_POSITION;
+        startingPos.heading = STARTING_HEADING;
         odometry_subsystem->setPos(startingPos);
     }
 }

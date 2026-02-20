@@ -24,7 +24,7 @@ OdometryPosition Odometry::getPos() {
 
 double Odometry::getX() { return position_tracker->getX(); }
 double Odometry::getY() { return position_tracker->getY(); }
-double Odometry::getHeading() { return position_tracker->getHeading(); }
+double Odometry::getHeading() { return position_tracker->getIMUHeading(); }
 double Odometry::getVexHeading() {return 0;}
 void Odometry::initVexImu() {position_tracker->init();}
 

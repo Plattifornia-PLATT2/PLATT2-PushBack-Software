@@ -5,6 +5,7 @@
 
 #include <memory>
 #include <cmath>
+#include <array>
 
 /**
  * @brief Namespace for PLATT2 library code.
@@ -31,6 +32,9 @@ namespace hal{
 
         double wheel_diameter;
         double wheel_circumference;
+        std::array<double, 3> placmentPos;
+
+        
 
         public:
         /**
@@ -39,7 +43,10 @@ namespace hal{
          * @return double The position in inches.
          */
         double getPosition();
-
+        double getAngle();
+        double getR();
+        void setPlacment(std::array<double, 3>);
+        std::array<double,3> getPlacment();
         /**
          * @brief Sets the current position of the tracking wheel.
          * 

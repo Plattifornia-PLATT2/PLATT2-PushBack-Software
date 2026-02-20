@@ -4,6 +4,8 @@
 #include <cmath>
 #include <numeric>
 #include <vector>
+#include <array>
+
 
 /**
  * @brief A struct to represent a cartesian coordinate.
@@ -127,6 +129,66 @@ inline double pythag(double P1[2], double P2[2]){
     double hyp = std::sqrt(pow(X,2)+pow(Y,2));
 
     return hyp;
+
+}
+
+
+inline std::array<std::array<double,3>,3> inverse(std::array<std::array<double,3>,3> A){
+
+    double det =
+          A[0][0] * (A[1][1]*A[2][2] - A[1][2]*A[2][1])
+        - A[0][1] * (A[1][0]*A[2][2] - A[1][2]*A[2][0])
+        + A[0][2] * (A[1][0]*A[2][1] - A[1][1]*A[2][0]);
+
+    double invDet = 1.0 / det;
+
+    std::array<std::array<double, 3>, 3> inv{};
+
+    inv[0][0] =  (A[1][1]*A[2][2] - A[1][2]*A[2][1]) * invDet;
+    inv[0][1] = -(A[0][1]*A[2][2] - A[0][2]*A[2][1]) * invDet;
+    inv[0][2] =  (A[0][1]*A[1][2] - A[0][2]*A[1][1]) * invDet;
+
+    inv[1][0] = -(A[1][0]*A[2][2] - A[1][2]*A[2][0]) * invDet;
+    inv[1][1] =  (A[0][0]*A[2][2] - A[0][2]*A[2][0]) * invDet;
+    inv[1][2] = -(A[0][0]*A[1][2] - A[0][2]*A[1][0]) * invDet;
+
+    inv[2][0] =  (A[1][0]*A[2][1] - A[1][1]*A[2][0]) * invDet;
+    inv[2][1] = -(A[0][0]*A[2][1] - A[0][1]*A[2][0]) * invDet;
+    inv[2][2] =  (A[0][0]*A[1][1] - A[0][1]*A[1][0]) * invDet;
+
+    return inv;
+
+}
+
+
+inline std::array<double, 3> matrixMult(std::array<std::array<double, 3>, 3> A, std::array<double, 3> B){
+   
+    std::array<double, 3> result{0.0, 0.0, 0.0};
+
+    for (size_t i = 0; i < 3; ++i)
+    {
+        for (size_t k = 0; k < 3; ++k)
+        {
+            result[i] += A[i][k] * B[k];
+        }
+    }
+
+    return result;
+}
+
+inline std::array<std::array<double, 3>, 3> scale(std::array<std::array<double, 3>, 3> A, double s){
+
+    std::array<std::array<double, 3>, 3> result{};
+
+    for (size_t i = 0; i < 3; ++i)
+    {
+        for (size_t j = 0; j < 3; ++j)
+        {
+            result[i][j] = s * A[i][j];
+        }
+    }
+
+    return result;
 
 }
 

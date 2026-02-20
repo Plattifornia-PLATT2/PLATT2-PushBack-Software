@@ -56,7 +56,7 @@ public:
      */
     void moveToPoint(double x_target, double y_target, double heading_target, double rSpeed = 0.6, double wSpeed = 0.3, double timeout = 7);
 
-    void moveToPointInternalHeading(double x_target, double y_target, double heading_target, double rSpeed = 0.4, double wSpeed = 0.3, double timeout = 7);
+    double motionCurve(double startXpos, double startYpos, double x_target);
 
     /**
      * @brief Used for debugging purposes.

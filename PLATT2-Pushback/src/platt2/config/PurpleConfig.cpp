@@ -2,7 +2,8 @@
 #include "platt2/EAutonConfig.hpp"
 #include "platt2/auton/PurpleSkillsAuton.hpp"
 #include "platt2/hal/TrackingWheel.hpp"
-#include "platt2/robot/subsystems/odometry/TrackingWheelPositionTracker.hpp"
+//#include "platt2/robot/subsystems/odometry/TrackingWheelPositionTracker.hpp"
+#include "platt2/robot/subsystems/odometry/TriWheelPositionTracker.hpp"
 #include "pros/rotation.hpp"
 #include <memory>
 
@@ -55,20 +56,23 @@ std::shared_ptr<robot::Robot> PurpleConfig::buildRobot(robot::AutonConfig auton,
 
      // odom subsystem
     std::unique_ptr<pros::IMU> vex_imu = std::make_unique<pros::IMU>(VEX_IMU_PORT);
-    std::unique_ptr<pros::Rotation> horiontal_encoder = std::make_unique<pros::Rotation>(HORIZONTAL_ENCODER_PORT);
-    std::unique_ptr<pros::Rotation> vertical_encoder = std::make_unique<pros::Rotation>(VERTICAL_ENCODER_PORT);
+    
+    std::unique_ptr<pros::Rotation> x_encoder = std::make_unique<pros::Rotation>(X_ENCODER_PORT);
+    std::unique_ptr<pros::Rotation> y1_encoder = std::make_unique<pros::Rotation>(Y1_ENCODER_PORT);
+    std::unique_ptr<pros::Rotation> y2_encoder = std::make_unique<pros::Rotation>(Y2_ENCODER_PORT);
 
-    std::unique_ptr<hal::TrackingWheel> horizontal_tracking_wheel = std::make_unique<hal::TrackingWheel>(std::move(horiontal_encoder), TRACKING_WHEEL_DIAMETER);
-    std::unique_ptr<hal::TrackingWheel> vertical_tracking_wheel = std::make_unique<hal::TrackingWheel>(std::move(vertical_encoder), TRACKING_WHEEL_DIAMETER);
+    std::unique_ptr<hal::TrackingWheel> x_tracking_wheel = std::make_unique<hal::TrackingWheel>(std::move(x_encoder), TRACKING_WHEEL_DIAMETER);
+    std::unique_ptr<hal::TrackingWheel> y1_tracking_wheel = std::make_unique<hal::TrackingWheel>(std::move(y1_encoder), TRACKING_WHEEL_DIAMETER);
+    std::unique_ptr<hal::TrackingWheel> y2_tracking_wheel = std::make_unique<hal::TrackingWheel>(std::move(y2_encoder), TRACKING_WHEEL_DIAMETER);
 
-    std::unique_ptr<robot::subsystems::odometry::TrackingWheelPositionTracker> position_tracker = std::make_unique<robot::subsystems::odometry::TrackingWheelPositionTracker>(std::move(horizontal_tracking_wheel), std::move(vertical_tracking_wheel), std::move(vex_imu));
-    position_tracker->setOffsets(HORIZONTAL_TRACKING_WHEEL_OFFSET, VERTICAL_TRACKING_WHEEL_OFFSET);
+    x_tracking_wheel->setPlacment(X_PLACMENT);
+    y1_tracking_wheel->setPlacment(Y1_PLACMENT);
+    y2_tracking_wheel->setPlacment(Y2_PLACMENT);
+
+    std::unique_ptr<robot::subsystems::odometry::TriWheelPositionTracker> position_tracker = std::make_unique<robot::subsystems::odometry::TriWheelPositionTracker>(std::move(x_tracking_wheel), std::move(y1_tracking_wheel), std::move(y2_tracking_wheel), std::move(vex_imu));
     std::shared_ptr<robot::subsystems::odometry::Odometry> odom_subsystem;
     odom_subsystem = std::make_shared<robot::subsystems::odometry::Odometry>(std::move(position_tracker));
-   
-    robot::subsystems::odometry::OdometryPosition startingPos = {0,0,90};
-    odom_subsystem->setPos(startingPos);
-    
+       
     // intake subsystem
     std::unique_ptr<pros::adi::DigitalOut> ed_mech_piston{std::make_unique<pros::adi::DigitalOut>(ED_MECH_PISTON_PORT)};
     std::unique_ptr<pros::adi::DigitalOut> upper_conveyor_height_piston{std::make_unique<pros::adi::DigitalOut>(UPPER_CONVEYOR_HEIGHT_PISTON_PORT)};

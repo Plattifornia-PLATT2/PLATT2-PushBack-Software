@@ -23,6 +23,7 @@
 #include "pros/rotation.hpp"
 
 // ** Standard C++ Library Includes **
+#include <array>
 #include <memory>
 #include <vector>
 #include <cmath>
@@ -87,11 +88,15 @@ class PurpleConfig : public IConfig {
     static constexpr int VEX_IMU_PORT{15};
 
     // ** Odometry Offsets **
-    static constexpr int HORIZONTAL_ENCODER_PORT{16};
-    static constexpr int VERTICAL_ENCODER_PORT{13};
+    static constexpr int X_ENCODER_PORT{16};
+    static constexpr int Y1_ENCODER_PORT{13};
+    static constexpr int Y2_ENCODER_PORT{13};
+
     static constexpr double TRACKING_WHEEL_DIAMETER{2.2725};
-    static constexpr double HORIZONTAL_TRACKING_WHEEL_OFFSET{.85};
-    static constexpr double VERTICAL_TRACKING_WHEEL_OFFSET{3.45};
+    
+    static constexpr std::array<double, 3> X_PLACMENT{.85};
+    static constexpr std::array<double, 3> Y1_PLACMENT{.85};
+    static constexpr std::array<double, 3> Y2_PLACMENT{.85};
 
     // ** Linear PID Tuning Values **
     static constexpr double position_dt{0.022};
