@@ -3,6 +3,7 @@
 #include "pros/screen.hpp"
 #include <cmath>
 #include <iostream>
+#include <iterator>
 
 namespace platt2{
 namespace robot{
@@ -16,7 +17,7 @@ namespace odometry{
     void TrackingWheelPositionTracker::setPos(OdometryPosition pos){
         current_position.x = pos.x;
         current_position.y = pos.y;
-        current_position.heading = pos.heading;
+        current_position.heading = pos.heading*(M_PI/180);
         imu->set_heading(360 - pos.heading);
     }
 
@@ -49,122 +50,75 @@ namespace odometry{
 
     void TrackingWheelPositionTracker::updatePosition(){
             
-    //init variables
-    current_position.heading  = 360 - imu->get_heading();
-    double oldHeading = current_position.heading ;
-    double deltaTheta = (current_position.heading  - oldHeading) * (M_PI/180);
+        //init variables
+        std::cout << current_position.heading << std::endl;
+        current_position.heading  = ((360 - imu->get_heading())*M_PI/180);
+        double oldTheta = current_position.heading ;
+        double dTheta = (current_position.heading  - oldTheta);
 
-    double hWheel = x_wheel->getPosition();
+        double newX = x_wheel->getPosition();
+        double oldX = newX;
+        double dX = newX - oldX;
 
-    std::cout<<current_position.x<<std::endl;
-    double oldHWheel = hWheel;
-    double deltaHWheel = hWheel - oldHWheel;
+        double newY = y_wheel->getPosition();
+        double oldY = newY;
+        double dY = newY - oldY;
 
-    double vWheel = y_wheel->getPosition();
-    double oldVWheel = vWheel;
-    double deltaVWheel = vWheel - oldVWheel;
+        double localX = 0;
+        double localY = 0;
 
-    double deltaX = 0;
-    double deltaY = 0;
+        double globalX = 0;
+        double globalY = 0;
 
-    double hyp = 0;
-    double theta = 0;
-    double points[2] = {0,0};
-    double zero[2] = {0,0};
+        
 
+        while(true){
 
-
-    while(true){
-        theta = 0;
-        static double lastX = NAN;
-
-
-        pros::screen::erase();
-        pros::screen::print(pros::E_TEXT_MEDIUM_CENTER, 1,"X Pos: %.3f", current_position.x);
+            pros::screen::erase();
+            pros::screen::print(pros::E_TEXT_MEDIUM_CENTER, 1,"X Pos: %.3f", current_position.x);
+            pros::screen::print(pros::E_TEXT_MEDIUM_CENTER, 2,"Y Pos: %.3f", current_position.y);
+            pros::screen::print(pros::E_TEXT_MEDIUM_CENTER, 3,"Heading: %.2f", current_position.heading*180/M_PI);
 
 
+            newX = x_wheel->getPosition();
+            newY = y_wheel->getPosition();
+            current_position.heading  = ((360 - imu->get_heading())*M_PI/180);
 
-        pros::screen::print(pros::E_TEXT_MEDIUM_CENTER, 2,"Y Pos: %.3f", current_position.y);
+            dX = newX - oldX;
+            dY = newY - oldY;
+            dTheta = current_position.heading - oldTheta;
 
-
-        pros::screen::print(pros::E_TEXT_MEDIUM_CENTER, 3,"Heading: %.2f", current_position.heading);
-
-
-        //update variables each iteration of loop
-        double imuHeading  = 360 -imu->get_heading();
-        if(!std::isfinite(imuHeading)){
-            continue;
-        }
-        current_position.heading = imuHeading;
-        deltaTheta = (current_position.heading  - oldHeading) * (M_PI/180);
-        hWheel = x_wheel->getPosition();
-        deltaHWheel = hWheel - oldHWheel;
-        vWheel = y_wheel->getPosition();
-        deltaVWheel = vWheel - oldVWheel;
-
-        //deltaTheta = 0;
-
-        //determins if the angle has changed and does relevent math 
-       const double EPS = 1e-6;
-
-        if (fabs(deltaTheta) < EPS) {
-            points[0] = deltaHWheel;
-            points[1] = deltaVWheel;
-        } else {
-            points[0] = (2 * sin(deltaTheta / 2.0)) * ((deltaHWheel / deltaTheta) + x_offset);
-            points[1] = (2 * sin(deltaTheta / 2.0)) * ((deltaVWheel / deltaTheta) + y_offset);
-        }
-
-        //convert local vector to the global oriantation
-        hyp = pythag(zero, points);
-
-        //std::cout<<hyp<<std::endl;
-
-        if (hyp < 0.001){hyp = 0;}
-
-        if (deltaHWheel == 0){
-
-            if(deltaVWheel != 0){
-
-                if(deltaVWheel > 0){
-
-                    theta = 90;
-
-                }else{
-
-                    theta = 270;
-
-                }
+            if(dTheta > M_PI || dTheta < -M_PI){
+                dTheta = -1 * sgn(dTheta) * (2*M_PI - std::abs(dTheta));
             }
 
-                theta = theta*(M_PI/180) - ((90-current_position.heading)*(M_PI/180) + (deltaTheta/2));
+            oldX = newX;
+            oldY = newY;
+            oldTheta = current_position.heading;
 
-        }else{
-
-            theta = atan2(points[1],points[0]) - ((90-current_position.heading)*(M_PI/180) + (deltaTheta/2));
-                
-        }
-
-        deltaX = hyp*cos(theta);
-        deltaY = hyp*sin(theta);
-
-        //std::cout<<deltaX<<std::endl;
-
-        //update poition using calculated vector
-        current_position.x = current_position.x + deltaX;
-        current_position.y = current_position.y + deltaY;
-
-        //std::cout<<current_position.x<<std::endl;
-
-        //std::cout<<current_position.x<<" "<<current_position.y<<std::endl;
-     
-        //update variable for next loop
-        oldHeading = current_position.heading;
-        oldHWheel = hWheel;
-        oldVWheel = vWheel;
+            localX = dX - (x_offset*dTheta);
+            localY = dY + (y_offset*dTheta);
 
 
-        pros::delay(10);
+            localX = (1-(pow(dTheta, 2)/24))*localX;
+            localY = (1-(pow(dTheta, 2)/24))*localY;
+
+            globalX =  localX * sin(oldTheta+dTheta/2)
+                        - localY * cos(oldTheta+dTheta/2);
+
+            globalY =  localX * cos(oldTheta+dTheta/2)
+                        + localY * sin(oldTheta+dTheta/2);
+
+            if (std::isnan(globalX) or std::isnan(globalY)){
+                pros::delay(10);
+                continue;
+            }
+
+            current_position.x += globalX;
+            current_position.y += globalY;
+
+
+            pros::delay(10);
         }
     }
 

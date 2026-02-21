@@ -35,7 +35,7 @@ namespace robot{
         controller.print(0, 0, "Sorted Color: %d", color_sort_subsystem->getSortedColor());
         
         while(true){
-            pros::screen::erase();
+            
 
           // pros::screen::print(pros::E_TEXT_MEDIUM_CENTER,6, "IMU Heading %f", odom_subsystem->getHeading());
            // std::cout << "IMU Heading: " << odom_subsystem->getHeading() << std::endl;

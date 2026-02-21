@@ -86,11 +86,11 @@ class PinkConfig : public IConfig {
     static constexpr int VEX_IMU_PORT{15};
 
     // ** Odometry Offsets **
-    static constexpr int HORIZONTAL_ENCODER_PORT{21};
+    static constexpr int HORIZONTAL_ENCODER_PORT{16};
     static constexpr int VERTICAL_ENCODER_PORT{13};
     static constexpr double TRACKING_WHEEL_DIAMETER{2.2725};
-    static constexpr double HORIZONTAL_TRACKING_WHEEL_OFFSET{.85};
-    static constexpr double VERTICAL_TRACKING_WHEEL_OFFSET{3.45};
+    static constexpr double HORIZONTAL_TRACKING_WHEEL_OFFSET{.5};
+    static constexpr double VERTICAL_TRACKING_WHEEL_OFFSET{2.45};
 
     // ** Linear PID Tuning Values **
     static constexpr double position_dt{0.026};
