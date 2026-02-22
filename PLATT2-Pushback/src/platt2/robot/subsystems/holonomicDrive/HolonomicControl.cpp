@@ -33,25 +33,28 @@ void HolonomicControl::moveToPoint(double x_target, double y_target, double targ
     double startPosX = odometry->getX();
     double startPosY = odometry->getY();
 
-    double dev;
-    double accel;
-    double v2;
+    double moveDistance = CtoP(x_target-startPosX, y_target-startPosY).r;
+
+    double currentVel = 0;
+
 
     while (true){
         
-        x_error = x_target - odometry->getX();
-        y_error = y_target - odometry->getY();
+        x_error = odometry->getX() - x_target;
+        y_error = odometry->getY() - y_target;
 
         p = CtoP(x_error, y_error);
 
-        angle_error = target_heading - (odometry->getHeading()*M_PI/180);
+        std::cout<<p.theta<<std::endl;
+
+        angle_error = target_heading - (odometry->getHeading());
 
         if(angle_error > M_PI || angle_error < -M_PI){
             angle_error = -1 * sgn(angle_error) * (2*M_PI - std::abs(angle_error));
         }
-
-        motionVector.r = std::clamp(-1*(positionPID->calculate(0, p.r)), -rSpeed, rSpeed);
-        motionVector.theta = p.theta - (odometry->getHeading()*M_PI/180)+(M_PI/2);
+        currentVel = velocityProfile(moveDistance, p.r, currentVel, 0.5, 0.1);
+        motionVector.r = currentVel;
+        motionVector.theta = p.theta - (odometry->getHeading());
 
         motionVector.w = std::clamp(headingPID->calculate(0, angle_error), -rSpeed, rSpeed);
 
@@ -75,6 +78,28 @@ void HolonomicControl::moveToPoint(double x_target, double y_target, double targ
     drivetrain->moveVector(motionVector);
 
 }
+
+double HolonomicControl::velocityProfile(double TotalDistance, double remainingDistance, double currentVel, double maxVel, double maxAccel){
+
+    double maxStoppingVel = std::sqrt(2.0 * maxAccel * remainingDistance);
+
+    double desiredVel = std::min(maxVel, maxStoppingVel);
+
+    double deltaVel = desiredVel - currentVel;
+    double maxDelta = maxAccel * 0.01;
+
+    if (deltaVel > maxDelta)
+        deltaVel = maxDelta;
+    if (deltaVel < -maxDelta)
+        deltaVel = -maxDelta;
+
+    currentVel += deltaVel;
+
+    return currentVel;
+
+}
+
+
 
 
 HolonomicControl::HolonomicControl(std::shared_ptr<XDrive> drive, std::shared_ptr<odometry::Odometry> odom, std::unique_ptr<robot::pid::PID> posPID, std::unique_ptr<robot::pid::PID> headingPID)

@@ -7,7 +7,7 @@ namespace hal{
 
 void MotorGroup::setVoltage(double voltage){
     for (auto &motor : motors)
-        if (motor) motor->move_voltage(voltage);
+        if (motor) motor->move(voltage);
 }
 
 void MotorGroup::setVelocity(double velocity){

@@ -26,7 +26,7 @@ namespace holonomicDrive{
 
         for (auto& module : drive_modules) {
             
-            projection = -cos(v.theta+(module->getPhi()))/cos((module->getTheta()));
+            projection = -sin(v.theta+(module->getPhi()))/sin((module->getTheta()));
             
             pV.push_back(std::abs(projection));
         }

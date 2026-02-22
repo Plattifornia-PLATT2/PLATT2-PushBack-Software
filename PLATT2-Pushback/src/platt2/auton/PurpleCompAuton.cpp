@@ -22,12 +22,17 @@ void PurpleCompAuton::init(
 
     if(odometry_subsystem){
         robot::subsystems::odometry::OdometryPosition startingPos;
+        startingPos.x = STARTING_X_POSITION;
+        startingPos.y = STARTING_Y_POSITION;
+        startingPos.heading = STARTING_HEADING;
         odometry_subsystem->setPos(startingPos);
     }
 }
 
 void PurpleCompAuton::run() {
     
+
+    holonomic_subsytem->moveToPoint(0, 24, 90);
         // TODO: Implementation goes here
     //intake_subsystem->toggle_rake_mech_piston();
     //if (alliance_color == robot::BLUE){
