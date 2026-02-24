@@ -56,7 +56,8 @@ public:
      */
     void moveToPoint(double x_target, double y_target, double heading_target, double rSpeed = 0.6, double wSpeed = 0.3, double timeout = 7);
 
-    double velocityProfile(double TotalDistance, double remainingDistance, double currentVel, double maxVel = 1, double maxAccel = 1);
+    double velocityProfile(double TotalDistance, double remainingDistance, double currentVel, double actualVel, double maxVel = 1, double maxAccel = 1);
+
 
     /**
      * @brief Used for debugging purposes.

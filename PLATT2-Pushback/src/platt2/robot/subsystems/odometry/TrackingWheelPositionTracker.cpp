@@ -3,7 +3,6 @@
 #include "pros/screen.hpp"
 #include <cmath>
 #include <iostream>
-#include <iterator>
 
 namespace platt2{
 namespace robot{
@@ -71,7 +70,6 @@ namespace odometry{
         double globalY = 0;
 
         
-
         while(true){
 
             pros::screen::erase();

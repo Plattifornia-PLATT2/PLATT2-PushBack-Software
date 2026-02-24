@@ -48,8 +48,8 @@ class PinkConfig : public IConfig {
 
 
     // ** Drive Ports **
-    static constexpr int LEFT_FRONT_MODULE_TOP_PORT{1};
-    static constexpr int LEFT_FRONT_MODULE_BOTTOM_PORT{-2};
+    static constexpr int LEFT_FRONT_MODULE_TOP_PORT{-1};
+    static constexpr int LEFT_FRONT_MODULE_BOTTOM_PORT{2};
 
     static constexpr int RIGHT_FRONT_MODULE_TOP_PORT{-7};
     static constexpr int RIGHT_FRONT_MODULE_BOTTOM_PORT{8};
@@ -57,8 +57,8 @@ class PinkConfig : public IConfig {
     static constexpr int LEFT_REAR_MODULE_TOP_PORT{-11};
     static constexpr int LEFT_REAR_MODULE_BOTTOM_PORT{12}; 
 
-    static constexpr int RIGHT_REAR_MODULE_TOP_PORT{-9};
-    static constexpr int RIGHT_REAR_MODULE_BOTTOM_PORT{10};
+    static constexpr int RIGHT_REAR_MODULE_TOP_PORT{9};
+    static constexpr int RIGHT_REAR_MODULE_BOTTOM_PORT{-10};
 
     // ** Intake Ports **
     static constexpr int FRONT_INTAKE_MOTOR_PORT{-5};
@@ -86,7 +86,7 @@ class PinkConfig : public IConfig {
     static constexpr int VEX_IMU_PORT{15};
 
     // ** Odometry Offsets **
-    static constexpr int HORIZONTAL_ENCODER_PORT{-16};
+    static constexpr int HORIZONTAL_ENCODER_PORT{-21};
     static constexpr int VERTICAL_ENCODER_PORT{-13};
     static constexpr double TRACKING_WHEEL_DIAMETER{2.2725};
     static constexpr double HORIZONTAL_TRACKING_WHEEL_OFFSET{.5};
