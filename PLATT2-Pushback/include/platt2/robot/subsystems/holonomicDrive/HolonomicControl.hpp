@@ -54,9 +54,9 @@ public:
      * @param y_target Target Y value to move to.
      * @param heading_target Target heading to achieve at the end of the movement.
      */
-    void moveToPoint(double x_target, double y_target, double heading_target, double rSpeed = 0.6, double wSpeed = 0.3, double timeout = 7);
+    void moveToPoint(double x_target, double y_target, double heading_target, double rSpeed = 0.6, double wSpeed = 0.5, double timeout = 7);
 
-    double velocityProfile(double TotalDistance, double remainingDistance, double currentVel, double actualVel, double maxVel = 1, double maxAccel = 1);
+    double velocityProfile(double TotalDistance, double remainingDistance, double currentVel, double maxVel = 1, double maxAccel = 1);
 
 
     /**

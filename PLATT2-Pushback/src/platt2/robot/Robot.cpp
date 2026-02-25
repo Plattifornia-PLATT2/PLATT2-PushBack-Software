@@ -1,6 +1,7 @@
 #include "platt2/robot/Robot.hpp"
 #include <iterator>
 #include <math.h>
+#include <ostream>
 
 namespace platt2{
 
@@ -50,8 +51,8 @@ namespace robot{
             subsystems::holonomicDrive::MovementVector movement;   
 
             movement.theta = atan2(leftY, leftX)-((odom_subsystem->getHeading())-M_PI/2);
-            movement.r = std::clamp(sqrt(leftX*leftX + leftY*leftY)/127, -1.0,1.0);
-            movement.w = rightX/127;
+            movement.r = std::clamp(sqrt(leftX*leftX + leftY*leftY)/(127*sqrt(2)), -1.0,1.0);
+            movement.w = rightX/(127*2);
             
             // Send to subsystem
             holonomicDrive_subsystem->moveVector(movement);

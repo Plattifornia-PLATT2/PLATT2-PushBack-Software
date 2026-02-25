@@ -101,11 +101,9 @@ namespace odometry{
             localX = (1-(pow(dTheta, 2)/24))*localX;
             localY = (1-(pow(dTheta, 2)/24))*localY;
 
-            globalX =  localX * sin(oldTheta+dTheta/2)
-                        + localY * cos(oldTheta+dTheta/2);
+            globalX = localY * cos(oldTheta-dTheta/2) - localX * sin(oldTheta-dTheta/2);
 
-            globalY =  localX * cos(oldTheta+dTheta/2)
-                        - localY * sin(oldTheta+dTheta/2);
+            globalY = localY * sin(oldTheta-dTheta/2) + localX * cos(oldTheta-dTheta/2);
 
             if (std::isnan(globalX) or std::isnan(globalY)){
                 pros::delay(10);

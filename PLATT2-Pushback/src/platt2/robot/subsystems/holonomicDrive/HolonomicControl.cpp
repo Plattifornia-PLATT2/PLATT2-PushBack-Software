@@ -2,8 +2,10 @@
 #include "platt2/helperFunctions.h"
 #include "pros/rtos.hpp"
 #include <cmath>
+#include <iterator>
 #include <math.h>
 #include <memory>
+#include <ostream>
 #include <utility>
 #include <vector>
 
@@ -37,15 +39,11 @@ void HolonomicControl::moveToPoint(double x_target, double y_target, double targ
     double moveDistance = CtoP(x_target-startPosX, y_target-startPosY).r;
 
     double currentVel = 0;
-
-    double actualVel = 0;
-    double distTravelled = 0;
-    double lastDistTravelled = 0;
  
     while (true){
         
-        x_error = odometry->getX() - x_target;
-        y_error = odometry->getY() - y_target;  
+        x_error = x_target - odometry->getX();
+        y_error = y_target - odometry->getY();  
 
         p = CtoP(x_error, y_error);
 
@@ -54,14 +52,16 @@ void HolonomicControl::moveToPoint(double x_target, double y_target, double targ
         if(angle_error > M_PI || angle_error < -M_PI){
             angle_error = -1 * sgn(angle_error) * (2*M_PI - std::abs(angle_error));
         }
-
-        distTravelled = CtoP(odometry->getX() - startPosX,odometry->getY() - startPosY).r;
-        actualVel = (distTravelled - lastDistTravelled) / 0.01;
-        lastDistTravelled = distTravelled;
         
-        currentVel = velocityProfile(moveDistance, p.r, currentVel, actualVel, 0.8, 1);
+        currentVel = velocityProfile(moveDistance, p.r, currentVel, rSpeed, 1);
         motionVector.r = currentVel;
-        motionVector.theta = p.theta - (odometry->getHeading());
+        motionVector.theta = p.theta - (odometry->getHeading()-M_PI/2);
+
+        if( motionVector.theta > M_PI ||  motionVector.theta < -M_PI){
+             motionVector.theta = -1 * sgn( motionVector.theta) * (2*M_PI - std::abs( motionVector.theta));
+        }
+
+        std::cout<<motionVector.theta<<std::endl;
 
         motionVector.w = std::clamp(headingPID->calculate(0, angle_error), -wSpeed, wSpeed);
 
@@ -69,9 +69,11 @@ void HolonomicControl::moveToPoint(double x_target, double y_target, double targ
         wAve = rollAverage(std::abs(motionVector.w), wArray);
         rArray = rAve.data;
         wArray = wAve.data;
-
+            
         if (rAve.average < 0.025 && wAve.average < 00.01){break;}
         if (pros::millis()-startTime>timeout*1000){break;}
+
+        //std::cout<<motionVector.theta<<std::endl;
         
         drivetrain->moveVector(motionVector);
         pros::delay(10);
@@ -85,9 +87,7 @@ void HolonomicControl::moveToPoint(double x_target, double y_target, double targ
 
 }
 
-double HolonomicControl::velocityProfile(double totalDistance, double remainingDistance,
-                                          double currentVel,   double actualVel,
-                                          double maxVel,       double maxAccel) {
+double HolonomicControl::velocityProfile(double totalDistance, double remainingDistance, double currentVel, double maxVel, double maxAccel) {
 
     double distanceTravelled = totalDistance - remainingDistance;
     bool reachedMaxVel       = currentVel >= maxVel;
