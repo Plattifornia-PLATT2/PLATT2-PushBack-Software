@@ -73,7 +73,7 @@ namespace odometry{
         /**
          * @brief Gets the current heading of the robot.
          * 
-         * @return double The heading in degrees.
+         * @return double The heading in radians.
          */
         double getHeading();
 

@@ -15,13 +15,13 @@ namespace holonomicDrive{
 void XDriveModule::move_vector(MovementVector v){
 
 
-    double p = -(cos(v.theta+getPhi())/cos(getTheta())); // should be expanded for readability
+    double p = -(sin(v.theta+getPhi())/sin(getTheta())); // should be expanded for readability
 
     double m = ((p/v.normalization_scalar)*(1-std::abs(v.w))); // should be expanded for readability
     
-    double rot = sgn(sin(getTheta()))*v.w;
+    double rot = -sgn(cos(getTheta()))*v.w;
 
-    module_motors.setVelocity((m+rot)*600);
+    module_motors.setVelocity((m+rot));
     
 }
 

@@ -27,10 +27,13 @@ void PinkCompAuton::init(
 void PinkCompAuton::run() {
     // TODO: Implementation goes here
 
-    std::cout<<"hello"<<std::endl;
-    holonomic_subsytem->moveToPoint(24, 0, 90);
+    //std::cout<<"hello"<<std::endl;
+    holonomic_subsytem->moveToPoint(0, 24, 180);
+    holonomic_subsytem->moveToPoint(0, 0, 90);
+    //holonomic_subsytem->moveToPoint(0, 24, 180);
+    //holonomic_subsytem->moveToPoint(0, 0, 90);
     //holonomic_subsytem->moveToPoint(-24, 24,0);
-    std::cout<<"done"<<std::endl;
+    //std::cout<<"done"<<std::endl;
 }
 
 }

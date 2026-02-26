@@ -77,7 +77,7 @@ inline polar CtoP(double x, double y)  {
 
     p.r = sqrtf(pow(x, 2)+pow(y, 2));
     p.theta = atan2f(y, x);
-
+    
     return p;
 
 }

@@ -1,5 +1,7 @@
 #include "platt2/robot/Robot.hpp"
+#include <iterator>
 #include <math.h>
+#include <ostream>
 
 namespace platt2{
 
@@ -35,10 +37,7 @@ namespace robot{
         controller.print(0, 0, "Sorted Color: %d", color_sort_subsystem->getSortedColor());
         
         while(true){
-            pros::screen::erase();
-
-          // pros::screen::print(pros::E_TEXT_MEDIUM_CENTER,6, "IMU Heading %f", odom_subsystem->getHeading());
-           // std::cout << "IMU Heading: " << odom_subsystem->getHeading() << std::endl;
+            
             double leftX = double(controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_X));
             double leftY = double(controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y));
             double rightX = double(controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X));
@@ -51,14 +50,10 @@ namespace robot{
             // Create movement vector
             subsystems::holonomicDrive::MovementVector movement;   
 
-
-            movement.theta = atan2(leftY, leftX)-((odom_subsystem->getHeading()*(M_PI/180))-(M_PI/2));
-            movement.r = std::clamp(sqrt(leftX*leftX + leftY*leftY)/127, -1.0,1.0);
-            //movement.w = 0.1;
-            movement.w = rightX/127;
-
+            movement.theta = atan2(leftY, leftX)-((odom_subsystem->getHeading())-M_PI/2);
+            movement.r = std::clamp(sqrt(leftX*leftX + leftY*leftY)/(127*sqrt(2)), -1.0,1.0);
+            movement.w = rightX/(127*2);
             
-
             // Send to subsystem
             holonomicDrive_subsystem->moveVector(movement);
 
