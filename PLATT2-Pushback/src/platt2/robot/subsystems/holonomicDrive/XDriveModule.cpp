@@ -21,8 +21,7 @@ void XDriveModule::move_vector(MovementVector v){
     
     double rot = -sgn(cos(getTheta()))*v.w;
 
-    //module_motors.setVoltage((m+rot)*127);
-    module_motors.setVelocity((m+rot)*600);
+    module_motors.setVelocity((m+rot));
     
 }
 

@@ -2,7 +2,6 @@
 #include "platt2/helperFunctions.h"
 #include "pros/rtos.hpp"
 #include <cmath>
-#include <iterator>
 #include <math.h>
 #include <memory>
 #include <ostream>
@@ -39,6 +38,8 @@ void HolonomicControl::moveToPoint(double x_target, double y_target, double targ
     double moveDistance = CtoP(x_target-startPosX, y_target-startPosY).r;
 
     double currentVel = 0;
+
+    bool usePID = false;
  
     while (true){
         
@@ -53,7 +54,7 @@ void HolonomicControl::moveToPoint(double x_target, double y_target, double targ
             angle_error = -1 * sgn(angle_error) * (2*M_PI - std::abs(angle_error));
         }
         
-        currentVel = velocityProfile(moveDistance, p.r, currentVel, rSpeed, 1);
+        currentVel = velocityProfile(moveDistance, p.r, currentVel, rSpeed, 1.5, usePID);
         motionVector.r = currentVel;
         motionVector.theta = p.theta - (odometry->getHeading()-M_PI/2);
 
@@ -61,7 +62,7 @@ void HolonomicControl::moveToPoint(double x_target, double y_target, double targ
              motionVector.theta = -1 * sgn( motionVector.theta) * (2*M_PI - std::abs( motionVector.theta));
         }
 
-        std::cout<<motionVector.theta<<std::endl;
+        //std::cout<<motionVector.theta<<std::endl;
 
         motionVector.w = std::clamp(headingPID->calculate(0, angle_error), -wSpeed, wSpeed);
 
@@ -69,11 +70,13 @@ void HolonomicControl::moveToPoint(double x_target, double y_target, double targ
         wAve = rollAverage(std::abs(motionVector.w), wArray);
         rArray = rAve.data;
         wArray = wAve.data;
-            
-        if (rAve.average < 0.025 && wAve.average < 00.01){break;}
+
+        if (rAve.average < 0.01 && wAve.average < 00.02){
+             std::cout<<"break"<<std::endl;
+            break;}
         if (pros::millis()-startTime>timeout*1000){break;}
 
-        //std::cout<<motionVector.theta<<std::endl;
+        std::cout<<rAve.average<<std::endl;
         
         drivetrain->moveVector(motionVector);
         pros::delay(10);
@@ -87,13 +90,14 @@ void HolonomicControl::moveToPoint(double x_target, double y_target, double targ
 
 }
 
-double HolonomicControl::velocityProfile(double totalDistance, double remainingDistance, double currentVel, double maxVel, double maxAccel) {
+double HolonomicControl::velocityProfile(double totalDistance, double remainingDistance, double currentVel, double maxVel, double maxAccel, bool& usePID) {
 
     double distanceTravelled = totalDistance - remainingDistance;
     bool reachedMaxVel       = currentVel >= maxVel;
     bool pastHalfway         = distanceTravelled >= totalDistance * 0.5;
 
-    if (!reachedMaxVel && !pastHalfway) {
+    if ((!reachedMaxVel && !pastHalfway) && !usePID ) {
+    //if (false) {
         // --- Acceleration phase ---
         double max_accel_delta = maxAccel * 0.01;
         double output = std::clamp(currentVel + max_accel_delta, 0.0, maxVel);
@@ -101,7 +105,8 @@ double HolonomicControl::velocityProfile(double totalDistance, double remainingD
 
     } else {
         // --- Handoff to decel/approach controller ---
-        return std::clamp(-1*(positionPID->calculate(0, remainingDistance)), -maxVel, maxVel);
+        usePID = true;
+        return std::clamp((positionPID->calculate(remainingDistance, 0)), 0.0, maxVel);
     }
 }
 
