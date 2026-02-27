@@ -51,11 +51,11 @@ class PinkConfig : public IConfig {
     static constexpr int LEFT_FRONT_MODULE_TOP_PORT{-1};
     static constexpr int LEFT_FRONT_MODULE_BOTTOM_PORT{2};
 
-    static constexpr int RIGHT_FRONT_MODULE_TOP_PORT{-7};
-    static constexpr int RIGHT_FRONT_MODULE_BOTTOM_PORT{8};
+    static constexpr int RIGHT_FRONT_MODULE_TOP_PORT{7};
+    static constexpr int RIGHT_FRONT_MODULE_BOTTOM_PORT{-8};
 
-    static constexpr int LEFT_REAR_MODULE_TOP_PORT{-11};
-    static constexpr int LEFT_REAR_MODULE_BOTTOM_PORT{12}; 
+    static constexpr int LEFT_REAR_MODULE_TOP_PORT{11};
+    static constexpr int LEFT_REAR_MODULE_BOTTOM_PORT{-12}; 
 
     static constexpr int RIGHT_REAR_MODULE_TOP_PORT{9};
     static constexpr int RIGHT_REAR_MODULE_BOTTOM_PORT{-10};
