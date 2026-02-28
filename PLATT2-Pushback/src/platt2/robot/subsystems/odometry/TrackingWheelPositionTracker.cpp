@@ -1,5 +1,6 @@
 #include "platt2/robot/subsystems/odometry/TrackingWheelPositionTracker.hpp"
 #include "OdometryPosition.hpp"
+#include "pros/rtos.hpp"
 #include "pros/screen.hpp"
 #include <cmath>
 #include <iostream>
@@ -38,6 +39,7 @@ namespace odometry{
     }
 
     void TrackingWheelPositionTracker::init(){
+        pros::delay(500);
         x_wheel->init();
         y_wheel->init();
         imu->reset();
@@ -48,9 +50,9 @@ namespace odometry{
     }
 
     void TrackingWheelPositionTracker::updatePosition(){
-            
+        pros::delay(1000);
         //init variables
-        std::cout << current_position.heading << std::endl;
+        //std::cout << current_position.heading << std::endl;
         current_position.heading  = ((360 - imu->get_heading())*M_PI/180);
         double oldTheta = current_position.heading ;
         double dTheta = (current_position.heading  - oldTheta);

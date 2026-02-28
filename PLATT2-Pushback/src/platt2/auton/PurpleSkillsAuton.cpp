@@ -30,7 +30,8 @@ void PurpleSkillsAuton::init(
 }
 
 void PurpleSkillsAuton::run() {
-    
+    holonomic_subsytem->moveToPoint(0, 24, 180);
+    holonomic_subsytem->moveToPoint(0, 0, 90);
     
 
 

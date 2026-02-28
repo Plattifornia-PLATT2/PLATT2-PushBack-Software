@@ -96,8 +96,8 @@ class PinkConfig : public IConfig {
     static constexpr double position_dt{0.01};
     static constexpr double position_max{1};
     static constexpr double position_min{-1};
-    static constexpr double position_Kp{0.05};
-    static constexpr double position_Kd{0.0027};
+    static constexpr double position_Kp{0.25};
+    static constexpr double position_Kd{0.02};
     static constexpr double position_Ki{0};
 
     // ** Angular PID Tuning Values **
@@ -105,7 +105,7 @@ class PinkConfig : public IConfig {
     static constexpr double heading_max{1};
     static constexpr double heading_min{-1};
     static constexpr double heading_Kp{0.3};
-    static constexpr double heading_Kd{0.001};
+    static constexpr double heading_Kd{0.01};
     static constexpr double heading_Ki{0};
 
     public:

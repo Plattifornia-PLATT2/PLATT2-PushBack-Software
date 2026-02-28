@@ -40,6 +40,9 @@ void HolonomicControl::moveToPoint(double x_target, double y_target, double targ
     double currentVel = 0;
 
     bool usePID = false;
+
+    headingPID->resetPID();
+    positionPID->resetPID();
  
     while (true){
         
@@ -62,7 +65,8 @@ void HolonomicControl::moveToPoint(double x_target, double y_target, double targ
              motionVector.theta = -1 * sgn( motionVector.theta) * (2*M_PI - std::abs( motionVector.theta));
         }
 
-        //std::cout<<motionVector.theta<<std::endl;
+        //std::cout<<motionVector.r<<std::endl;
+        std::cout << motionVector.r << " usePID:" << usePID << " dist:" << p.r << std::endl;
 
         motionVector.w = std::clamp(headingPID->calculate(0, angle_error), -wSpeed, wSpeed);
 
@@ -71,12 +75,12 @@ void HolonomicControl::moveToPoint(double x_target, double y_target, double targ
         rArray = rAve.data;
         wArray = wAve.data;
 
-        if (rAve.average < 0.01 && wAve.average < 00.02){
-             std::cout<<"break"<<std::endl;
+        if (rAve.average < 0.08 && wAve.average < 00.02){
+             //std::cout<<"break"<<std::endl;
             break;}
         if (pros::millis()-startTime>timeout*1000){break;}
 
-        std::cout<<rAve.average<<std::endl;
+        std::cout<<wAve.average<<std::endl;
         
         drivetrain->moveVector(motionVector);
         pros::delay(10);
