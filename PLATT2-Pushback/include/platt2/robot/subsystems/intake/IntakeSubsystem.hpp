@@ -159,6 +159,8 @@ namespace intake{
 
         void toggle_rear_intake_piston();
 
+        bool get_rear_intake_position();
+
         /**
          * @brief Sets the intake subsystem to color sort mode, or disables it.
          * 

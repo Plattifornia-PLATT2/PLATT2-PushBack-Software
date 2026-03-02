@@ -180,6 +180,10 @@ namespace intake{
         rear_intake_piston_state = !rear_intake_piston_state;
         rear_intake_piston->set_value(rear_intake_piston_state);
     }
+
+    bool IntakeSubsystem::get_rear_intake_position(){
+        return rear_intake_piston_state;
+    }
     
 }
 }

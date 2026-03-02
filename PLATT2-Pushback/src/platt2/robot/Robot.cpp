@@ -136,6 +136,9 @@ namespace robot{
             
             if(controller.get_digital_new_press(driver_profile->rearIntake_toggle)){
                 intake_subsystem->toggle_rear_intake_piston();
+                if(intake_subsystem->get_rear_intake_position()){
+                    controller.rumble("..");
+                }
             }
             
             pros::delay(10);
