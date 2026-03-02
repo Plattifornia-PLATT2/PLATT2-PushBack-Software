@@ -35,10 +35,14 @@ class PinkSkillsAuton : public auton::IAuton {
     std::shared_ptr<robot::subsystems::colorsort::ColorSortSubsystem> color_sort_subsystem;
     robot::AllianceConfig alliance_color;
     
-    const double STARTING_X_POSITION {70.0};
-    const double STARTING_Y_POSITION {24};
-    const double STARTING_HEADING {90.0};
-        
+    //const double STARTING_X_POSITION {70.0};
+    //const double STARTING_Y_POSITION {24};
+    //const double STARTING_HEADING {90.0};
+      
+    const double STARTING_X_POSITION {86.5};
+    const double STARTING_Y_POSITION {8.5};
+    const double STARTING_HEADING {90.0}; 
+
     public:
     /**
      * @brief Initalizes the autonomous routine

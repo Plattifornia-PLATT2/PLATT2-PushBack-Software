@@ -66,7 +66,7 @@ void HolonomicControl::moveToPoint(double x_target, double y_target, double targ
         }
 
         //std::cout<<motionVector.r<<std::endl;
-        std::cout << motionVector.r << " usePID:" << usePID << " dist:" << p.r << std::endl;
+        //std::cout << motionVector.r << " usePID:" << usePID << " dist:" << p.r << std::endl;
 
         motionVector.w = std::clamp(headingPID->calculate(0, angle_error), -wSpeed, wSpeed);
 
@@ -80,7 +80,7 @@ void HolonomicControl::moveToPoint(double x_target, double y_target, double targ
             break;}
         if (pros::millis()-startTime>timeout*1000){break;}
 
-        std::cout<<wAve.average<<std::endl;
+        //std::cout<<wAve.average<<std::endl;
         
         drivetrain->moveVector(motionVector);
         pros::delay(10);

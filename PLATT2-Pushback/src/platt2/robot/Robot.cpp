@@ -3,6 +3,7 @@
 #include <iterator>
 #include <math.h>
 #include <ostream>
+#include "platt2/helperFunctions.h"
 
 namespace platt2{
 
@@ -36,12 +37,16 @@ namespace robot{
 
         pros::Controller controller{pros::Controller(pros::E_CONTROLLER_MASTER)};
         controller.print(0, 0, "Sorted Color: %d", color_sort_subsystem->getSortedColor());
-        
+
+        double targetHeading;
+        double angle_error;
+        double KPA = 1;
+
         while(true){
             
-            double leftX = double(controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_X));
-            double leftY = double(controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y));
-            double rightX = double(controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X));
+            double leftX = double(controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_X))/127;
+            double leftY = double(controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y))/127;
+            double rightX = double(controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X))/127;
 
             // right stick deadzone to eliminate stick drift issues with heading
             if(rightX < 0.05 && rightX > -0.05){
@@ -52,9 +57,19 @@ namespace robot{
             subsystems::holonomicDrive::MovementVector movement;   
 
             movement.theta = atan2(leftY, leftX)-((odom_subsystem->getHeading())-M_PI/2);
-            movement.r = std::clamp(sqrt(leftX*leftX + leftY*leftY), -1.0,1.0);
-            movement.w = rightX/(127*2);
-            std::cout<<movement.r<<std::endl;
+            movement.r = std::clamp(sqrt(leftX*leftX + leftY*leftY), 0.0,1.0);
+                
+            targetHeading += (rightX*(2*M_PI)*0.01);
+            
+            angle_error = targetHeading - (odom_subsystem->getHeading());
+
+            if(angle_error > M_PI || angle_error < -M_PI){
+                angle_error = -1 * sgn(angle_error) * (2*M_PI - std::abs(angle_error));
+            }            
+            
+            
+            //movement.w = angle_error*KPA;
+            movement.w = rightX/2;
             // Send to subsystem
             holonomicDrive_subsystem->moveVector(movement);
 

@@ -72,7 +72,7 @@ class PinkConfig : public IConfig {
     static constexpr pros::MotorGears INTAKE_GEARSET{pros::MotorGears::blue};
 
     // ** Color Sort Ports **
-    static constexpr int OPTICAL_SENSOR_PORT{16};
+    static constexpr int OPTICAL_SENSOR_PORT{14};
 
     // ** Pneumatics **
     static constexpr int ED_MECH_PISTON_PORT{1};
@@ -101,10 +101,10 @@ class PinkConfig : public IConfig {
     static constexpr double position_Ki{0};
 
     // ** Angular PID Tuning Values **
-    static constexpr double heading_dt{0.01};
+    static constexpr double heading_dt{0.01}; 
     static constexpr double heading_max{1};
     static constexpr double heading_min{-1};
-    static constexpr double heading_Kp{0.3};
+    static constexpr double heading_Kp{0.5};
     static constexpr double heading_Kd{0.01};
     static constexpr double heading_Ki{0};
 
