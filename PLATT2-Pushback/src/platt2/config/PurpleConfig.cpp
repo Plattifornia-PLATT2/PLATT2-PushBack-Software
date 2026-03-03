@@ -75,7 +75,6 @@ std::shared_ptr<robot::Robot> PurpleConfig::buildRobot(robot::AutonConfig auton,
     std::unique_ptr<pros::adi::DigitalOut> rake_mech_piston{std::make_unique<pros::adi::DigitalOut>(RAKE_MECH_PISTON_PORT)};
     std::unique_ptr<pros::adi::DigitalOut> descore_piston{std::make_unique<pros::adi::DigitalOut>(DESCORE_PISTON_PORT)};
     std::unique_ptr<pros::adi::DigitalOut> rear_intake_piston{std::make_unique<pros::adi::DigitalOut>(REAR_INTAKE_PISTON_PORT)};
-    std::unique_ptr<pros::Distance> distance_sensor{std::make_unique<pros::Distance>(DISTANCE_SENSOR_PORT)};
 
     std::unique_ptr<pros::Motor> matchload_left_motor{std::make_unique<pros::Motor>(REAR_INTAKE_LEFT_MOTOR_PORT, pros::MotorGears::blue)};
     std::unique_ptr<pros::Motor> matchload_right_motor{std::make_unique<pros::Motor>(REAR_INTAKE_RIGHT_MOTOR_PORT, pros::MotorGears::blue)};
@@ -94,8 +93,7 @@ std::shared_ptr<robot::Robot> PurpleConfig::buildRobot(robot::AutonConfig auton,
         std::move(conveyor_stopper_piston),
         std::move(rake_mech_piston),
         std::move(descore_piston),
-        std::move(rear_intake_piston),
-        std::move(distance_sensor)
+        std::move(rear_intake_piston)
     );
 
     // Color sort subsystem

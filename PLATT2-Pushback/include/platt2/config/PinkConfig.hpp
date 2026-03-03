@@ -68,7 +68,7 @@ class PinkConfig : public IConfig {
     static constexpr int UPPER_CONVEYOR_MOTOR_PORT{20};
     static constexpr int REAR_INTAKE_LEFT_MOTOR_PORT{19};
     static constexpr int REAR_INTAKE_RIGHT_MOTOR_PORT{-18};
-    static constexpr int DISTANCE_SENSOR_PORT{14};
+    //static constexpr int DISTANCE_SENSOR_PORT{14};
     static constexpr pros::MotorGears INTAKE_GEARSET{pros::MotorGears::blue};
 
     // ** Color Sort Ports **

@@ -21,8 +21,9 @@ namespace colorsort{
 
     }
 
-    void ColorSortSubsystem::setSortedColor(BallColor color) {
+    void ColorSortSubsystem::setSortOption(BallColor color, SortDirection direction) {
         current_color = color;
+        current_direction = direction;
     }
 
     BallColor ColorSortSubsystem::getSortedColor(){
@@ -57,55 +58,52 @@ namespace colorsort{
         double currentR = currentRGB.red;
         double currentB = currentRGB.blue;
         double currentDistance = optical_sensor->get_proximity();
-        //std::cout<<"R: "<<currentR<<" B: "<<currentB<<" Distance: "<<currentDistance<<std::endl;
+        double rejection_threshold;
+        if(intake_subsystem->get_rear_intake_position()){
+            rejection_threshold = MATCHLOAD_BALL_REJECTION_THRESHOLD;
+        }
+        else {
+            rejection_threshold = FRONT_LOAD_BALL_REJECTION_THRESHOLD;
+        }
 
         switch(current_color)
         {
             case RED:
             {
 
-            if(currentR > currentB && currentDistance > BALL_DISTANCE_THRESHOLD)
-            {
-                isActive = true;
-                //std::cout<<"r>b"<<std::endl;
-                intake_subsystem->tare_rear_motor_position();
-                intake_subsystem->move_rear_motor(intake::OUT);
-                //std::cout<<intake_subsystem->get_rear_motor_position()<<std::endl;
-
-                while(intake_subsystem->get_rear_motor_position() > BALL_REJECTION_THRESHOLD) {
-                    std::cout<<intake_subsystem->get_rear_motor_position()<<std::endl;
-                    pros::delay(10);
+                if(currentR > currentB && currentDistance > BALL_DISTANCE_THRESHOLD)
+                {
+                    isActive = true;
+                    intake_subsystem->tare_rear_motor_position();
+                    while(std::abs(intake_subsystem->get_rear_motor_position()) < rejection_threshold) {
+                        pros::delay(10);
+                    }
                 }
-
-            intake_subsystem->move_rear_motor(intake::STOP);
-            }
-            break;
+                isActive = false;
+                break;
             }
             case BLUE:
             {
                 if(currentB > currentR && currentDistance > BALL_DISTANCE_THRESHOLD)
                 {
                 isActive = true;
-                //std::cout<<"b>r"<<std::endl;
                 intake_subsystem->tare_rear_motor_position();
-                intake_subsystem->move_rear_motor(intake::OUT);
-
-                while(intake_subsystem->get_rear_motor_position() > BALL_REJECTION_THRESHOLD) {
+                while(std::abs(intake_subsystem->get_rear_motor_position()) < rejection_threshold) {
+                    std::cout<<" Distance: "<<intake_subsystem->get_rear_motor_position()<<std::endl;
                     pros::delay(10);
                 }
-
                 intake_subsystem->move_rear_motor(intake::STOP);
-                break;
-                    }
                 }
+                isActive = false;
+                break;
+            }
             case OFF:
             {
                 isActive = false;
                 break;
             }
         }
-                isActive = false;
-                pros::delay(10);
+            pros::delay(10);
     }
 
         }       
