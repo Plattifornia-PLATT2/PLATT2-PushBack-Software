@@ -70,12 +70,12 @@ void HolonomicControl::moveToPoint(double x_target, double y_target, double targ
 
         motionVector.w = std::clamp(headingPID->calculate(0, angle_error), -wSpeed, wSpeed);
 
-        rAve = rollAverage(std::abs(motionVector.r), rArray);
+        rAve = rollAverage(std::abs(p.r), rArray);
         wAve = rollAverage(std::abs(motionVector.w), wArray);
         rArray = rAve.data;
         wArray = wAve.data;
 
-        if (rAve.average < 0.08 && wAve.average < 00.02){
+        if (rAve.average < 0.4 && wAve.average < 00.02){
              //std::cout<<"break"<<std::endl;
             break;}
         if (pros::millis()-startTime>timeout*1000){break;}
