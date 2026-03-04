@@ -21,9 +21,8 @@ namespace colorsort{
 
     }
 
-    void ColorSortSubsystem::setSortOption(BallColor color, SortDirection direction) {
+    void ColorSortSubsystem::setSortOption(BallColor color) {
         current_color = color;
-        current_direction = direction;
     }
 
     BallColor ColorSortSubsystem::getSortedColor(){

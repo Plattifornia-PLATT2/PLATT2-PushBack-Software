@@ -102,7 +102,7 @@ namespace colorsort{
          * @param color Enumeration to set the current color
          * @param direction Enumeration to set the sorting direction
          */
-        void setSortOption(BallColor color, SortDirection direction);
+        void setSortOption(BallColor color);
 
         /**
          * @brief Get the currently sorted color

@@ -34,19 +34,19 @@ void PurpleSkillsAuton::run() {
     holonomic_subsytem->moveToPoint(116, 24, 90);
     intake_subsystem->toggle_rear_intake_piston();
     intake_subsystem->move_intake(robot::subsystems::intake::IN);
-    holonomic_subsytem->moveToPoint(116, 13.75, 90, 0.5, 0.4, 3);
-    pros::delay(2500);
-    holonomic_subsytem->moveToPoint(128.5, 36, 90);
+    holonomic_subsytem->moveToPoint(116, 13.5, 90, 0.5, 0.4, 3);
+    pros::delay(1500);
+    holonomic_subsytem->moveToPoint(128, 36, 90);
     intake_subsystem->toggle_rear_intake_piston();
     intake_subsystem->move_intake(robot::subsystems::intake::STOP);
-    holonomic_subsytem->moveToPoint(128.5, 36, 270, 0.5, 0.2);
-    holonomic_subsytem->moveToPoint(128.5, 109, 270, 0.5);
+    holonomic_subsytem->moveToPoint(128, 36, 270, 0.5, 0.2);
+    holonomic_subsytem->moveToPoint(128, 105, 270, 0.5, 0.8l);
 
     //Far Long Goal First Score
-    holonomic_subsytem->moveToPoint(115.75, 109, 270, 0.35);
+    holonomic_subsytem->moveToPoint(118.5, 105, 270, 0.15, 1);
     intake_subsystem->toggle_upper_conveyor_height_piston();
     pros::delay(200);
-    holonomic_subsytem->moveToPoint(115.75, 99, 270, 0.5, 1, 2);
+    holonomic_subsytem->moveToPoint(119, 99, 270, 0.3, 0.2, 2);
     intake_subsystem->toggle_conveyor_stopper_piston();
     intake_subsystem->move_intake(robot::subsystems::intake::IN);
     pros::delay(3000);
@@ -54,53 +54,56 @@ void PurpleSkillsAuton::run() {
 
     //Far Matchloader
     intake_subsystem->toggle_rear_intake_piston();
-    holonomic_subsytem->moveToPoint(114, 128.5, 270, 0.5, 0.4, 2);
+    holonomic_subsytem->moveToPoint(116, 128.5, 270, 0.5, 0.4, 2);
     pros::delay(2500);
 
     //Far Long Goal Second Score
-    holonomic_subsytem->moveToPoint(115.75, 99, 270, .5, 1, 3);
+    holonomic_subsytem->moveToPoint(118.5, 99, 270, 0.6, 0.2, 3);
     intake_subsystem->toggle_rear_intake_piston();
     intake_subsystem->toggle_conveyor_stopper_piston();
-    pros::delay(3000);
-    intake_subsystem->toggle_conveyor_stopper_piston();
+    pros::delay(1500);
+    intake_subsystem->move_intake(robot::subsystems::intake::IN);
+    pros::delay(250);
+
 
     //Blue Park Zone Blocks
-    holonomic_subsytem->moveToPoint(86, 115.5, 270);
+    //color_sort_subsystem->setSortOption(robot::subsystems::colorsort::BLUE);
+    holonomic_subsytem->moveToPoint(89, 116, 270);
+    intake_subsystem->toggle_conveyor_stopper_piston();
     intake_subsystem->toggle_upper_conveyor_height_piston();
-    holonomic_subsytem->moveToPoint(67, 115.5, 270, 0.5);
-    holonomic_subsytem->moveToPoint(67,117, 270, 0.5, 0.4, 1.5);
+    holonomic_subsytem->moveToPoint(71.25, 116, 270, 0.5, 1);
+    holonomic_subsytem->moveToPoint(71.25,118, 270, 0.5, 0.4, 1);
     intake_subsystem->toggle_rake_mech_piston();
     pros::delay(500);
-    holonomic_subsytem->moveToPoint(67,109, 270, 0.5, 0.4, 2);
-    holonomic_subsytem->moveToPoint(67,113, 270, 0.5, 0.4, 2);
+    holonomic_subsytem->moveToPoint(71.25,109, 270, 0.5, 0.4, 2);
+    holonomic_subsytem->moveToPoint(71.25,113, 270, 0.5, 0.4, 2);
     pros::delay(1500);
     intake_subsystem->toggle_rear_intake_piston();
-    pros::delay(1500);
+    pros::delay(1000);
     intake_subsystem->toggle_rear_intake_piston();
-    intake_subsystem->toggle_rake_mech_piston();
 
     //Red Blocks on Wall
-    holonomic_subsytem->moveToPoint(128.5, 115, 0);
+    holonomic_subsytem->moveToPoint(132.5, 115, 0, 0.8, 0.4, 3);
+    intake_subsystem->toggle_rake_mech_piston();
     pros::delay(750);
 
     //Red Block in Middle by Long Goal
-    holonomic_subsytem->moveToPoint(98, 113, 180);
-    holonomic_subsytem->moveToPoint(89.5, 70, 270);
+    holonomic_subsytem->moveToPoint(101, 113, 180);
+    holonomic_subsytem->moveToPoint(97.5, 70, 270);
     intake_subsystem->move_intake(robot::subsystems::intake::STOP);
     
     //Upper Middle Goal
-    
-    intake_subsystem->toggle_conveyor_stopper_piston();
-    holonomic_subsytem->moveToPoint(81, 80.5, 215, 0.5);
+    holonomic_subsytem->moveToPoint(84.5, 80.25, 215, 0.5);
     intake_subsystem->toggle_ed_mech_piston();
+    intake_subsystem->toggle_conveyor_stopper_piston();
     intake_subsystem->move_intake(robot::subsystems::intake::IN);
     pros::delay(2500);
 
     //Block Low Middle Goal
-    holonomic_subsytem->moveToPoint(82.25, 110, 215);
-    holonomic_subsytem->moveToPoint(52.5, 85.5, 215, 0.8, 0.4, 3.5);
-    pros::delay(2500);
-    holonomic_subsytem->moveToPoint(44, 102, 215, 0.8);
+    holonomic_subsytem->moveToPoint(84.25, 110, 215);
+    holonomic_subsytem->moveToPoint(60, 85.5, 215, 0.8, 0.4, 2);
+    pros::delay(1500);
+    holonomic_subsytem->moveToPoint(46, 102, 215, 0.8);
 
 
 
