@@ -29,6 +29,11 @@ void PurpleSkillsAuton::init(
     }
 }
 
+
+std::string PurpleSkillsAuton::getName() const {
+    return AUTON_NAME;
+}
+
 void PurpleSkillsAuton::run() {
     //Near Matchloader
     holonomic_subsytem->moveToPoint(116, 24, 90);

@@ -99,11 +99,16 @@ private:
     lv_obj_t* btn_purple = nullptr;
     lv_obj_t* btn_jon    = nullptr;
     lv_obj_t* btn_quinn  = nullptr;
-    lv_obj_t* btn_comp   = nullptr;
-    lv_obj_t* btn_skills = nullptr;
     lv_obj_t* btn_red   = nullptr;
     lv_obj_t* btn_blue = nullptr;
     lv_obj_t* btn_save   = nullptr;
+
+    lv_obj_t* btn_pink_comp1 = nullptr;
+    lv_obj_t* btn_pink_comp2 = nullptr;
+    lv_obj_t* btn_purple_comp1 = nullptr;
+    lv_obj_t* btn_purple_comp2 = nullptr;
+    lv_obj_t* btn_pink_skills = nullptr;
+    lv_obj_t* btn_purple_skills = nullptr;
 
     // helpers
     void saveConfig();

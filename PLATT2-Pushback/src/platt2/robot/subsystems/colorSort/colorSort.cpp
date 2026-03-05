@@ -74,7 +74,13 @@ namespace colorsort{
                 {
                     isActive = true;
                     intake_subsystem->tare_rear_motor_position();
-                    intake_subsystem->move_rear_motor(intake::IN);
+                    if(intake_subsystem->get_rear_intake_position()){
+                        intake_subsystem->move_rear_motor(intake::IN);
+                    }
+                    else {
+                        intake_subsystem->move_rear_motor(intake::OUT);
+                    }
+                    
                     while(std::abs(intake_subsystem->get_rear_motor_position()) < rejection_threshold) {
                         pros::delay(10);
                     }
@@ -87,17 +93,21 @@ namespace colorsort{
             {
                 if(currentB > currentR && currentDistance > BALL_DISTANCE_THRESHOLD)
                 {
-                isActive = true;
-                intake_subsystem->move_rear_motor(intake::IN);
-                intake_subsystem->tare_rear_motor_position();
-                while(std::abs(intake_subsystem->get_rear_motor_position()) < rejection_threshold) {
-                    std::cout<<" Distance: "<<intake_subsystem->get_rear_motor_position()<<std::endl;
-                    pros::delay(10);
-                }
-                intake_subsystem->move_rear_motor(intake::STOP);
-                }
-                isActive = false;
-                break;
+                    intake_subsystem->tare_rear_motor_position();
+                    if(intake_subsystem->get_rear_intake_position()){
+                        intake_subsystem->move_rear_motor(intake::IN);
+                    }
+                    else {
+                        intake_subsystem->move_rear_motor(intake::OUT);
+                    }
+                    while(std::abs(intake_subsystem->get_rear_motor_position()) < rejection_threshold) {
+                        std::cout<<" Distance: "<<intake_subsystem->get_rear_motor_position()<<std::endl;
+                        pros::delay(10);
+                    }
+                    intake_subsystem->move_rear_motor(intake::STOP);
+                    }
+                    isActive = false;
+                    break;
             }
             case OFF:
             {

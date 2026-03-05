@@ -30,6 +30,11 @@ void PinkSkillsAuton::init(
     }
 }
 
+
+std::string PinkSkillsAuton::getName() const {
+    return AUTON_NAME;
+}
+
 void PinkSkillsAuton::run() {
     intake_subsystem->toggle_rake_mech_piston();
     pros::delay(500);

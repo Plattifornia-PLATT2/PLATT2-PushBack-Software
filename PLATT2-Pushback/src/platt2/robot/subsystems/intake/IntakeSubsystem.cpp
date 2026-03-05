@@ -166,7 +166,7 @@ namespace intake{
                 rear_intake_motor->move_velocity(-intake_speed);
                 lower_roller_motor->move_velocity(-intake_speed);
                 matchload_left_motor->move_velocity(-intake_speed);
-                matchload_right_motor->move_velocity(0);
+                matchload_right_motor->move_velocity(-intake_speed);
                 break;   
             }
             case STOP:{
