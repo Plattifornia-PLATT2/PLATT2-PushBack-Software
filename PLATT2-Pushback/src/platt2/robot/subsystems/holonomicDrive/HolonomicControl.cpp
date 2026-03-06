@@ -1,10 +1,12 @@
 #include "platt2/robot/subsystems/holonomicDrive/HolonomicControl.hpp"
+#include "platt2/EAllianceConfig.hpp"
 #include "platt2/helperFunctions.h"
 #include "pros/rtos.hpp"
 #include <cmath>
 #include <math.h>
 #include <memory>
 #include <ostream>
+#include <regex>
 #include <utility>
 #include <vector>
 
@@ -19,7 +21,7 @@ void HolonomicControl::moveToPoint(double x_target, double y_target, double targ
 
     MovementVector motionVector;
     polar p;
-
+    
     double x_error;
     double y_error;
     double angle_error;
@@ -31,7 +33,6 @@ void HolonomicControl::moveToPoint(double x_target, double y_target, double targ
     avg wAve;
 
     double startTime = pros::millis();
-
     double startPosX = odometry->getX();
     double startPosY = odometry->getY();
 
@@ -46,6 +47,7 @@ void HolonomicControl::moveToPoint(double x_target, double y_target, double targ
  
     while (true){
         
+        // calculate position errors
         x_error = x_target - odometry->getX();
         y_error = y_target - odometry->getY();  
 
@@ -53,35 +55,34 @@ void HolonomicControl::moveToPoint(double x_target, double y_target, double targ
 
         angle_error = target_heading - (odometry->getHeading());
 
+        // adjust angle error for wraparound
         if(angle_error > M_PI || angle_error < -M_PI){
             angle_error = -1 * sgn(angle_error) * (2*M_PI - std::abs(angle_error));
         }
-        
+        //set current velocity based on profile and position error
         currentVel = velocityProfile(moveDistance, p.r, currentVel, rSpeed, 1.5, usePID);
         motionVector.r = currentVel;
         motionVector.theta = p.theta - (odometry->getHeading()-M_PI/2);
 
+        // adjust theta for wraparound
         if( motionVector.theta > M_PI ||  motionVector.theta < -M_PI){
              motionVector.theta = -1 * sgn( motionVector.theta) * (2*M_PI - std::abs( motionVector.theta));
         }
 
-        //std::cout<<motionVector.r<<std::endl;
-        //std::cout << motionVector.r << " usePID:" << usePID << " dist:" << p.r << std::endl;
-
+        // calculate rotational velocity from heading error and PID
         motionVector.w = std::clamp(headingPID->calculate(0, angle_error), -wSpeed, wSpeed);
 
+        //add current rotational velocity to rolling average for determining if the motion is finished
         rAve = rollAverage(std::abs(p.r), rArray);
         wAve = rollAverage(std::abs(motionVector.w), wArray);
         rArray = rAve.data;
         wArray = wAve.data;
 
-        if (rAve.average < 0.4 && wAve.average < 00.02){
-             //std::cout<<"break"<<std::endl;
-            break;}
+        // if both the linear and rotational velocities have been low for a little while, we can assume we've reached the target and stop the motion
+        if (rAve.average < 0.4 && wAve.average < 00.02){break;}
         if (pros::millis()-startTime>timeout*1000){break;}
-
-        //std::cout<<wAve.average<<std::endl;
         
+        // send the movement command to the drivetrain
         drivetrain->moveVector(motionVector);
         pros::delay(10);
 
@@ -114,6 +115,15 @@ double HolonomicControl::velocityProfile(double totalDistance, double remainingD
     }
 }
 
+std::unique_ptr<pid::PID>& HolonomicControl::getHeadingPID(){
+
+    std::unique_ptr<pid::PID>& out = this->headingPID;
+
+    return out;
+
+
+}
+
 
 
 
@@ -122,7 +132,7 @@ HolonomicControl::HolonomicControl(std::shared_ptr<XDrive> drive, std::shared_pt
 {
     drivetrain = drive;
     odometry = odom;
-    positionPID = std::move(posPID);
+    this->positionPID = std::move(posPID);
     this->headingPID = std::move(headingPID);
 }
 
