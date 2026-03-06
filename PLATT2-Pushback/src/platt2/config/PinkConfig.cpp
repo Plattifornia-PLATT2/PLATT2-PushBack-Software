@@ -135,16 +135,48 @@ std::shared_ptr<robot::Robot> PinkConfig::buildRobot(robot::AutonConfig auton, r
     // Build auton routine
     std::unique_ptr<auton::IAuton> auton_routine;
 
-    if(auton == robot::SKILLS_1 ){
-        std::unique_ptr<auton::PinkSkillsAuton> pink_skills_auton = std::make_unique<auton::PinkSkillsAuton>();
-        auton_routine = std::move(pink_skills_auton);
-        auton_routine->init(holonomic_contol_subsystem, odom_subsystem, intake_subsystem, color_sort_subsystem, alliance);
-    }
-    else {
-        std::unique_ptr<auton::PinkCompAuton> pink_comp_auton = std::make_unique<auton::PinkCompAuton>();
-        auton_routine = std::move(pink_comp_auton);
-        auton_routine->init(holonomic_contol_subsystem, odom_subsystem, intake_subsystem, color_sort_subsystem, alliance);
-    }
+    switch(auton){
+        case robot::PINK_SKILLS:{
+            std::unique_ptr<auton::PinkSkillsAuton> pink_skills_auton = std::make_unique<auton::PinkSkillsAuton>();
+            auton_routine = std::move(pink_skills_auton);
+            auton_routine->init(holonomic_contol_subsystem, odom_subsystem, intake_subsystem, color_sort_subsystem, alliance);
+            break;
+        }
+        case robot::PURPLE_SKILLS:{
+            std::unique_ptr<auton::PurpleSkillsAuton> purple_skills_auton = std::make_unique<auton::PurpleSkillsAuton>();
+            auton_routine = std::move(purple_skills_auton);
+            auton_routine->init(holonomic_contol_subsystem, odom_subsystem, intake_subsystem, color_sort_subsystem, alliance);
+             break;
+        }
+        case robot::PINK_COMP_WP:{
+            std::unique_ptr<auton::PinkCompAuton> pink_comp_auton = std::make_unique<auton::PinkCompAuton>();
+            auton_routine = std::move(pink_comp_auton);
+            auton_routine->init(holonomic_contol_subsystem, odom_subsystem, intake_subsystem, color_sort_subsystem, alliance);
+             break;
+        }
+        case robot::PURPLE_COMP_WP:{
+            std::unique_ptr<auton::PurpleCompAuton> purple_comp_auton = std::make_unique<auton::PurpleCompAuton>();
+            auton_routine = std::move(purple_comp_auton);
+            auton_routine->init(holonomic_contol_subsystem, odom_subsystem, intake_subsystem, color_sort_subsystem, alliance);
+             break;
+        }
+        case robot::PINK_COMP_PND:{
+            std::unique_ptr<auton::PinkPumpnDumpAuton> pink_pumpn_dump_auton = std::make_unique<auton::PinkPumpnDumpAuton>();
+            auton_routine = std::move(pink_pumpn_dump_auton);
+            auton_routine->init(holonomic_contol_subsystem, odom_subsystem, intake_subsystem, color_sort_subsystem, alliance);
+             break;
+        }
+        case robot::PURPLE_COMP_PND:{
+            std::unique_ptr<auton::PurplePumpnDumpAuton> purple_pumpn_dump_auton = std::make_unique<auton::PurplePumpnDumpAuton>();
+            auton_routine = std::move(purple_pumpn_dump_auton);
+            auton_routine->init(holonomic_contol_subsystem, odom_subsystem, intake_subsystem, color_sort_subsystem, alliance);
+             break;
+        }
+        case robot::NO_AUTON:{
+            break;
+        }
+
+    }   
 
     // build robot object
     std::shared_ptr<robot::Robot> robot{std::make_shared<robot::Robot>(

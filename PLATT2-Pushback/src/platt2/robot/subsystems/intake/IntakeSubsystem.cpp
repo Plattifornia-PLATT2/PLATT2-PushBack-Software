@@ -143,17 +143,30 @@ namespace intake{
     void IntakeSubsystem::move_rear_motor(IntakeDirection direction){
         switch(direction){
             case IN:{
-                rear_intake_motor->move_velocity(intake_speed);
-                lower_roller_motor->move_velocity(intake_speed);
-                matchload_left_motor->move_velocity(intake_speed);
-                matchload_right_motor->move_velocity(intake_speed); 
-                break;
+                if(rear_intake_piston_state){
+                        front_intake_motor->move_velocity(-intake_speed);
+                        middle_intake_motor->move_velocity(-intake_speed);
+                        rear_intake_motor->move_velocity(intake_speed);
+                        upper_conveyor_motor->move_velocity(intake_speed);
+                        lower_roller_motor->move_velocity(intake_speed);
+                        matchload_left_motor->move_velocity(intake_speed);
+                        matchload_right_motor->move_velocity(intake_speed);
+                    }
+                    else {
+                        front_intake_motor->move_velocity(intake_speed);
+                        middle_intake_motor->move_velocity(intake_speed);
+                        rear_intake_motor->move_velocity(-intake_speed);
+                        upper_conveyor_motor->move_velocity(intake_speed);
+                        lower_roller_motor->move_velocity(-intake_speed);
+                        matchload_left_motor->move_velocity(-intake_speed);
+                        matchload_right_motor->move_velocity(-intake_speed);
+                    }
             }
             case OUT:{
                 rear_intake_motor->move_velocity(-intake_speed);
                 lower_roller_motor->move_velocity(-intake_speed);
                 matchload_left_motor->move_velocity(-intake_speed);
-                matchload_right_motor->move_velocity(0);
+                matchload_right_motor->move_velocity(-intake_speed);
                 break;   
             }
             case STOP:{

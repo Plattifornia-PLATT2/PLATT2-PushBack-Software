@@ -28,7 +28,7 @@ namespace profiles{
         edMech_toggle = pros::E_CONTROLLER_DIGITAL_R1;
         highScore_toggle = pros::E_CONTROLLER_DIGITAL_R2;
         stopper_toggle = pros::E_CONTROLLER_DIGITAL_UP;
-        colorSort_toggle = pros::E_CONTROLLER_DIGITAL_X;
+        colorSort_toggle = pros::E_CONTROLLER_DIGITAL_RIGHT;
         rakeMech_toggle = pros::E_CONTROLLER_DIGITAL_LEFT;
         fieldOriented_toggle = pros::E_CONTROLLER_DIGITAL_X;
         heading_reset = pros::E_CONTROLLER_DIGITAL_X;
