@@ -48,10 +48,10 @@ void PurpleSkillsAuton::run() {
     holonomic_subsytem->moveToPoint(129, 105, 270, 0.5, 0.8l);
 
     //Far Long Goal First Score
-    holonomic_subsytem->moveToPoint(119.15, 105, 270, 0.15, 1);
+    holonomic_subsytem->moveToPoint(120, 105, 270, 0.15, 1);
     intake_subsystem->toggle_upper_conveyor_height_piston();
     pros::delay(200);
-    holonomic_subsytem->moveToPoint(119.15, 99, 270, 0.3, 0.2, 2);
+    holonomic_subsytem->moveToPoint(120, 99, 270, 0.3, 0.2, 2);
     intake_subsystem->toggle_conveyor_stopper_piston();
     intake_subsystem->move_intake(robot::subsystems::intake::IN);
     pros::delay(3000);
@@ -73,10 +73,11 @@ void PurpleSkillsAuton::run() {
 
     //Blue Park Zone Blocks
     //color_sort_subsystem->setSortOption(robot::subsystems::colorsort::BLUE);
-    holonomic_subsytem->moveToPoint(89, 118, 270);
+    holonomic_subsytem->moveToPoint(89, 116, 270);
     intake_subsystem->toggle_conveyor_stopper_piston();
     intake_subsystem->toggle_upper_conveyor_height_piston();
-    holonomic_subsytem->moveToPoint(72, 117, 270, 0.5, 1);
+    holonomic_subsytem->moveToPoint(72, 116
+        , 270, 0.5, 1);
     holonomic_subsytem->moveToPoint(72,119, 270, 0.5, 0.4, 1);
     intake_subsystem->toggle_rake_mech_piston();
     pros::delay(500);
@@ -98,10 +99,10 @@ void PurpleSkillsAuton::run() {
     intake_subsystem->move_intake(robot::subsystems::intake::STOP);
     
     //Upper Middle Goal
-    holonomic_subsytem->moveToPoint(90, 82.25, 215);
+    holonomic_subsytem->moveToPoint(90, 82.25, 220);
     intake_subsystem->toggle_ed_mech_piston();
     intake_subsystem->toggle_conveyor_stopper_piston();
-    holonomic_subsytem->moveToPoint(81, 82.5, 215, 0.5, 0.4, 2);
+    holonomic_subsytem->moveToPoint(82.5, 82.5, 220, 0.5, 0.4, 2);
     intake_subsystem->move_intake(robot::subsystems::intake::IN);
     pros::delay(2500);
 

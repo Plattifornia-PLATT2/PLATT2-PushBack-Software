@@ -49,9 +49,9 @@ void PurpleCompAuton::run() {
     holonomic_subsytem->moveToPoint(117.75, 24, 90, 0.7);
     intake_subsystem->toggle_rear_intake_piston();
     intake_subsystem->move_intake(robot::subsystems::intake::IN);
-    holonomic_subsytem->moveToPoint(117.75, 13, 90, 0.3, 0.4, 3);
+    holonomic_subsytem->moveToPoint(117.25, 13, 90, 0.3, 0.4, 3);
     intake_subsystem->toggle_upper_conveyor_height_piston();
-    holonomic_subsytem->moveToPoint(117.75, 42, 90, 0.5, 0.4, 3);
+    holonomic_subsytem->moveToPoint(117.25, 42, 90, 0.5, 0.4, 3);
     intake_subsystem->toggle_conveyor_stopper_piston(),
     pros::delay(1500);
     holonomic_subsytem->moveToPoint(117.75, 12.5, 90, 0.3, 0.4, 3);
@@ -59,7 +59,7 @@ void PurpleCompAuton::run() {
     intake_subsystem->toggle_conveyor_stopper_piston();
     pros::delay(3000);
     intake_subsystem->toggle_rear_intake_piston();
-    holonomic_subsytem->moveToPoint(118.25, 42, 90, 0.5, 0.4, 3);
+    holonomic_subsytem->moveToPoint(117.75, 42, 90, 0.5, 0.4, 3);
     intake_subsystem->toggle_conveyor_stopper_piston(),
     pros::delay(2000);
     intake_subsystem->toggle_conveyor_stopper_piston();

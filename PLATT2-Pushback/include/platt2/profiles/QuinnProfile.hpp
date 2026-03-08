@@ -32,7 +32,7 @@ namespace profiles{
         rakeMech_toggle = pros::E_CONTROLLER_DIGITAL_LEFT;
         fieldOriented_toggle = pros::E_CONTROLLER_DIGITAL_X;
         heading_reset = pros::E_CONTROLLER_DIGITAL_X;
-        descore_toggle = pros::E_CONTROLLER_DIGITAL_B;
+        descore_toggle = pros::E_CONTROLLER_DIGITAL_A;
         scoreHighMacro = pros::E_CONTROLLER_DIGITAL_R1;
         scoreMiddleHighMacro = pros::E_CONTROLLER_DIGITAL_R2;
         rearIntake_toggle = pros::E_CONTROLLER_DIGITAL_DOWN;

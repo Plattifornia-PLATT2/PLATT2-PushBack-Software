@@ -53,9 +53,9 @@ void PurplePumpnDumpAuton::run() {
     intake_subsystem->toggle_conveyor_stopper_piston();
     intake_subsystem->toggle_descore_piston();
     holonomic_subsytem->moveToPoint(108.75, 38, 90, 0.5, 0.2, 2);
-    holonomic_subsytem->moveToPoint(108.75, 48, 90, 0.5, 0.2, 2);
+    holonomic_subsytem->moveToPoint(109.25, 48, 90, 0.5, 0.2, 2);
     intake_subsystem->toggle_descore_piston();
-    holonomic_subsytem->moveToPoint(109, 62, 90, 0.8, 0.2, 2);
+    holonomic_subsytem->moveToPoint(109.5, 62, 90, 0.8, 0.2, 2);
 }
 
 }}
