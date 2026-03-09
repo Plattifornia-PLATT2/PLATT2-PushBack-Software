@@ -11,17 +11,24 @@ namespace robot{
 namespace subsystems{
 
 namespace holonomicDrive{
+
+    double deadzone = 0.085;
  
 void XDriveModule::move_vector(MovementVector v){
 
 
-    double p = -(cos(v.theta+getPhi())/cos(getTheta())); // should be expanded for readability
+    double p = -(sin(v.theta+getPhi())/sin(getTheta())); // should be expanded for readability
 
     double m = ((p/v.normalization_scalar)*(1-std::abs(v.w))); // should be expanded for readability
     
-    double rot = sgn(sin(getTheta()))*v.w;
+    double rot = -sgn(cos(getTheta()))*v.w;
 
-    module_motors.setVelocity((m+rot)*600);
+    double combined = m+rot;
+
+    double output = sgn(combined)*deadzone + combined*(1-deadzone);
+    //std::cout<<output<<std::endl;
+
+    module_motors.setVoltage((output));
     
 }
 

@@ -34,10 +34,16 @@ class PinkCompAuton : public auton::IAuton {
     std::shared_ptr<robot::subsystems::intake::IntakeSubsystem> intake_subsystem;
     std::shared_ptr<robot::subsystems::colorsort::ColorSortSubsystem> color_sort_subsystem;
     robot::AllianceConfig alliance_color;
+
+    const std::string AUTON_NAME {"Pink_Comp_WP"};
+
+    const double STARTING_X_POSITION {70.0};
+    const double STARTING_Y_POSITION {24};
+    const double STARTING_HEADING {90.0};
     
     public:
     /**
-     * @brief Initalizes the autonomous routine
+     * @brief Initalizes the autonomous routine()
      * 
      * @param holonomic_subsytem The holonomic subsystem to use
      * @param odometry_subsystem The odometry subsystem to use
@@ -51,6 +57,8 @@ class PinkCompAuton : public auton::IAuton {
         std::shared_ptr<robot::subsystems::colorsort::ColorSortSubsystem> color_sort_subsystem,
         robot::AllianceConfig alliance_color
     ) override; 
+
+    std::string getName() const override;
 
     /**
      * @brief Runs the autonomous routine

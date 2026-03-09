@@ -5,6 +5,7 @@
  * @brief The namespace for all PLATT2 library code.
  * @authors PLATT2 Development team.
  */
+#include "ERobotConfig.hpp"
 namespace platt2{
 
 /**
@@ -19,11 +20,14 @@ namespace robot{
  */
  enum AutonConfig
  {
- 
-     NO_AUTON = 0,
-     COMP_1 = 1,
-     SKILLS_1 = 2
- 
+    NO_AUTON = 0,
+    PURPLE_COMP_WP = 1,
+    PURPLE_COMP_PND = 2,
+    PURPLE_SKILLS = 3,
+    PINK_COMP_WP = 4,
+    PINK_COMP_PND = 5,
+    PINK_SKILLS = 6,
+
  };
 }
 }

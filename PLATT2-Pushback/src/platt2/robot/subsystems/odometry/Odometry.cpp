@@ -1,6 +1,8 @@
 #include "platt2/robot/subsystems/odometry/Odometry.hpp"
+#include "IPositionTracker.hpp"
 #include "OdometryPosition.hpp"
 #include <memory>
+#include "TrackingWheelPositionTracker.hpp"
 #include "pros/rtos.hpp"
 #include <math.h>
 
@@ -12,30 +14,42 @@ namespace subsystems {
 
 namespace odometry {
 
-OdometryPosition Odometry::getPos() {
-  OdometryPosition curPos;
-  curPos.x = otos.getXPosition();
-  curPos.y = otos.getYPosition();
-  curPos.heading = otos.getHeading();
-
-  return curPos;
+static void taskThunk(void *p) {
+    reinterpret_cast<Odometry*>(p)->startTracking();
 }
 
-double Odometry::getX() { return otos.getXPosition(); }
-double Odometry::getY() { return otos.getYPosition(); }
-double Odometry::getHeading() { return otos.getHeading(); }
-double Odometry::getVexHeading() {return otos.getVexHeading();}
-void Odometry::initVexImu() {return otos.initVexImu();}
+OdometryPosition Odometry::getPos() {
+  return position_tracker->getPos();
+}
+
+double Odometry::getX() { return position_tracker->getX(); }
+double Odometry::getY() { return position_tracker->getY(); }
+double Odometry::getHeading() { return position_tracker->getHeading(); }
+double Odometry::getVexHeading() {return 0;}
+void Odometry::initVexImu() {position_tracker->init();}
+
+void Odometry::setPos(OdometryPosition pos){
+  position_tracker->setPos(pos);
+}
 
 void Odometry::resetHeading() {
-  otos.resetHeading();
+  // TODO
 }
 
-Odometry::Odometry(std::unique_ptr<pros::IMU> vex_imu, double x, double y, double h)
-: otos(x, y, h,  std::move(vex_imu)) 
-{
-   
+void Odometry::startTracking(){
+  position_tracker->updatePosition();
 }
+
+void Odometry::setOffsets(double x, double y){
+  position_tracker->setOffsets(x, y);
+}
+
+Odometry::Odometry(std::unique_ptr<IPositionTracker> position_tracker):
+m_trackingTask(taskThunk, this)
+{
+   this->position_tracker = std::move(position_tracker);
+}
+
 } // namespace odometry
 } // namespace subsystems
 } // namespace robot

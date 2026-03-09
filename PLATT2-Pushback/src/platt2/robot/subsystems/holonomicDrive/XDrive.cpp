@@ -1,6 +1,7 @@
 #include "platt2/robot/subsystems/holonomicDrive/XDrive.hpp"
 #include "MovementVector.hpp"
 #include <algorithm>
+#include <vector>
 #include "math.h"
 
 
@@ -16,7 +17,7 @@ namespace holonomicDrive{
         this->drive_modules = (std::move(drive_modules));
     }
 
-    void XDrive::moveVector(MovementVector v){
+    void XDrive::moveVector(MovementVector v){ 
 
         double projection;
         double s;
@@ -26,7 +27,7 @@ namespace holonomicDrive{
 
         for (auto& module : drive_modules) {
             
-            projection = -cos(v.theta+(module->getPhi()))/cos((module->getTheta()));
+            projection = -sin(v.theta+(module->getPhi()))/sin((module->getTheta()));
             
             pV.push_back(std::abs(projection));
         }
@@ -39,7 +40,7 @@ namespace holonomicDrive{
             module->move_vector(v);
         }
 
-        
+         
     }
 
 }

@@ -44,7 +44,6 @@ void competition_initialize() {}
  */
 void autonomous() {
 	pros::Motor whacker = pros::Motor(-1);
-	pros::delay(5000);
 	whacker.set_encoder_units(pros::E_MOTOR_ENCODER_DEGREES);
 	whacker.move_relative(180, 75);
 }
