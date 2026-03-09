@@ -89,8 +89,12 @@ void RobotConfigMenu::updateButtonStates() {
     setButtonChecked(btn_quinn,  driver_profile == robot::QUINN, COLOR_QUINN);
 
     // Auton
-    setButtonChecked(btn_comp,   auton_mode == robot::COMP_1, COLOR_COMP);
-    setButtonChecked(btn_skills, auton_mode == robot::SKILLS_1, COLOR_SKILLS);
+    setButtonChecked(btn_pink_comp1,   auton_mode == robot::PINK_COMP_WP, COLOR_PINK);
+    setButtonChecked(btn_pink_comp2,   auton_mode == robot::PINK_COMP_PND, COLOR_PINK);
+    setButtonChecked(btn_purple_comp1, auton_mode == robot::PURPLE_COMP_WP, COLOR_PURPLE);
+    setButtonChecked(btn_purple_comp2, auton_mode == robot::PURPLE_COMP_PND, COLOR_PURPLE);
+    setButtonChecked(btn_pink_skills,   auton_mode == robot::PINK_SKILLS, COLOR_PINK);
+    setButtonChecked(btn_purple_skills, auton_mode == robot::PURPLE_SKILLS, COLOR_PURPLE);
 
     setButtonChecked(btn_red,   alliance_color == robot::RED, COLOR_RED_ALLIANCE);
     setButtonChecked(btn_blue, alliance_color == robot::BLUE, COLOR_BLUE_ALLIANCE);
@@ -117,8 +121,18 @@ void RobotConfigMenu::cbDriverProfile(lv_event_t* e) {
 void RobotConfigMenu::cbAutonMode(lv_event_t* e) {
     RobotConfigMenu* self = static_cast<RobotConfigMenu*>(lv_event_get_user_data(e));
     lv_obj_t* target = static_cast<lv_obj_t*>(lv_event_get_target(e));
-    if (target == self->btn_comp)   self->auton_mode = robot::COMP_1;
-    else                             self->auton_mode = robot::SKILLS_1;
+
+    if(target == self->btn_pink_skills)   self->auton_mode = robot::PINK_SKILLS;
+    else if(target == self->btn_purple_skills) self->auton_mode = robot::PURPLE_SKILLS;
+    else if(target == self->btn_pink_comp1)   self->auton_mode = robot::PINK_COMP_WP;
+    else if(target == self->btn_purple_comp1) self->auton_mode = robot::PURPLE_COMP_WP;
+    else if(target == self->btn_pink_comp2)   self->auton_mode = robot::PINK_COMP_PND;
+    else if(target == self->btn_purple_comp2) self->auton_mode = robot::PURPLE_COMP_PND;
+    else if(target == self->btn_purple_skills) self->auton_mode = robot::PURPLE_SKILLS;
+    else {
+        self->auton_mode = robot::NO_AUTON; // default if no match
+    }
+                           
     self->updateButtonStates();
 }
 
@@ -141,93 +155,148 @@ void RobotConfigMenu::build() {
     // Create/load screen
     lv_obj_t* scr = lv_screen_active();
     lv_obj_remove_flag(scr, LV_OBJ_FLAG_SCROLLABLE);
+
+    lv_obj_t* tabview = lv_tabview_create(scr);
+    lv_obj_set_size(tabview, 480, 240);
+    lv_tabview_set_tab_bar_size(tabview, 30);
+
+    // Create two tabs
+    lv_obj_t* tab1 = lv_tabview_add_tab(tabview, "Config");
+    lv_obj_t* tab2 = lv_tabview_add_tab(tabview, "Autons");
+    lv_obj_remove_flag(tab1, LV_OBJ_FLAG_SCROLLABLE);
+    lv_obj_remove_flag(tab2, LV_OBJ_FLAG_SCROLLABLE);
+
     // Use column flex on the screen to stack rows
-    lv_obj_set_flex_flow(scr, LV_FLEX_FLOW_COLUMN);
-    lv_obj_set_flex_align(scr, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
-    lv_obj_set_style_pad_row(scr, 8, LV_PART_MAIN);
+    lv_obj_set_flex_flow(tab1, LV_FLEX_FLOW_COLUMN);
+    lv_obj_set_flex_align(tab1, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
+    lv_obj_set_style_pad_row(tab1, 8, LV_PART_MAIN);
+
+    lv_obj_set_flex_flow(tab2, LV_FLEX_FLOW_COLUMN);
+    lv_obj_set_flex_align(tab2, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
+    lv_obj_set_style_pad_row(tab2, 4, LV_PART_MAIN);
 
     // Helper to create a row container with horizontal flex
-    auto makeRow = [&](int height) -> lv_obj_t* {
-        lv_obj_t* row = lv_obj_create(scr);
-        lv_obj_set_size(row, 480, height);
-        lv_obj_set_flex_flow(row, LV_FLEX_FLOW_ROW);
-        lv_obj_set_flex_align(row, LV_FLEX_ALIGN_SPACE_EVENLY, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
-        return row;
-    };
+    auto makeRow = [&](lv_obj_t* parent, int height) -> lv_obj_t* {
+    lv_obj_t* row = lv_obj_create(parent);
+    lv_obj_set_size(row, 480, height);
+    lv_obj_set_flex_flow(row, LV_FLEX_FLOW_ROW);
+    lv_obj_set_flex_align(row, LV_FLEX_ALIGN_SPACE_EVENLY,
+                          LV_FLEX_ALIGN_CENTER,
+                          LV_FLEX_ALIGN_CENTER);
+    return row;
+};
 
     // Title label (top)
-    lv_obj_t* title = lv_label_create(scr);
-    lv_label_set_text(title, "67 41 SIGMA OHIO RIZZ");
+    lv_obj_t* title = lv_label_create(tab1);
+    lv_label_set_text(title, "PLATT2 ROBOT CONFIG");
     lv_obj_set_style_text_font(title, LV_THEME_DEFAULT_FONT_NORMAL, 0);
     lv_obj_set_align(title, LV_ALIGN_TOP_MID);
 
     // --- Robot color row ---
-    lv_obj_t* row1 = makeRow(48);
+    lv_obj_t* row1 = makeRow(tab1, 48);
     lv_obj_remove_flag(row1, LV_OBJ_FLAG_SCROLLABLE);
     btn_pink = lv_button_create(row1);
-    lv_obj_set_size(btn_pink, 146, 48);
+    lv_obj_set_size(btn_pink, 220, 48);
     applyColorTheme(btn_pink, COLOR_PINK);
     lv_obj_add_event_cb(btn_pink, cbRobotConfig, LV_EVENT_CLICKED, this);
     lv_obj_t* lbl_pink = lv_label_create(btn_pink);
     lv_label_set_text(lbl_pink, "Pink");
 
     btn_purple = lv_button_create(row1);
-    lv_obj_set_size(btn_purple, 146, 48);
+    lv_obj_set_size(btn_purple, 220, 48);
     applyColorTheme(btn_purple, COLOR_PURPLE);
     lv_obj_add_event_cb(btn_purple, cbRobotConfig, LV_EVENT_CLICKED, this);
     lv_obj_t* lbl_purple = lv_label_create(btn_purple);
     lv_label_set_text(lbl_purple, "Purple");
 
-    btn_red = lv_button_create(row1);
-    lv_obj_set_size(btn_red, 146, 48);
-    applyColorTheme(btn_red, COLOR_RED_ALLIANCE);
-    lv_obj_add_event_cb(btn_red, cbAlliance, LV_EVENT_CLICKED, this);
-    lv_obj_t* lbl_red = lv_label_create(btn_red);
-    lv_label_set_text(lbl_red, "Red");
-
     // --- Driver profile row ---
-    lv_obj_t* row2 = makeRow(48);
+    lv_obj_t* row2 = makeRow(tab1, 48);
     lv_obj_remove_flag(row2, LV_OBJ_FLAG_SCROLLABLE);
     btn_jon = lv_button_create(row2);
-    lv_obj_set_size(btn_jon, 146, 48);
+    lv_obj_set_size(btn_jon, 220, 48);
     applyColorTheme(btn_jon, COLOR_JON);
     lv_obj_add_event_cb(btn_jon, cbDriverProfile, LV_EVENT_CLICKED, this);
     lv_obj_t* lbl_jon = lv_label_create(btn_jon);
     lv_label_set_text(lbl_jon, "Jon");
 
     btn_quinn = lv_button_create(row2);
-    lv_obj_set_size(btn_quinn, 146, 48);
+    lv_obj_set_size(btn_quinn, 220, 48);
     applyColorTheme(btn_quinn, COLOR_QUINN);
     lv_obj_add_event_cb(btn_quinn, cbDriverProfile, LV_EVENT_CLICKED, this);
     lv_obj_t* lbl_quinn = lv_label_create(btn_quinn);
     lv_label_set_text(lbl_quinn, "Quinn");
 
-    btn_blue = lv_button_create(row2);
-    lv_obj_set_size(btn_blue, 146, 48);
+    // --- Auton row ---
+    lv_obj_t* row3 = makeRow(tab1, 48);
+    lv_obj_remove_flag(row3, LV_OBJ_FLAG_SCROLLABLE);
+
+    btn_blue = lv_button_create(row3);
+    lv_obj_set_size(btn_blue, 220, 48);
     applyColorTheme(btn_blue, COLOR_BLUE_ALLIANCE);
     lv_obj_add_event_cb(btn_blue, cbAlliance, LV_EVENT_CLICKED, this);
     lv_obj_t* lbl_blue = lv_label_create(btn_blue);
     lv_label_set_text(lbl_blue, "Blue");
 
-    // --- Auton row ---
-    lv_obj_t* row3 = makeRow(48);
-    lv_obj_remove_flag(row3, LV_OBJ_FLAG_SCROLLABLE);
-    btn_comp = lv_button_create(row3);
-    lv_obj_set_size(btn_comp, 220, 48);
-    applyColorTheme(btn_comp, COLOR_COMP);
-    lv_obj_add_event_cb(btn_comp, cbAutonMode, LV_EVENT_CLICKED, this);
-    lv_obj_t* lbl_comp = lv_label_create(btn_comp);
-    lv_label_set_text(lbl_comp, "Comp");
+    btn_red = lv_button_create(row3);
+    lv_obj_set_size(btn_red, 220, 48);
+    applyColorTheme(btn_red, COLOR_RED_ALLIANCE);
+    lv_obj_add_event_cb(btn_red, cbAlliance, LV_EVENT_CLICKED, this);
+    lv_obj_t* lbl_red = lv_label_create(btn_red);
+    lv_label_set_text(lbl_red, "Red");
 
-    btn_skills = lv_button_create(row3);
-    lv_obj_set_size(btn_skills, 220, 48);
-    applyColorTheme(btn_skills, COLOR_SKILLS);
-    lv_obj_add_event_cb(btn_skills, cbAutonMode, LV_EVENT_CLICKED, this);
-    lv_obj_t* lbl_skills = lv_label_create(btn_skills);
-    lv_label_set_text(lbl_skills, "Skills");
+    // --- Auto Route Buttons ---
+    lv_obj_t* comp1_row = makeRow(tab2, 48);
+    lv_obj_remove_flag(comp1_row, LV_OBJ_FLAG_SCROLLABLE);
+    lv_obj_t* comp2_row = makeRow(tab2, 48);
+    lv_obj_remove_flag(comp2_row, LV_OBJ_FLAG_SCROLLABLE);
+    lv_obj_t* skills_row = makeRow(tab2, 48);
+    lv_obj_remove_flag(comp2_row, LV_OBJ_FLAG_SCROLLABLE);
+
+    btn_pink_comp1 = lv_button_create(comp1_row);
+    lv_obj_set_size(btn_pink_comp1, 220, 48);
+    applyColorTheme(btn_pink_comp1, COLOR_PINK);
+    lv_obj_add_event_cb(btn_pink_comp1, cbAutonMode, LV_EVENT_CLICKED, this);
+    lv_obj_t* lbl_pinkc1 = lv_label_create(btn_pink_comp1);
+    lv_label_set_text(lbl_pinkc1, "Pink WP");
+
+    btn_purple_comp1 = lv_button_create(comp1_row);
+    lv_obj_set_size(btn_purple_comp1, 220, 48);
+    applyColorTheme(btn_purple_comp1, COLOR_PURPLE);
+    lv_obj_add_event_cb(btn_purple_comp1, cbAutonMode, LV_EVENT_CLICKED, this);
+    lv_obj_t* lbl_purplec1 = lv_label_create(btn_purple_comp1);
+    lv_label_set_text(lbl_purplec1, "Purple WP");
+
+    btn_pink_comp2 = lv_button_create(comp2_row);
+    lv_obj_set_size(btn_pink_comp2, 220, 48);
+    applyColorTheme(btn_pink_comp2, COLOR_PINK);
+    lv_obj_add_event_cb(btn_pink_comp2, cbAutonMode, LV_EVENT_CLICKED, this);
+    lv_obj_t* lbl_pinkc2 = lv_label_create(btn_pink_comp2);
+    lv_label_set_text(lbl_pinkc2, "Pink PumpNDump");
+
+    btn_purple_comp2 = lv_button_create(comp2_row);
+    lv_obj_set_size(btn_purple_comp2, 220, 48);
+    applyColorTheme(btn_purple_comp2, COLOR_PURPLE);
+    lv_obj_add_event_cb(btn_purple_comp2, cbAutonMode, LV_EVENT_CLICKED, this);
+    lv_obj_t* lbl_purplec2 = lv_label_create(btn_purple_comp2);
+    lv_label_set_text(lbl_purplec2, "Purple PumpNDump");
+
+    btn_pink_skills = lv_button_create(skills_row);
+    lv_obj_set_size(btn_pink_skills, 220, 48);
+    applyColorTheme(btn_pink_skills, COLOR_PINK);
+    lv_obj_add_event_cb(btn_pink_skills, cbAutonMode, LV_EVENT_CLICKED, this);
+    lv_obj_t* lbl_pinkskills = lv_label_create(btn_pink_skills);
+    lv_label_set_text(lbl_pinkskills, "Pink Skills");
+
+    btn_purple_skills = lv_button_create(skills_row);
+    lv_obj_set_size(btn_purple_skills, 220, 48);
+    applyColorTheme(btn_purple_skills, COLOR_PURPLE);
+    lv_obj_add_event_cb(btn_purple_skills, cbAutonMode, LV_EVENT_CLICKED, this);
+    lv_obj_t* lbl_purpleskills = lv_label_create(btn_purple_skills);
+    lv_label_set_text(lbl_purpleskills, "Purple Skills");
+
 
     // --- Save / Load button ---
-    btn_save = lv_button_create(scr);
+    btn_save = lv_button_create(tab2);
     lv_obj_set_size(btn_save, 360, 48);
     applyColorTheme(btn_save, COLOR_SAVE);
     lv_obj_add_event_cb(btn_save, cbSave, LV_EVENT_CLICKED, this);

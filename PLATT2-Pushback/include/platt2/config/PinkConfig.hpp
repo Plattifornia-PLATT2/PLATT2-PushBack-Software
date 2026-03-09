@@ -14,6 +14,11 @@
 #include "platt2/ERobotConfig.hpp"
 #include "platt2/profiles/JonProfile.hpp"
 #include "platt2/auton/PinkSkillsAuton.hpp"
+#include "platt2/auton/PurpleSkillsAuton.hpp"
+#include "platt2/auton/PinkCompAuton.hpp"
+#include "platt2/auton/PurpleCompAuton.hpp"
+#include "platt2/auton/PinkPumpnDumpAuton.hpp"
+#include "platt2/auton/PurplePumpnDumpAuton.hpp"
 #include "platt2/robot/subsystems/colorSort/colorSort.hpp"
 #include "platt2/hal/TrackingWheel.hpp"
 #include "platt2/robot/subsystems/odometry/TrackingWheelPositionTracker.hpp"
@@ -51,11 +56,11 @@ class PinkConfig : public IConfig {
     static constexpr int LEFT_FRONT_MODULE_TOP_PORT{-1};
     static constexpr int LEFT_FRONT_MODULE_BOTTOM_PORT{2};
 
-    static constexpr int RIGHT_FRONT_MODULE_TOP_PORT{-7};
-    static constexpr int RIGHT_FRONT_MODULE_BOTTOM_PORT{8};
+    static constexpr int RIGHT_FRONT_MODULE_TOP_PORT{7};
+    static constexpr int RIGHT_FRONT_MODULE_BOTTOM_PORT{-8};
 
-    static constexpr int LEFT_REAR_MODULE_TOP_PORT{-11};
-    static constexpr int LEFT_REAR_MODULE_BOTTOM_PORT{12}; 
+    static constexpr int LEFT_REAR_MODULE_TOP_PORT{11};
+    static constexpr int LEFT_REAR_MODULE_BOTTOM_PORT{-12}; 
 
     static constexpr int RIGHT_REAR_MODULE_TOP_PORT{9};
     static constexpr int RIGHT_REAR_MODULE_BOTTOM_PORT{-10};
@@ -68,11 +73,11 @@ class PinkConfig : public IConfig {
     static constexpr int UPPER_CONVEYOR_MOTOR_PORT{20};
     static constexpr int REAR_INTAKE_LEFT_MOTOR_PORT{19};
     static constexpr int REAR_INTAKE_RIGHT_MOTOR_PORT{-18};
-    static constexpr int DISTANCE_SENSOR_PORT{14};
+    //static constexpr int DISTANCE_SENSOR_PORT{14};
     static constexpr pros::MotorGears INTAKE_GEARSET{pros::MotorGears::blue};
 
     // ** Color Sort Ports **
-    static constexpr int OPTICAL_SENSOR_PORT{16};
+    static constexpr int OPTICAL_SENSOR_PORT{14};
 
     // ** Pneumatics **
     static constexpr int ED_MECH_PISTON_PORT{1};
@@ -96,16 +101,16 @@ class PinkConfig : public IConfig {
     static constexpr double position_dt{0.01};
     static constexpr double position_max{1};
     static constexpr double position_min{-1};
-    static constexpr double position_Kp{0.05};
-    static constexpr double position_Kd{0.0027};
+    static constexpr double position_Kp{0.25};
+    static constexpr double position_Kd{0.02};
     static constexpr double position_Ki{0};
 
     // ** Angular PID Tuning Values **
-    static constexpr double heading_dt{0.01};
+    static constexpr double heading_dt{0.01}; 
     static constexpr double heading_max{1};
     static constexpr double heading_min{-1};
-    static constexpr double heading_Kp{0.3};
-    static constexpr double heading_Kd{0.001};
+    static constexpr double heading_Kp{0.5};
+    static constexpr double heading_Kd{0.01};
     static constexpr double heading_Ki{0};
 
     public:

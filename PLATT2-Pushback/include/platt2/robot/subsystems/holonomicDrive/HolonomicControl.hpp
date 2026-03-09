@@ -54,11 +54,10 @@ public:
      * @param y_target Target Y value to move to.
      * @param heading_target Target heading to achieve at the end of the movement.
      */
-    void moveToPoint(double x_target, double y_target, double heading_target, double rSpeed = 0.8, double wSpeed = 0.2, double timeout = 7);
+    void moveToPoint(double x_target, double y_target, double heading_target, double rSpeed = 0.8, double wSpeed = 0.4, double timeout = 7);
 
-    double velocityProfile(double TotalDistance, double remainingDistance, double currentVel, double maxVel, double maxAccel, bool& usePid);
-
-
+    std::unique_ptr<pid::PID>& getHeadingPID();
+    
 
     /**
      * @brief Used for debugging purposes.
@@ -69,6 +68,9 @@ private:
     std::shared_ptr<odometry::Odometry> odometry;
     std::unique_ptr<pid::PID> positionPID;
     std::unique_ptr<pid::PID> headingPID;
+    
+    double velocityProfile(double TotalDistance, double remainingDistance, double currentVel, double maxVel, double maxAccel, bool& usePid);
+
 
 };
 }}}}

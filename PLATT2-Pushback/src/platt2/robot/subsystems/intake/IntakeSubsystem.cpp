@@ -24,8 +24,7 @@ namespace intake{
         std::unique_ptr<pros::adi::DigitalOut> conveyor_stopper_piston,
         std::unique_ptr<pros::adi::DigitalOut> rake_mech_piston,
         std::unique_ptr<pros::adi::DigitalOut> descore_piston,
-        std::unique_ptr<pros::adi::DigitalOut> rear_intake_piston,
-        std::unique_ptr<pros::Distance> distance_sensor
+        std::unique_ptr<pros::adi::DigitalOut> rear_intake_piston
     )
         {
         front_intake_motor = std::move(front_intake);
@@ -41,7 +40,6 @@ namespace intake{
         this->rake_mech_piston = std::move(rake_mech_piston);
         this->descore_piston = std::move(descore_piston);
         this->rear_intake_piston = std::move(rear_intake_piston);
-        this->distance_sensor = std::move(distance_sensor);
 
         if(rear_intake_motor){
             rear_intake_motor->set_encoder_units(pros::E_MOTOR_ENCODER_ROTATIONS);
@@ -53,13 +51,24 @@ namespace intake{
         switch(direction){
             case IN:{
                 if(colorSort){
-                    front_intake_motor->move_velocity(intake_speed);
-                    middle_intake_motor->move_velocity(intake_speed);
-                    rear_intake_motor->move_velocity(-intake_speed);
-                    upper_conveyor_motor->move_velocity(intake_speed);
-                    lower_roller_motor->move_velocity(intake_speed);
-                    matchload_left_motor->move_velocity(intake_speed);
-                    matchload_right_motor->move_velocity(intake_speed);
+                    if(rear_intake_piston_state){
+                        front_intake_motor->move_velocity(-intake_speed);
+                        middle_intake_motor->move_velocity(-intake_speed);
+                        rear_intake_motor->move_velocity(intake_speed);
+                        upper_conveyor_motor->move_velocity(intake_speed);
+                        lower_roller_motor->move_velocity(intake_speed);
+                        matchload_left_motor->move_velocity(intake_speed);
+                        matchload_right_motor->move_velocity(intake_speed);
+                    }
+                    else {
+                        front_intake_motor->move_velocity(intake_speed);
+                        middle_intake_motor->move_velocity(intake_speed);
+                        rear_intake_motor->move_velocity(-intake_speed);
+                        upper_conveyor_motor->move_velocity(intake_speed);
+                        lower_roller_motor->move_velocity(-intake_speed);
+                        matchload_left_motor->move_velocity(-intake_speed);
+                        matchload_right_motor->move_velocity(-intake_speed);
+                    }
                 }
                 else{
                     front_intake_motor->move_velocity(intake_speed);
@@ -134,17 +143,37 @@ namespace intake{
     void IntakeSubsystem::move_rear_motor(IntakeDirection direction){
         switch(direction){
             case IN:{
-                rear_intake_motor->move_velocity(intake_speed);
-                lower_roller_motor->move_velocity(intake_speed);
-                break;
+                if(rear_intake_piston_state){
+                        front_intake_motor->move_velocity(-intake_speed);
+                        middle_intake_motor->move_velocity(-intake_speed);
+                        rear_intake_motor->move_velocity(intake_speed);
+                        upper_conveyor_motor->move_velocity(intake_speed);
+                        lower_roller_motor->move_velocity(intake_speed);
+                        matchload_left_motor->move_velocity(intake_speed);
+                        matchload_right_motor->move_velocity(intake_speed);
+                    }
+                    else {
+                        front_intake_motor->move_velocity(intake_speed);
+                        middle_intake_motor->move_velocity(intake_speed);
+                        rear_intake_motor->move_velocity(-intake_speed);
+                        upper_conveyor_motor->move_velocity(intake_speed);
+                        lower_roller_motor->move_velocity(-intake_speed);
+                        matchload_left_motor->move_velocity(-intake_speed);
+                        matchload_right_motor->move_velocity(-intake_speed);
+                    }
             }
             case OUT:{
                 rear_intake_motor->move_velocity(-intake_speed);
+                lower_roller_motor->move_velocity(-intake_speed);
+                matchload_left_motor->move_velocity(-intake_speed);
+                matchload_right_motor->move_velocity(-intake_speed);
                 break;   
             }
             case STOP:{
                 rear_intake_motor->move_velocity(0);
                 lower_roller_motor->move_velocity(0);
+                matchload_left_motor->move_velocity(0);
+                matchload_right_motor->move_velocity(0);
                 break;
             }
         }
@@ -158,13 +187,15 @@ namespace intake{
         return rear_intake_motor->get_position();
     }
 
+    void IntakeSubsystem::tare_middle_motor_position(){
+        middle_intake_motor->tare_position();
+    }
+
+    double IntakeSubsystem::get_middle_motor_position(){
+        return middle_intake_motor->get_position();
+    }  
+
     void IntakeSubsystem::auto_unload(){
-        auto_unload_active = true;
-        double start_time = pros::millis();
-        while(distance_sensor->get() < MAX_DISTANCE || pros::millis() < start_time + 7000){
-            move_intake(OUT);
-        }
-        move_intake(STOP);
         auto_unload_active = false;
     }
 
@@ -173,12 +204,16 @@ namespace intake{
     }
 
     void IntakeSubsystem::colorSortMode(bool state){
-        colorSort = state;
+        this->colorSort = state;
     }
 
     void IntakeSubsystem::toggle_rear_intake_piston(){
         rear_intake_piston_state = !rear_intake_piston_state;
         rear_intake_piston->set_value(rear_intake_piston_state);
+    }
+
+    bool IntakeSubsystem::get_rear_intake_position(){
+        return rear_intake_piston_state;
     }
     
 }

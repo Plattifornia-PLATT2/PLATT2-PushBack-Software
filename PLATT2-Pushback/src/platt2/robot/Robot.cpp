@@ -1,7 +1,8 @@
 #include "platt2/robot/Robot.hpp"
-#include <iterator>
+#include <cmath>      // for std::isnan, M_PI
 #include <math.h>
-#include <ostream>
+#include <memory>
+#include "platt2/helperFunctions.h"
 
 namespace platt2{
 
@@ -24,7 +25,8 @@ namespace robot{
         intake_subsystem{intake_subsystem},
         driver_profile{std::move(driver_profile)},
         auton_routine{std::move(auton_routine)},
-        color_sort_subsystem{color_sort_subsystem}
+        color_sort_subsystem{color_sort_subsystem}        
+
     {
         current_alliance = alliance_config;
         current_auton_route = auton_config;
@@ -35,12 +37,23 @@ namespace robot{
 
         pros::Controller controller{pros::Controller(pros::E_CONTROLLER_MASTER)};
         controller.print(0, 0, "Sorted Color: %d", color_sort_subsystem->getSortedColor());
-        
+
+        // initialize target heading from the odometry (adjusted if needed)
+        double targetHeading = odom_subsystem->getHeading() - M_PI/2;
+        double angle_error;
+
+        // fetch real heading PID and reset it before entering the loop
+        std::unique_ptr<pid::PID>& headingPID = holonomic_controller->getHeadingPID();
+        headingPID->resetPID();
+
+        // debugging helpers
+        double pid_output = 0;
+
         while(true){
             
-            double leftX = double(controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_X));
-            double leftY = double(controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y));
-            double rightX = double(controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X));
+            double leftX = double(controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_X))/127;
+            double leftY = double(controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y))/127;
+            double rightX = double(controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X))/127;
 
             // right stick deadzone to eliminate stick drift issues with heading
             if(rightX < 0.05 && rightX > -0.05){
@@ -51,9 +64,31 @@ namespace robot{
             subsystems::holonomicDrive::MovementVector movement;   
 
             movement.theta = atan2(leftY, leftX)-((odom_subsystem->getHeading())-M_PI/2);
-            movement.r = std::clamp(sqrt(leftX*leftX + leftY*leftY)/(127*sqrt(2)), -1.0,1.0);
-            movement.w = rightX/(127*2);
+            movement.r = std::clamp(sqrt(leftX*leftX + leftY*leftY), 0.0,1.0); 
+            movement.w = rightX/2;
+                
+            //targetHeading += (rightX*(2*M_PI)*0.01);
+            //
+            //angle_error = (targetHeading - (odom_subsystem->getHeading()));
+//
+            //if(angle_error > M_PI || angle_error < -M_PI){
+            //    angle_error = -1 * sgn(angle_error) * (2*M_PI - std::abs(angle_error));
+            //}   
+            //
+            //if (std::isnan(angle_error)) { angle_error = 0;}
             
+            //pid_output = headingPID->calculate(0, angle_error);
+            //if(std::isnan(pid_output)) {
+            //    // something went wrong inside the controller; clamp and reset to recover
+            //    pid_output = 0;
+            //    headingPID->resetPID();
+            //}
+            //movement.w = pid_output;
+//
+            // log both the error and the PID output so we can see what is happening
+            //std::cout << "angle_error=" << angle_error
+            //          << " pid=" << pid_output << std::endl;
+            //
             // Send to subsystem
             holonomicDrive_subsystem->moveVector(movement);
 
@@ -120,6 +155,9 @@ namespace robot{
             
             if(controller.get_digital_new_press(driver_profile->rearIntake_toggle)){
                 intake_subsystem->toggle_rear_intake_piston();
+                if(intake_subsystem->get_rear_intake_position()){
+                    controller.rumble("..");
+                }
             }
             
             pros::delay(10);

@@ -16,7 +16,12 @@
 #include "platt2/profiles/JonProfile.hpp"
 #include "platt2/profiles/DriverProfile.hpp"
 #include "platt2/profiles/QuinnProfile.hpp"
+#include "platt2/auton/PinkSkillsAuton.hpp"
+#include "platt2/auton/PurpleSkillsAuton.hpp"
+#include "platt2/auton/PinkCompAuton.hpp"
 #include "platt2/auton/PurpleCompAuton.hpp"
+#include "platt2/auton/PinkPumpnDumpAuton.hpp"
+#include "platt2/auton/PurplePumpnDumpAuton.hpp"
 
 // ** Pros API Includes **
 #include "pros/motors.hpp"
@@ -58,8 +63,8 @@ class PurpleConfig : public IConfig {
     static constexpr int LEFT_REAR_MODULE_TOP_PORT{-11};
     static constexpr int LEFT_REAR_MODULE_BOTTOM_PORT{12}; 
 
-    static constexpr int RIGHT_REAR_MODULE_TOP_PORT{9};
-    static constexpr int RIGHT_REAR_MODULE_BOTTOM_PORT{-10};
+    static constexpr int RIGHT_REAR_MODULE_TOP_PORT{-9};
+    static constexpr int RIGHT_REAR_MODULE_BOTTOM_PORT{10};
 
     // ** Intake Ports **
     static constexpr int FRONT_INTAKE_MOTOR_PORT{-5};
@@ -69,11 +74,11 @@ class PurpleConfig : public IConfig {
     static constexpr int UPPER_CONVEYOR_MOTOR_PORT{20};
     static constexpr int REAR_INTAKE_LEFT_MOTOR_PORT{19};
     static constexpr int REAR_INTAKE_RIGHT_MOTOR_PORT{-18};
-    static constexpr int DISTANCE_SENSOR_PORT{14};
+    //static constexpr int DISTANCE_SENSOR_PORT{14};
     static constexpr pros::MotorGears INTAKE_GEARSET{pros::MotorGears::blue};
 
     // ** Color Sort Ports **
-    static constexpr int OPTICAL_SENSOR_PORT{16};
+    static constexpr int OPTICAL_SENSOR_PORT{14};
 
     // ** Pneumatics **
     static constexpr int ED_MECH_PISTON_PORT{1};
@@ -88,26 +93,27 @@ class PurpleConfig : public IConfig {
 
     // ** Odometry Offsets **
     static constexpr int HORIZONTAL_ENCODER_PORT{-16};
-    static constexpr int VERTICAL_ENCODER_PORT{-13};
+    static constexpr int VERTICAL_ENCODER_PORT{13};
     static constexpr double TRACKING_WHEEL_DIAMETER{2.2725};
-    static constexpr double HORIZONTAL_TRACKING_WHEEL_OFFSET{.85};
-    static constexpr double VERTICAL_TRACKING_WHEEL_OFFSET{3.45};
+    static constexpr double HORIZONTAL_TRACKING_WHEEL_OFFSET{.5};
+    static constexpr double VERTICAL_TRACKING_WHEEL_OFFSET{2.45};
 
     // ** Linear PID Tuning Values **
-    static constexpr double position_dt{0.022};
+    static constexpr double position_dt{0.01};
     static constexpr double position_max{1};
     static constexpr double position_min{-1};
-    static constexpr double position_Kp{0.067};
-    static constexpr double position_Kd{0.007};
+    static constexpr double position_Kp{0.25};
+    static constexpr double position_Kd{0.025};
     static constexpr double position_Ki{0};
 
     // ** Angular PID Tuning Values **
     static constexpr double heading_dt{0.01};
     static constexpr double heading_max{1};
     static constexpr double heading_min{-1};
-    static constexpr double heading_Kp{0.3};
-    static constexpr double heading_Kd{0.0};
+    static constexpr double heading_Kp{0.6};
+    static constexpr double heading_Kd{0.01}; 
     static constexpr double heading_Ki{0};
+
     
     public:
 

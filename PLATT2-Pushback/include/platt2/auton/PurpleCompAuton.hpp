@@ -4,6 +4,7 @@
 #include "IAuton.hpp"
 #include "platt2/EAllianceConfig.hpp"
 #include "platt2/robot/Robot.hpp"
+#include "platt2/robot/subsystems/colorSort/ColorSort.hpp"
 #include "platt2/robot/subsystems/holonomicDrive/XDrive.hpp"
 #include "platt2/robot/subsystems/holonomicDrive/HolonomicControl.hpp"
 #include "platt2/robot/subsystems/odometry/Odometry.hpp"
@@ -34,11 +35,14 @@ class PurpleCompAuton : public auton::IAuton {
     std::shared_ptr<robot::subsystems::intake::IntakeSubsystem> intake_subsystem;
     std::shared_ptr<robot::subsystems::colorsort::ColorSortSubsystem> color_sort_subsystem;
     robot::AllianceConfig alliance_color;
+    robot::subsystems::colorsort::BallColor rejected_color;
     
-    const double STARTING_X_POSITION {0.0};
-    const double STARTING_Y_POSITION {0.0};
-    const double STARTING_HEADING {90.0};    
+    const double STARTING_X_POSITION {86.5};
+    const double STARTING_Y_POSITION {8.5};
+    const double STARTING_HEADING {90.0};  
 
+    const std::string AUTON_NAME {"Purple_Comp_WP"};
+    
     public:
     /**
      * @brief Initalizes the autonomous routine
@@ -55,6 +59,8 @@ class PurpleCompAuton : public auton::IAuton {
         std::shared_ptr<robot::subsystems::colorsort::ColorSortSubsystem> color_sort_subsystem,
         robot::AllianceConfig alliance_color
     ) override; 
+
+    std::string getName() const override;
 
     /**
      * @brief Runs the autonomous routine

@@ -9,6 +9,7 @@
 #include "platt2/robot/subsystems/intake/IntakeSubsystem.hpp"
 #include "platt2/robot/subsystems/colorsort/ColorSort.hpp"
 #include <memory>
+#include <string>
 
 /**
  * @brief Namespace for all PLATT2 Library Code
@@ -45,6 +46,8 @@ class IAuton{
         std::shared_ptr<robot::subsystems::colorsort::ColorSortSubsystem> color_sort_subsystem,
         robot::AllianceConfig alliance_color
     ) = 0;
+
+    virtual std::string getName() const = 0;
 
     /**
      * @brief Runs the autonomous routine.

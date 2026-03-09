@@ -1,8 +1,8 @@
 #include "platt2/robot/subsystems/odometry/TrackingWheelPositionTracker.hpp"
 #include "OdometryPosition.hpp"
+#include "pros/rtos.hpp"
 #include "pros/screen.hpp"
 #include <cmath>
-#include <iostream>
 
 namespace platt2{
 namespace robot{
@@ -38,6 +38,7 @@ namespace odometry{
     }
 
     void TrackingWheelPositionTracker::init(){
+        pros::delay(500);
         x_wheel->init();
         y_wheel->init();
         imu->reset();
@@ -48,9 +49,8 @@ namespace odometry{
     }
 
     void TrackingWheelPositionTracker::updatePosition(){
-            
-        //init variables
-        std::cout << current_position.heading << std::endl;
+        pros::delay(1000);
+
         current_position.heading  = ((360 - imu->get_heading())*M_PI/180);
         double oldTheta = current_position.heading ;
         double dTheta = (current_position.heading  - oldTheta);
@@ -71,13 +71,13 @@ namespace odometry{
 
         
         while(true){
-
+            //print statments for debugging
             pros::screen::erase();
             pros::screen::print(pros::E_TEXT_MEDIUM_CENTER, 1,"X Pos: %.3f", current_position.x);
             pros::screen::print(pros::E_TEXT_MEDIUM_CENTER, 2,"Y Pos: %.3f", current_position.y);
             pros::screen::print(pros::E_TEXT_MEDIUM_CENTER, 3,"Heading: %.2f", current_position.heading*180/M_PI);
 
-
+            //get new values and calculate deltas
             newX = x_wheel->getPosition();
             newY = y_wheel->getPosition();
             current_position.heading  = ((360 - imu->get_heading())*M_PI/180);
@@ -86,34 +86,34 @@ namespace odometry{
             dY = newY - oldY;
             dTheta = current_position.heading - oldTheta;
 
+            // adjust deltas for angle wraparound
             if(dTheta > M_PI || dTheta < -M_PI){
                 dTheta = -1 * sgn(dTheta) * (2*M_PI - std::abs(dTheta));
             }
 
+            // save new values as old values for next loop
             oldX = newX;
             oldY = newY;
             oldTheta = current_position.heading;
-
+            // apply tracking wheel odometry algorithm to calculate local and global position deltas
             localX = dX - (x_offset*dTheta);
             localY = dY + (y_offset*dTheta);
-
 
             localX = (1-(pow(dTheta, 2)/24))*localX;
             localY = (1-(pow(dTheta, 2)/24))*localY;
 
             globalX = localY * cos(oldTheta-dTheta/2) - localX * sin(oldTheta-dTheta/2);
-
             globalY = localY * sin(oldTheta-dTheta/2) + localX * cos(oldTheta-dTheta/2);
 
+            // if the global deltas are NaN, skip the update and try again in the next loop iteration
             if (std::isnan(globalX) or std::isnan(globalY)){
                 pros::delay(10);
                 continue;
             }
-
+            // update current position with global deltas
             current_position.x += globalX;
             current_position.y += globalY;
-
-
+ 
             pros::delay(10);
         }
     }

@@ -1,5 +1,5 @@
-#ifndef PURPLESKILLSAUTON_HPP
-#define PURPLESKILLSAUTON_HPP
+#ifndef PINK_PUMPNDUMP_HPP
+#define PINK_PUMPNDUMP_HPP
 
 #include "IAuton.hpp"
 #include "platt2/EAllianceConfig.hpp"
@@ -24,10 +24,10 @@ namespace platt2{
 namespace auton{
 
 /**
- * @brief The purple robot skills autonomous routine implementation
+ * @brief The pink robot competition autonomous routine implementation
  * @authors Brett Kucko, Quinn Smith, and Logan Wolf
  */
-class PurpleSkillsAuton : public auton::IAuton {
+class PinkPumpnDumpAuton : public auton::IAuton {
     private:
     std::shared_ptr<robot::subsystems::holonomicDrive::HolonomicControl> holonomic_subsytem;
     std::shared_ptr<robot::subsystems::odometry::Odometry> odometry_subsystem;
@@ -35,16 +35,15 @@ class PurpleSkillsAuton : public auton::IAuton {
     std::shared_ptr<robot::subsystems::colorsort::ColorSortSubsystem> color_sort_subsystem;
     robot::AllianceConfig alliance_color;
 
-    const double STARTING_X_POSITION {86.5};
-    const double STARTING_Y_POSITION {8.5};
-    const double STARTING_HEADING {90.0};  
+    const double STARTING_X_POSITION {70.0};
+    const double STARTING_Y_POSITION {24};
+    const double STARTING_HEADING {90.0};
 
-    const std::string AUTON_NAME {"Purple_Skills"};
-
+    const std::string AUTON_NAME {"Pink_Comp_PumpnDump"};
+    
     public:
-
     /**
-     * @brief Initalizes the autonomous routine
+     * @brief Initalizes the autonomous routine()
      * 
      * @param holonomic_subsytem The holonomic subsystem to use
      * @param odometry_subsystem The odometry subsystem to use
@@ -56,9 +55,9 @@ class PurpleSkillsAuton : public auton::IAuton {
         std::shared_ptr<robot::subsystems::odometry::Odometry> odometry_subsystem, 
         std::shared_ptr<robot::subsystems::intake::IntakeSubsystem> intake_subsystem,
         std::shared_ptr<robot::subsystems::colorsort::ColorSortSubsystem> color_sort_subsystem,
-        robot::AllianceConfig alliance_color  
+        robot::AllianceConfig alliance_color
     ) override; 
-
+    
     std::string getName() const override;
 
     /**

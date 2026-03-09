@@ -24,15 +24,15 @@ namespace profiles{
     JonProfile() {
         frontIntake_IN = pros::E_CONTROLLER_DIGITAL_L1;
         frontIntake_OUT = pros::E_CONTROLLER_DIGITAL_L2;
-        auto_unload_button = pros::E_CONTROLLER_DIGITAL_X;
+        //auto_unload_button = pros::E_CONTROLLER_DIGITAL_X;
         edMech_toggle = pros::E_CONTROLLER_DIGITAL_R2;
         highScore_toggle = pros::E_CONTROLLER_DIGITAL_R1;
-        stopper_toggle = pros::E_CONTROLLER_DIGITAL_Y;
-        colorSort_toggle = pros::E_CONTROLLER_DIGITAL_X;
-        rakeMech_toggle = pros::E_CONTROLLER_DIGITAL_B;
-        fieldOriented_toggle = pros::E_CONTROLLER_DIGITAL_X;
-        heading_reset = pros::E_CONTROLLER_DIGITAL_X;
-        descore_toggle = pros::E_CONTROLLER_DIGITAL_B;
+        stopper_toggle = pros::E_CONTROLLER_DIGITAL_B;
+        colorSort_toggle = pros::E_CONTROLLER_DIGITAL_UP;
+        rakeMech_toggle = pros::E_CONTROLLER_DIGITAL_X;
+        //fieldOriented_toggle = pros::E_CONTROLLER_DIGITAL_X;
+        //heading_reset = pros::E_CONTROLLER_DIGITAL_X;
+        descore_toggle = pros::E_CONTROLLER_DIGITAL_Y;
         scoreHighMacro = pros::E_CONTROLLER_DIGITAL_R1;
         scoreMiddleHighMacro = pros::E_CONTROLLER_DIGITAL_R2;
         rearIntake_toggle = pros::E_CONTROLLER_DIGITAL_DOWN;

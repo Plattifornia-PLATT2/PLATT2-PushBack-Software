@@ -68,8 +68,6 @@ namespace intake{
         std::unique_ptr<pros::adi::DigitalOut> descore_piston;
         std::unique_ptr<pros::adi::DigitalOut> rear_intake_piston;
 
-        // ** Sensors **
-        std::unique_ptr<pros::Distance> distance_sensor;
 
         bool conveyor_stopper_piston_state = false;
         bool conveyor_stopper_piston_lastState = false;
@@ -81,6 +79,7 @@ namespace intake{
         bool auto_unload_active = false;
         bool descore_piston_state = false;
         bool colorSort = false;
+        bool matchLoading = false;
         bool rear_intake_piston_state = false;
         bool rear_intake_piston_lastState = false;
 
@@ -157,7 +156,33 @@ namespace intake{
          */
         void toggle_descore_piston();
 
+        /**
+         * @brief Toggles the state of the rear intake (matchloader) pistons.
+         * 
+         */
         void toggle_rear_intake_piston();
+
+        /**
+         * @brief Gets the position of the rear intake piston (matchloader).
+         * @return A boolean for the position of the rear intake state (T for out, F for in).
+         */
+        bool get_rear_intake_position();
+
+        /**
+         * @brief Sets the current position of the middle intake motor to 0.
+         */
+        void tare_middle_motor_position();
+
+        /**
+         * @brief gets the position of the middle intake motor.
+         * @return A double of the current position of the middle intake motor from its internal encoder. 
+         */
+        double get_middle_motor_position();
+
+        /**
+         * @brief Spins the intake motors in an optimized configuration for matchloading.
+         */
+        void move_intake_matchload(IntakeDirection direction);
 
         /**
          * @brief Sets the intake subsystem to color sort mode, or disables it.
@@ -179,7 +204,6 @@ namespace intake{
          * @param conveyor_stopper_piston Conveyor stopper piston
          * @param rake_mech_piston Rake mechanism piston
          * @param descore_piston Descore piston
-         * @param distance_sensor Distance sensor
          */
         IntakeSubsystem(
             std::unique_ptr<pros::Motor>front_intake, 
@@ -194,8 +218,7 @@ namespace intake{
             std::unique_ptr<pros::adi::DigitalOut> conveyor_stopper_piston,
             std::unique_ptr<pros::adi::DigitalOut> rake_mech_piston,
             std::unique_ptr<pros::adi::DigitalOut> descore_piston,
-            std::unique_ptr<pros::adi::DigitalOut> rear_intake_piston,
-            std::unique_ptr<pros::Distance> distance_sensor
+            std::unique_ptr<pros::adi::DigitalOut> rear_intake_piston
         );
 
 
