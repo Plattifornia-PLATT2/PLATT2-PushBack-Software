@@ -2,17 +2,18 @@
 #include "platt2/robot/subsystems/holonomicDrive/HolonomicControl.hpp"
 #include "platt2/robot/subsystems/odometry/OdometryPosition.hpp"
 
+
 namespace platt2{
 namespace auton{
 
 void PinkPumpnDumpAuton::init(
-    std::shared_ptr<robot::subsystems::holonomicDrive::HolonomicControl> holonomic_subsytem, 
+    std::shared_ptr<robot::subsystems::TankDrive::tankControl> tank_subsytem, 
     std::shared_ptr<robot::subsystems::odometry::Odometry> odometry_subsystem, 
     std::shared_ptr<robot::subsystems::intake::IntakeSubsystem> intake_subsystem,
     std::shared_ptr<robot::subsystems::colorsort::ColorSortSubsystem> color_sort_subsystem,
     robot::AllianceConfig alliance_color
 ) {
-    this->holonomic_subsytem = holonomic_subsytem;
+    this->tank_subsytem = tank_subsytem;
     this->odometry_subsystem = odometry_subsystem;
     this->intake_subsystem = intake_subsystem;
     this->color_sort_subsystem = color_sort_subsystem;
@@ -33,29 +34,7 @@ std::string PinkPumpnDumpAuton::getName() const {
 }
 
 void PinkPumpnDumpAuton::run() {
-    //Auto Run 2: Pump and Dump all Blocks into long goal
-    holonomic_subsytem->moveToPoint(24, 22, 90);
-    intake_subsystem->toggle_rear_intake_piston();
-    intake_subsystem->move_intake(robot::subsystems::intake::IN);
-    holonomic_subsytem->moveToPoint(23, 12, 90,0.5, 0.4, 2);
-    intake_subsystem->toggle_upper_conveyor_height_piston();
-    holonomic_subsytem->moveToPoint(22.5, 41, 90, 0.5, 0.4, 2);
-    intake_subsystem->toggle_conveyor_stopper_piston();
-    pros::delay(2000);
-    holonomic_subsytem->moveToPoint(23, 12, 90,0.5, 0.4, 2);
-    pros::delay(1500);
-    intake_subsystem->toggle_conveyor_stopper_piston();
-    pros::delay(2500);
-    holonomic_subsytem->moveToPoint(22.5, 41, 90, 0.5, 0.4, 2);
-    intake_subsystem->toggle_conveyor_stopper_piston();
-    pros::delay(1500);
-    intake_subsystem->move_intake(robot::subsystems::intake::STOP);
-    intake_subsystem->toggle_rear_intake_piston();
-    intake_subsystem->toggle_descore_piston();
-    holonomic_subsytem->moveToPoint(12, 36, 90, 0.5, 0.2, 1.5);
-    holonomic_subsytem->moveToPoint(13.25, 48, 90, 0.5, 0.2, 1.5);
-    intake_subsystem->toggle_descore_piston();
-    holonomic_subsytem->moveToPoint(13.75, 62, 90, 0.5, 0.2);
+
 }
 
 }}

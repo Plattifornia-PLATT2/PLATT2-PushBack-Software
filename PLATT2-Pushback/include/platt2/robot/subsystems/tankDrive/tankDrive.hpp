@@ -1,5 +1,5 @@
-#ifndef XDRIVE_HPP
-#define XDRIVE_HPP
+#ifndef TANKDRIVE_HPP
+#define TANKDRIVE_HPP
 
 
 /**
@@ -28,33 +28,36 @@ namespace subsystems{
  * @authors PLATT2 Development team.
  */
 
+namespace TankDrive{
 
-class tankModule{
-    public:
-        hal::MotorGroup module_motors;
-        tankModule(std::unique_ptr<pros::Motor>& motor_1, std::unique_ptr<pros::Motor>& motor_2, std::unique_ptr<pros::Motor>& motor_3, std::unique_ptr<pros::Motor>& motor_4);
-
-};
 class tankDrive{
-
+    
+    
+    
+    
     public:
-
+    class tankModule{
+    
+        private:    
+           
+        public: 
+            hal::MotorGroup module_motors;
+            tankModule(std::unique_ptr<pros::Motor>& motor_1, std::unique_ptr<pros::Motor>& motor_2, std::unique_ptr<pros::Motor>& motor_3, std::unique_ptr<pros::Motor>& motor_4);
+    }; 
         struct MovementVector {
             double r;
             double w;
         };
-
         void moveVector(MovementVector v);
-
-        
+        tankDrive(std::vector<std::unique_ptr<tankModule>> drive_modules);
         std::vector<std::unique_ptr<tankModule>> drive_modules;
 
- 
-        tankDrive(std::vector<std::unique_ptr<tankModule>> drive_modules);
+    private:        
+    
+        
 };
-
 }
 }
 }
-
+}
 #endif

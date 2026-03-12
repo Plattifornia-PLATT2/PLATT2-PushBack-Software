@@ -7,7 +7,7 @@
 #include "platt2/robot/subsystems/holonomicDrive/XDrive.hpp"
 #include "platt2/robot/subsystems/holonomicDrive/HolonomicControl.hpp"
 #include "platt2/robot/subsystems/odometry/Odometry.hpp"
-#include "platt2/robot/subsystems/holonomicDrive/IHolonomicDrive.hpp"
+#include "platt2/robot/subsystems/tankDrive/tankDrive.hpp"
 #include "platt2/robot/subsystems/intake/IntakeSubsystem.hpp"
 #include <memory>
 
@@ -29,7 +29,7 @@ namespace auton{
  */
 class PurplePumpnDumpAuton : public auton::IAuton {
     private:
-    std::shared_ptr<robot::subsystems::holonomicDrive::HolonomicControl> holonomic_subsytem;
+    std::shared_ptr<robot::subsystems::TankDrive::tankControl> tank_subsytem;
     std::shared_ptr<robot::subsystems::odometry::Odometry> odometry_subsystem;
     std::shared_ptr<robot::subsystems::intake::IntakeSubsystem> intake_subsystem;
     std::shared_ptr<robot::subsystems::colorsort::ColorSortSubsystem> color_sort_subsystem;
@@ -51,7 +51,7 @@ class PurplePumpnDumpAuton : public auton::IAuton {
      * @param color_sort_subsystem The color sort subsystem to use
      */
     void init(
-        std::shared_ptr<robot::subsystems::holonomicDrive::HolonomicControl> holonomic_subsytem, 
+        std::shared_ptr<robot::subsystems::TankDrive::tankControl> tank_subsytem, 
         std::shared_ptr<robot::subsystems::odometry::Odometry> odometry_subsystem, 
         std::shared_ptr<robot::subsystems::intake::IntakeSubsystem> intake_subsystem,
         std::shared_ptr<robot::subsystems::colorsort::ColorSortSubsystem> color_sort_subsystem,

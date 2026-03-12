@@ -5,8 +5,6 @@
 #include "platt2/config/IConfig.hpp"
 #include "platt2/robot/Robot.hpp"
 #include "platt2/robot/pid/pid.hpp"
-#include "platt2/robot/subsystems/holonomicDrive/XDrive.hpp"
-#include "platt2/robot/subsystems/holonomicDrive/XDriveModule.hpp"
 #include "platt2/robot/subsystems/intake/IntakeSubsystem.hpp"
 #include "platt2/robot/subsystems/odometry/Odometry.hpp"
 #include "platt2/robot/subsystems/colorsort/ColorSort.hpp"
@@ -54,17 +52,15 @@ class PurpleConfig : public IConfig {
 
 
     // ** Drive Ports **
-    static constexpr int LEFT_FRONT_MODULE_TOP_PORT{1};
-    static constexpr int LEFT_FRONT_MODULE_BOTTOM_PORT{-2};
+    static constexpr int RIGHT_1_PORT{-1};
+    static constexpr int RIGHT_2_PORT{2};
+    static constexpr int RIGHT_3_PORT{7};
+    static constexpr int RIGHT_4_PORT{-8};
 
-    static constexpr int RIGHT_FRONT_MODULE_TOP_PORT{-7};
-    static constexpr int RIGHT_FRONT_MODULE_BOTTOM_PORT{8};
-
-    static constexpr int LEFT_REAR_MODULE_TOP_PORT{-11};
-    static constexpr int LEFT_REAR_MODULE_BOTTOM_PORT{12}; 
-
-    static constexpr int RIGHT_REAR_MODULE_TOP_PORT{-9};
-    static constexpr int RIGHT_REAR_MODULE_BOTTOM_PORT{10};
+    static constexpr int LEFT_1_PORT{11};
+    static constexpr int LEFT_2_PORT{-12}; 
+    static constexpr int LEFT_3_PORT{9};
+    static constexpr int LEFT_4_PORT{-10};
 
     // ** Intake Ports **
     static constexpr int FRONT_INTAKE_MOTOR_PORT{-5};

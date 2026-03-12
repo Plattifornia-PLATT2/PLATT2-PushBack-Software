@@ -7,7 +7,7 @@
 #include "platt2/EAllianceConfig.hpp"
 #include "platt2/EAutonConfig.hpp"
 #include "platt2/ERobotConfig.hpp"
-#include "platt2/robot/subsystems/holonomicDrive/HolonomicControl.hpp"
+#include "platt2/robot/subsystems/tankDrive/tankControl.hpp"
 #include "platt2/robot/subsystems/intake/IntakeSubsystem.hpp"
 #include "platt2/robot/subsystems/colorsort/ColorSort.hpp"
 #include "platt2/EAllianceConfig.hpp"
@@ -19,6 +19,8 @@
 #include "pros/misc.hpp"
 #include "pros/rtos.hpp"
 #include "pros/screen.hpp"
+#include "subsystems/tankDrive/tankControl.hpp"
+#include "subsystems/tankDrive/tankDrive.hpp"
 
 // ** Standard Library Includes **
 #include <memory>
@@ -48,8 +50,8 @@ namespace platt2
 
             // Subsystems
             std::shared_ptr<subsystems::odometry::Odometry> odom_subsystem;
-            std::shared_ptr<subsystems::holonomicDrive::IHolonomic> holonomicDrive_subsystem;
-            std::shared_ptr<subsystems::holonomicDrive::HolonomicControl> holonomic_controller;
+            std::shared_ptr<subsystems::TankDrive::tankDrive> tankDrive_subsystem;
+            std::shared_ptr<subsystems::TankDrive::tankControl> tank_controller;
             std::shared_ptr<subsystems::intake::IntakeSubsystem> intake_subsystem;
             std::shared_ptr<subsystems::colorsort::ColorSortSubsystem> color_sort_subsystem;
 
@@ -94,9 +96,9 @@ namespace platt2
              * @param auton_routine Current autonomous routine
              * @param color_sort_subsystem Shared pointer to a ColorSortSubsystem object
              */
-            Robot(std::shared_ptr<subsystems::holonomicDrive::XDrive>& xdrive_subsystem, 
+            Robot(std::shared_ptr<subsystems::TankDrive::tankDrive>& tank_drive_subsystem, 
                 std::shared_ptr<subsystems::odometry::Odometry>& odometry_subsystem, 
-                std::shared_ptr<subsystems::holonomicDrive::HolonomicControl>& holonomic_controller,
+                std::shared_ptr<subsystems::TankDrive::tankControl>& tank_controller,
                 std::shared_ptr<subsystems::intake::IntakeSubsystem>& intake_subsystem,
                 platt2::robot::AllianceConfig alliance_config,
                 platt2::robot::RobotConfig robot_config,

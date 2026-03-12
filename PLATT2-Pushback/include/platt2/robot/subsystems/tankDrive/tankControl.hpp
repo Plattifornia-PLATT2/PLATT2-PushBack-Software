@@ -34,6 +34,8 @@ namespace subsystems{
  * @brief Control class for holonomic drive systems.
  * @authors Dominic Young and Logan Wolf
  */
+namespace TankDrive{
+
 class tankControl{
 public:
     /**
@@ -69,6 +71,6 @@ private:
 
 
 };
-}}}
+}}}}
 
 #endif

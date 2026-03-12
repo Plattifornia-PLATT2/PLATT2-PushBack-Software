@@ -9,6 +9,7 @@
 namespace platt2{
 namespace robot{
 namespace subsystems{
+namespace TankDrive{
 
 void tankControl::moveToPoint(double x_target, double y_target, double target_heading, double rSpeed, double wSpeed, double timeout) {
 
@@ -116,4 +117,4 @@ tankControl::tankControl(std::shared_ptr<tankDrive> drive, std::shared_ptr<odome
 
 }
 }
-}
+}}
