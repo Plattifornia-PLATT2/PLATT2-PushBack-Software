@@ -48,6 +48,10 @@ namespace odometry{
         }
     }
 
+    double TrackingWheelPositionTracker::getVelocity(){
+        return this->velocity;
+    }
+
     void TrackingWheelPositionTracker::updatePosition(){
         pros::delay(1000);
 
@@ -90,6 +94,8 @@ namespace odometry{
             if(dTheta > M_PI || dTheta < -M_PI){
                 dTheta = -1 * sgn(dTheta) * (2*M_PI - std::abs(dTheta));
             }
+
+            this->velocity = sqrt(pow(dX, 2) + pow(dY, 2))/0.01;
 
             // save new values as old values for next loop
             oldX = newX;

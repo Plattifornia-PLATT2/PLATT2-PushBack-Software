@@ -1,5 +1,5 @@
 #include "platt2/robot/Robot.hpp"
-#include <cmath>      // for std::isnan, M_PI
+#include <cmath>    
 #include <math.h>
 #include <memory>
 #include "platt2/helperFunctions.h"
@@ -41,10 +41,6 @@ namespace robot{
         // initialize target heading from the odometry (adjusted if needed)
         double targetHeading = odom_subsystem->getHeading() - M_PI/2;
         double angle_error;
-
-
-        // debugging helpers
-        double pid_output = 0;
 
         while(true){
             
@@ -97,10 +93,6 @@ namespace robot{
 
             }
 
-            if(controller.get_digital_new_press(driver_profile->heading_reset)){
-                odom_subsystem->resetHeading();
-            }
-
             if(controller.get_digital_new_press(driver_profile->colorSort_toggle)){
                 color_sort_subsystem->toggleSortedColor();
                 controller.print(0, 0, "Sorted Color: %d", color_sort_subsystem->getSortedColor());
@@ -143,7 +135,7 @@ namespace robot{
     }
 
     void Robot::init(){
-        odom_subsystem->initVexImu();
+        odom_subsystem->initImu();
     }
 
 }

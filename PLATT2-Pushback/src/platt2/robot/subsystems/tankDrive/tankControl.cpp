@@ -25,6 +25,8 @@ void tankControl::moveToPoint(double x_target, double y_target, double target_he
     std::vector<double> rArray(40,1);
     std::vector<double> wArray(40,1);
 
+    odometry->getVelocity();
+
     avg rAve;
     avg wAve;
 

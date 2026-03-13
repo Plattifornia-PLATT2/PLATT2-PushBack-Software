@@ -65,6 +65,8 @@ namespace odometry{
          */
         virtual double getHeading() = 0;
 
+        virtual double getVelocity() = 0;
+
         /**
          * @brief Sets the offsets for the position tracker.
          * @param x_offset The x offset in inches.

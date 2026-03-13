@@ -77,20 +77,20 @@ namespace odometry{
          */
         double getHeading();
 
+        double getVelocity();
+
         /**
          * @brief Resets the current heading of the robot to zero.
          * 
          */
-        void resetHeading();
 
         /**
          * @brief Gets the heading from the VEX IMU sensor.
          * 
          * @return double Vex IMU heading in radians.
          */
-        double getVexHeading();
 
-        void initVexImu();
+        void initImu();
 
         void setOffsets(double x, double y);
 
