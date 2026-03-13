@@ -9,9 +9,9 @@ namespace platt2{
 namespace robot{
 
     Robot::Robot(
-        std::shared_ptr<subsystems::TankDrive::tankDrive>& tank_drive_subsystem,
+        std::shared_ptr<subsystems::tankDrive::TankDrive>& tank_drive_subsystem,
         std::shared_ptr<subsystems::odometry::Odometry>& odometry_subsystem,
-        std::shared_ptr<subsystems::TankDrive::tankControl>& tank_controller,
+        std::shared_ptr<subsystems::tankDrive::TankControl>& tank_controller,
         std::shared_ptr<subsystems::intake::IntakeSubsystem>& intake_subsystem,
         platt2::robot::AllianceConfig alliance_config,
         platt2::robot::RobotConfig robot_config,
@@ -54,7 +54,7 @@ namespace robot{
             }
 
             // Create movement vector
-            subsystems::TankDrive::tankDrive::MovementVector movement;   
+            subsystems::tankDrive::TankDrive::MovementVector movement;   
 
             movement.r = leftY;
             movement.w = rightX;    

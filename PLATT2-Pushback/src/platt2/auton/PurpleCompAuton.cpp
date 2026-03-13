@@ -8,7 +8,7 @@ namespace platt2{
 namespace auton{
 
 void PurpleCompAuton::init(
-    std::shared_ptr<robot::subsystems::TankDrive::tankControl> tank_subsytem, 
+    std::shared_ptr<robot::subsystems::tankDrive::TankControl> tank_subsytem, 
     std::shared_ptr<robot::subsystems::odometry::Odometry> odometry_subsystem, 
     std::shared_ptr<robot::subsystems::intake::IntakeSubsystem> intake_subsystem,
     std::shared_ptr<robot::subsystems::colorsort::ColorSortSubsystem> color_sort_subsystem,

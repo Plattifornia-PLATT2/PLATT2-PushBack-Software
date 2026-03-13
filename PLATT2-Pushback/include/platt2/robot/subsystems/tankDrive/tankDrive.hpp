@@ -28,29 +28,29 @@ namespace subsystems{
  * @authors PLATT2 Development team.
  */
 
-namespace TankDrive{
+namespace tankDrive{
 
-class tankDrive{
+class TankDrive{
     
     
     
     
     public:
-    class tankModule{
+    class TankModule{
     
         private:    
            
         public: 
             hal::MotorGroup module_motors;
-            tankModule(std::unique_ptr<pros::Motor>& motor_1, std::unique_ptr<pros::Motor>& motor_2, std::unique_ptr<pros::Motor>& motor_3, std::unique_ptr<pros::Motor>& motor_4);
+            TankModule(std::unique_ptr<pros::Motor>& motor_1, std::unique_ptr<pros::Motor>& motor_2, std::unique_ptr<pros::Motor>& motor_3, std::unique_ptr<pros::Motor>& motor_4);
     }; 
         struct MovementVector {
             double r;
             double w;
         };
         void moveVector(MovementVector v);
-        tankDrive(std::vector<std::unique_ptr<tankModule>> drive_modules);
-        std::vector<std::unique_ptr<tankModule>> drive_modules;
+        TankDrive(std::vector<std::unique_ptr<TankModule>> drive_modules);
+        std::vector<std::unique_ptr<TankModule>> drive_modules;
 
     private:        
     

@@ -34,9 +34,9 @@ namespace subsystems{
  * @brief Control class for holonomic drive systems.
  * @authors Dominic Young and Logan Wolf
  */
-namespace TankDrive{
+namespace tankDrive{
 
-class tankControl{
+class TankControl{
 public:
     /**
      * @brief Construct a new Holonomic Control object
@@ -46,7 +46,7 @@ public:
      * @param posPID PID controller for position control
      * @param headingPID PID controller for heading control
      */
-    tankControl(std::shared_ptr<tankDrive> drive, std::shared_ptr<odometry::Odometry> odom, std::unique_ptr<robot::pid::PID> posPID, std::unique_ptr<robot::pid::PID> headingPID);
+    TankControl(std::shared_ptr<TankDrive> drive, std::shared_ptr<odometry::Odometry> odom, std::unique_ptr<robot::pid::PID> posPID, std::unique_ptr<robot::pid::PID> headingPID);
 
     /**
      * @brief Moves the holonomic drive to a specified point with a target heading.
@@ -63,7 +63,7 @@ public:
      */
 
 private:
-    std::shared_ptr<tankDrive> drivetrain;
+    std::shared_ptr<TankDrive> drivetrain;
     std::shared_ptr<odometry::Odometry> odometry;
     std::unique_ptr<pid::PID> positionPID;
     

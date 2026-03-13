@@ -35,14 +35,14 @@ std::shared_ptr<robot::Robot> PurpleConfig::buildRobot(robot::AutonConfig auton,
 
     //X drive modules
     
-    std::unique_ptr<platt2::robot::subsystems::TankDrive::tankDrive::tankModule> right_module{std::make_unique<platt2::robot::subsystems::TankDrive::tankDrive::tankModule>(right1, right2, right3, right4)};
-    std::unique_ptr<platt2::robot::subsystems::TankDrive::tankDrive::tankModule> left_module{std::make_unique<platt2::robot::subsystems::TankDrive::tankDrive::tankModule>(left1, left2, left3, left4)};
+    std::unique_ptr<platt2::robot::subsystems::tankDrive::TankDrive::TankModule> right_module{std::make_unique<platt2::robot::subsystems::tankDrive::TankDrive::TankModule>(right1, right2, right3, right4)};
+    std::unique_ptr<platt2::robot::subsystems::tankDrive::TankDrive::TankModule> left_module{std::make_unique<platt2::robot::subsystems::tankDrive::TankDrive::TankModule>(left1, left2, left3, left4)};
 
-    std::vector<std::unique_ptr<platt2::robot::subsystems::TankDrive::tankDrive::tankModule>> modules;
+    std::vector<std::unique_ptr<platt2::robot::subsystems::tankDrive::TankDrive::TankModule>> modules;
     modules.push_back(std::move(left_module));
     modules.push_back(std::move(right_module));
 
-    std::shared_ptr<platt2::robot::subsystems::TankDrive::tankDrive> tankDrive_subsystem = std::make_shared<platt2::robot::subsystems::TankDrive::tankDrive>(std::move(modules));
+    std::shared_ptr<platt2::robot::subsystems::tankDrive::TankDrive> tankDrive_subsystem = std::make_shared<platt2::robot::subsystems::tankDrive::TankDrive>(std::move(modules));
 
     // odom subsystem
     std::unique_ptr<pros::IMU> vex_imu = std::make_unique<pros::IMU>(VEX_IMU_PORT);
@@ -95,7 +95,7 @@ std::shared_ptr<robot::Robot> PurpleConfig::buildRobot(robot::AutonConfig auton,
     //holonomic control system
     std::unique_ptr<robot::pid::PID>position_pid = std::make_unique<robot::pid::PID>(position_dt, position_max, position_min, position_Kp, position_Kd, position_Ki);
     std::unique_ptr<robot::pid::PID>heading_pid = std::make_unique<robot::pid::PID>(heading_dt, heading_max, heading_min, heading_Kp, heading_Kd, heading_Ki);
-    std::shared_ptr<robot::subsystems::TankDrive::tankControl> tank_control_subsystem = std::make_shared<robot::subsystems::TankDrive::tankControl>(tankDrive_subsystem, odom_subsystem, std::move(position_pid), std::move(heading_pid));
+    std::shared_ptr<robot::subsystems::tankDrive::TankControl> tank_control_subsystem = std::make_shared<robot::subsystems::tankDrive::TankControl>(tankDrive_subsystem, odom_subsystem, std::move(position_pid), std::move(heading_pid));
 
     //build driver profile
     std::unique_ptr<profiles::DriverProfile> driver_profile;
