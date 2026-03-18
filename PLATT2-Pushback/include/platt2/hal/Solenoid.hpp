@@ -1,3 +1,6 @@
+#ifndef SOLENOID_HPP
+#define SOLENOID_HPP
+
 #include "pros/adi.hpp"
 #include <memory>
 #include <sys/types.h>
@@ -65,3 +68,5 @@ namespace hal{
     };
 }
 }
+
+#endif
