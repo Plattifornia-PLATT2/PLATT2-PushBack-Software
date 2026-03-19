@@ -1,4 +1,5 @@
 #include "platt2/robot/subsystems/intake/IntakeSubsystem.hpp"
+#include "platt2/hal/Solenoid.hpp"
 #include "pros/adi.hpp"
 #include "pros/motors.h"
 #include "pros/motors.hpp"
@@ -49,6 +50,22 @@ namespace intake{
         return matchload_piston->getState();
     }
     
+    void IntakeSubsystem::setFrontIntakeMotor(std::unique_ptr<pros::Motor> motor){
+        front_intake_motor = std::move(motor);
+    }
+
+    void IntakeSubsystem::setLeftMatchloadMotor(std::unique_ptr<pros::Motor> motor){
+        left_matchload_motor = std::move(motor);
+    }
+
+    void IntakeSubsystem::setRightMatchloadMotor(std::unique_ptr<pros::Motor> motor){
+        right_matchload_motor = std::move(motor);
+    }
+
+    void IntakeSubsystem::setMatchloadPiston(std::unique_ptr<hal::Solenoid> piston){
+        matchload_piston = std::move(piston);
+    }
+
 }
 }
 }

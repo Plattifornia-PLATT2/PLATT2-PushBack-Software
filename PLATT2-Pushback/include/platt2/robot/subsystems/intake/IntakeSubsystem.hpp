@@ -2,11 +2,10 @@
 #define INTAKESUBSYSTEM_HPP
 
 #include "platt2/hal/Solenoid.hpp"
-#include "pros/adi.hpp"
-#include "pros/distance.hpp"
 #include "pros/motors.hpp"
 
 #include <memory>
+#include <type_traits>
 
 /**
  * @brief Namespace for PLATT2 library code.
@@ -62,6 +61,12 @@ namespace intake{
         std::unique_ptr<hal::Solenoid> matchload_piston;
 
         public:
+        void setFrontIntakeMotor(std::unique_ptr<pros::Motor> motor);
+        void setLeftMatchloadMotor(std::unique_ptr<pros::Motor> motor);
+        void setRightMatchloadMotor(std::unique_ptr<pros::Motor> motor);
+        void setMatchloadPiston(std::unique_ptr<hal::Solenoid> piston);
+
+
         /**
          * @brief Moves the intake motors in the specified direction.
          * 
