@@ -50,6 +50,25 @@ namespace hood{
          * @param piston piston to set
          */
         void setStopperPiston(std::unique_ptr<hal::Solenoid> piston);
+
+        /**
+         * @brief Toggles the position of the long goal height piston.
+         * 
+         */
+        void toggleLongHeightPiston();
+
+        /**
+         * @brief Toggles the position of the middle goal height piston.
+         * 
+         */
+        void toggleMiddleHeightPiston();
+
+        /**
+         * @brief Toggles the position of the stopper piston.
+         * 
+         */
+        void toggleStopperPiston();
+
     };
 
 }}}}
