@@ -57,7 +57,7 @@ std::shared_ptr<robot::Robot> PurpleConfig::buildRobot(robot::AutonConfig auton,
     std::shared_ptr<robot::subsystems::odometry::Odometry> odom_subsystem;
     odom_subsystem = std::make_shared<robot::subsystems::odometry::Odometry>(std::move(position_tracker));
    
-    robot::subsystems::odometry::OdometryPosition startingPos = {0,0,90};
+    robot::subsystems::odometry::Position startingPos = {0,0,90};
     odom_subsystem->setPos(startingPos);
     
     // intake subsystem

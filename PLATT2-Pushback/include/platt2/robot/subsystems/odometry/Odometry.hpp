@@ -49,12 +49,12 @@ namespace odometry{
          * 
          * @return OdometryPosition Struct containing x, y, and heading of the robot.
          */
-        OdometryPosition getPos();
+        Position getPos();
 
         /**
         * @brief Sets the position of the odometry system.
         */
-        void setPos(OdometryPosition pos);
+        void setPos(Position pos);
 
         /**
          * @brief Gets the current x position of the robot.

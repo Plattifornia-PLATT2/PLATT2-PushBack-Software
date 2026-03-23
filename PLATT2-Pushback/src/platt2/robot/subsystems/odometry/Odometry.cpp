@@ -18,7 +18,7 @@ static void taskThunk(void *p) {
     reinterpret_cast<Odometry*>(p)->startTracking();
 }
 
-OdometryPosition Odometry::getPos() {
+Position Odometry::getPos() {
   return position_tracker->getPos();
 }
 
@@ -27,7 +27,7 @@ double Odometry::getY() { return position_tracker->getY(); }
 double Odometry::getHeading() { return position_tracker->getHeading(); }
 void Odometry::initImu() {position_tracker->init();}
 
-void Odometry::setPos(OdometryPosition pos){
+void Odometry::setPos(Position pos){
   position_tracker->setPos(pos);
 }
 

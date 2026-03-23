@@ -19,7 +19,7 @@ void PurplePumpnDumpAuton::init(
     this->alliance_color= alliance_color;
 
     if(odometry_subsystem){
-        robot::subsystems::odometry::OdometryPosition startingPos;
+        robot::subsystems::odometry::Position startingPos;
         startingPos.x = STARTING_X_POSITION;
         startingPos.y = STARTING_Y_POSITION;
         startingPos.heading = STARTING_HEADING;

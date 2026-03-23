@@ -9,11 +9,11 @@ namespace robot{
 namespace subsystems{
 namespace odometry{
 
-    OdometryPosition TrackingWheelPositionTracker::getPos(){
+    Position TrackingWheelPositionTracker::getPos(){
         return current_position;
     }
 
-    void TrackingWheelPositionTracker::setPos(OdometryPosition pos){
+    void TrackingWheelPositionTracker::setPos(Position pos){
         current_position.x = pos.x;
         current_position.y = pos.y;
         current_position.heading = pos.heading*(M_PI/180);
@@ -84,11 +84,11 @@ namespace odometry{
             //get new values and calculate deltas
             newX = x_wheel->getPosition();
             newY = y_wheel->getPosition();
-            current_position.heading  = ((360 - imu->get_heading())*M_PI/180);
+            this->current_position.heading  = ((360 - imu->get_heading())*M_PI/180);
 
             dX = newX - oldX;
             dY = newY - oldY;
-            dTheta = current_position.heading - oldTheta;
+            dTheta = this->current_position.heading - oldTheta;
 
             // adjust deltas for angle wraparound
             if(dTheta > M_PI || dTheta < -M_PI){
@@ -100,7 +100,7 @@ namespace odometry{
             // save new values as old values for next loop
             oldX = newX;
             oldY = newY;
-            oldTheta = current_position.heading;
+            oldTheta = this->current_position.heading;
             // apply tracking wheel odometry algorithm to calculate local and global position deltas
             localX = dX - (x_offset*dTheta);
             localY = dY + (y_offset*dTheta);
@@ -117,8 +117,8 @@ namespace odometry{
                 continue;
             }
             // update current position with global deltas
-            current_position.x += globalX;
-            current_position.y += globalY;
+            this->current_position.x += globalX;
+            this->current_position.y += globalY;
  
             pros::delay(10);
         }

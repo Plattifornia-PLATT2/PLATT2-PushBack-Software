@@ -1,6 +1,7 @@
 #ifndef TANKCONTROL_HPP
 #define TANKCONTROL_HPP
 
+#include "platt2/robot/subsystems/odometry/OdometryPosition.hpp"
 #include "platt2/robot/subsystems/tankDrive/tankDrive.hpp"
 #include "platt2/robot/subsystems/odometry/Odometry.hpp"
 #include "platt2/robot/pid/pid.hpp"
@@ -55,7 +56,7 @@ public:
      * @param y_target Target Y value to move to.
      * @param heading_target Target heading to achieve at the end of the movement.
      */
-    void moveToPoint(double x_target, double y_target, double heading_target, double rSpeed = 0.8, double wSpeed = 0.4, double timeout = 7);
+    void moveToPoint(odometry::Position target, double rSpeed = 0.8, double wSpeed = 0.4, double timeout = 7);
 
 
     /**
@@ -66,8 +67,17 @@ private:
     std::shared_ptr<TankDrive> drivetrain;
     std::shared_ptr<odometry::Odometry> odometry;
     std::unique_ptr<pid::PID> positionPID;
+
+    struct point {
+
+        double x;
+        double y;
+
+    };
     
     double velocityProfile(double TotalDistance, double remainingDistance, double currentVel, double maxVel, double maxAccel, bool& usePid);
+    double arcLength(odometry::Position start, point controlPoint1, point controlPoint2, odometry::Position end);
+    std::vector<point> generatePath(odometry::Position target);
 
 
 };

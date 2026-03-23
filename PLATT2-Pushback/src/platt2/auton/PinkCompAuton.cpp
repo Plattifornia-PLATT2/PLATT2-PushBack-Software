@@ -20,7 +20,7 @@ void PinkCompAuton::init(
     this->alliance_color= alliance_color;
 
     if(odometry_subsystem){
-        robot::subsystems::odometry::OdometryPosition startingPos;
+        robot::subsystems::odometry::Position startingPos;
         startingPos.x = STARTING_X_POSITION;
         startingPos.y = STARTING_Y_POSITION;
         startingPos.heading = STARTING_HEADING;
@@ -34,6 +34,9 @@ std::string PinkCompAuton::getName() const {
 
 void PinkCompAuton::run() {
     //Auto Run 1: Scores one ball in upper Middle goal. Pumps a few blocks from matchloaded into control zone
+
+    tank_subsytem->moveToPoint({20,30,90}, 0.8, 0.4, 7);
+
 
 }
 

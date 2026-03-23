@@ -43,7 +43,7 @@ namespace odometry{
         std::unique_ptr<hal::TrackingWheel> y_wheel;
         std::unique_ptr<pros::IMU> imu;
 
-        OdometryPosition current_position;
+        Position current_position;
         
 
         double x_offset{};
@@ -57,13 +57,13 @@ namespace odometry{
          * 
          * @return OdometryPosition Struct containing x, y, and heading of the robot.
          */
-        OdometryPosition getPos() override;
+        Position getPos() override;
 
         /**
         * @brief Sets the postion of the odometry subsystem.
         * @param OdometryPosition the position struct of the new position.
         */
-        void setPos(OdometryPosition pos) override;
+        void setPos(Position pos) override;
 
         /**
          * @brief Gets the current x position of the robot.

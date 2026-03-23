@@ -28,7 +28,7 @@ namespace odometry{
      * @brief Struct representing the position of the robot on the field.
      * @author Dominic Young
      */
-    struct OdometryPosition{
+    struct Position{
         public:
         double x = 0;
         double y = 0;
