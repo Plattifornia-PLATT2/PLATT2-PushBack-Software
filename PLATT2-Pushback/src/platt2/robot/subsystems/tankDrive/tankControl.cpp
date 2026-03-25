@@ -5,6 +5,7 @@
 #include <memory>
 #include <utility>
 #include <vector>
+#include "platt2/helperFunctions.h"
 
 
 namespace platt2{
@@ -12,34 +13,78 @@ namespace robot{
 namespace subsystems{
 namespace tankDrive{
 
-void TankControl::moveToPoint(odometry::Position target, double maxV, double maxW, double timeout) {
+void TankControl::moveToPoint(odometry::Position target, double maxV, double maxW) {
 
     TankDrive::MovementVector motionVector;
 
     target.heading = target.heading*(M_PI/180);
-    std::vector<point> path = generatePath(target);
-
+    std::vector<odometry::Position> path = generatePath(target);
+    
+    std::vector<double> timeoutArray(50,0);
     bool exitCondition = false;
 
-    for (auto target:path){
+    const double b = 1; 
+    const double L = 1; 
+
+    double currentVel = 0;
+    bool usePID = false;
+    int index = 0;
+
+    for (auto pathTarget:path){
 
         while (true){
+            
+            odometry::Position currentPos = odometry->getPos();
+            double distanceToTarget = distanceBetweenPoints({currentPos.x, currentPos.y}, {pathTarget.x, pathTarget.y});
 
+            if (distanceToTarget < 0.05) {
+                break; // Move to the next target in the path
+            }
+            
+            avg timeoutAvg = rollAverage(odometry->getVelocity(), timeoutArray);
+            timeoutArray = timeoutAvg.data;
+            
+            if (timeoutAvg.average < 0.01) {
+                exitCondition = true;
+                break; // Exit if the robot is stuck
+            }
 
+            double ex = pathTarget.x - currentPos.x;
+            double ey = pathTarget.y - currentPos.y;
+            double eth = pathTarget.heading - currentPos.heading;
 
+            // adjust angle error for wraparound
+            if(eth > M_PI || eth < -M_PI){
+                eth = -1 * sgn(eth) * (2*M_PI - std::abs(eth));
+            }  
+            
+            //convert to local robot coordinates    
+            ex = ex*cos(currentPos.heading) + ey*sin(currentPos.heading);
+            ey = -ex*sin(currentPos.heading) + ey*cos(currentPos.heading);
 
+            currentVel = velocityProfile(path.size(), path.size()-index, currentVel, maxV, maxV, usePID);
+            double vd = currentVel;
+            double wd = eth;
 
+            double k = 2*L*sqrt(pow(wd,2)+(b*pow(vd,2)));
+
+            motionVector.v = vd*cos(eth) + k*ex;
+            motionVector.w = wd + k*eth + (b*vd*sin(eth)*ey)/(eth);
+
+            drivetrain->moveVector(motionVector);
+            index++;
+            pros::delay(10);
         }
         if (exitCondition){break;}
     }
-    motionVector.r = 0;
+    motionVector.v = 0;
     motionVector.w = 0;
     drivetrain->moveVector(motionVector);
 }
 
-std::vector<TankControl::point> TankControl::generatePath(odometry::Position endPos) {
+std::vector<odometry::Position> TankControl::generatePath(odometry::Position endPos) {
     
-    std::vector<point> path;
+    std::vector<odometry::Position> path;
     odometry::Position startPos = odometry->getPos();
 
     point control1;
@@ -63,50 +108,37 @@ std::vector<TankControl::point> TankControl::generatePath(odometry::Position end
         return pow((1-t),3)*startPos.y + 3*pow((1-t),2)*t*control1.y + 3*(1-t)*pow(t,2)*control2.y + pow(t,3)*endPos.y;
     };
 
+    auto dx = [&](double t){
+        return 3*pow(1-t,2)*(control1.x-startPos.x) + 6*(1-t)*t*(control2.x-control1.x) + 3*pow(t,2)*(endPos.x-control2.x);
+    };
+
+    auto dy = [&](double t){
+        return 3*pow(1-t,2)*(control1.y-startPos.y) + 6*(1-t)*t*(control2.y-control1.y) + 3*pow(t,2)*(endPos.y-control2.y);
+    };
+
+    auto tangentAngle = [&](double t){
+        return atan2(dy(t), dx(t));
+    };
+
     double n = length/0.1;
 
     for (int i = 0; i <= n; i++) {
         double t = (double)i / n;
-        path.push_back({x(t), y(t)});
+        path.push_back({x(t), y(t), tangentAngle(t)});
     }
 
     return path;
 
 }
 
-
-double TankControl::velocityProfile(double totalDistance, double remainingDistance, double currentVel, double maxVel, double maxAccel, bool& usePID) {
-
-    double distanceTravelled = totalDistance - remainingDistance;
-    bool reachedMaxVel       = currentVel >= maxVel;
-    bool pastHalfway         = distanceTravelled >= totalDistance * 0.5;
-
-    if ((!reachedMaxVel && !pastHalfway) && !usePID ) {
-    //if (false) {
-        // --- Acceleration phase ---
-        double max_accel_delta = maxAccel * 0.01;
-        double output = std::clamp(currentVel + max_accel_delta, 0.0, maxVel);
-        return output;
-
-    } else {
-        // --- Handoff to decel/approach controller ---
-        usePID = true;
-        return std::clamp((positionPID->calculate(remainingDistance, 0)), 0.0, maxVel);
-    }
-}
-
 double TankControl::arcLength(odometry::Position p0, point p1, point p2, odometry::Position p3) {
     
     auto dx = [&](double t){
-        return 3*pow(1-t,2)*(p1.x-p0.x)
-             + 6*(1-t)*t*(p2.x-p1.x)
-             + 3*pow(t,2)*(p3.x-p2.x);
+        return 3*pow(1-t,2)*(p1.x-p0.x) + 6*(1-t)*t*(p2.x-p1.x) + 3*pow(t,2)*(p3.x-p2.x);
         };
 
     auto dy = [&](double t){
-        return 3*pow(1-t,2)*(p1.y-p0.y)
-             + 6*(1-t)*t*(p2.y-p1.y)
-             + 3*pow(t,2)*(p3.y-p2.y);
+        return 3*pow(1-t,2)*(p1.y-p0.y) + 6*(1-t)*t*(p2.y-p1.y) + 3*pow(t,2)*(p3.y-p2.y);
     };
 
     auto vel = [&](double t){
@@ -125,6 +157,28 @@ double TankControl::arcLength(odometry::Position p0, point p1, point p2, odometr
         double tm = (t0+t1)/2;
 
         length += (t1-t0)/6*(vel(t0) + 4*vel(tm) + vel(t1));
+    }
+
+    return length;
+}
+
+double TankControl::velocityProfile(double totalDistance, double remainingDistance, double currentVel, double maxVel, double maxAccel, bool& usePID) {
+
+    double distanceTravelled = totalDistance - remainingDistance;
+    bool reachedMaxVel       = currentVel >= maxVel;
+    bool pastHalfway         = distanceTravelled >= totalDistance * 0.5;
+
+    if ((!reachedMaxVel && !pastHalfway) && !usePID ) {
+    //if (false) {
+        // --- Acceleration phase ---
+        double max_accel_delta = maxAccel * 0.01;
+        double output = std::clamp(currentVel + max_accel_delta, 0.0, maxVel);
+        return output;
+
+    } else {
+        // --- Handoff to decel/approach controller ---
+        usePID = true;
+        return std::clamp((positionPID->calculate(remainingDistance, 0)), 0.0, maxVel);
     }
 }
 

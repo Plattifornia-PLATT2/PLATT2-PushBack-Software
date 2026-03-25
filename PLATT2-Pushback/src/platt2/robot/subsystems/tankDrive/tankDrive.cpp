@@ -15,12 +15,12 @@ namespace tankDrive{
         this->drive_modules = (std::move(drive_modules));
     }
 
-    void TankDrive::moveVector(MovementVector v) {
+    void TankDrive::moveVector(MovementVector vec) {
 
         //TODO: needs min voltage Scaling 
         
-        drive_modules[0]->TankDrive::TankModule::module_motors.setVoltage(v.r+v.w);
-        drive_modules[1]->TankDrive::TankModule::module_motors.setVoltage(v.r-v.w);
+        drive_modules[0]->TankDrive::TankModule::module_motors.setVoltage(vec.v+vec.w);
+        drive_modules[1]->TankDrive::TankModule::module_motors.setVoltage(vec.v-vec.w);
        
     }
 

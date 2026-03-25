@@ -1,6 +1,7 @@
 #ifndef HELPERFUNCTIONS_H
 #define HELPERFUNCTIONS_H
 
+
 #include <cmath>
 #include <numeric>
 #include <vector>
@@ -9,12 +10,13 @@
  * @brief A struct to represent a cartesian coordinate.
  * @author Logan Wolf
  */
+
 struct cart {
 
-    double x;
-    double y;
+        double x;
+        double y;
 
-};
+    };
 
 /**
  * @brief A struct to represent a polar coordinate.
@@ -119,10 +121,10 @@ inline double distanceFromSecant(double x1, double y1,
     return dist;
 }
 
-inline double pythag(double P1[2], double P2[2]){
+inline double distanceBetweenPoints(cart P1, cart P2){
 
-    double X = P2[0] - P1[0];
-    double Y = P2[1] - P1[1];
+    double X = P2.x - P1.x;
+    double Y = P2.y - P1.y;
 
     double hyp = std::sqrt(pow(X,2)+pow(Y,2));
 

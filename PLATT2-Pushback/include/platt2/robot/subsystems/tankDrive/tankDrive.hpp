@@ -45,7 +45,7 @@ class TankDrive{
             TankModule(std::unique_ptr<pros::Motor>& motor_1, std::unique_ptr<pros::Motor>& motor_2, std::unique_ptr<pros::Motor>& motor_3, std::unique_ptr<pros::Motor>& motor_4);
     }; 
         struct MovementVector {
-            double r;
+            double v;
             double w;
         };
         void moveVector(MovementVector v);
