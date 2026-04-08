@@ -68,6 +68,7 @@ private:
     std::shared_ptr<TankDrive> drivetrain;
     std::shared_ptr<odometry::Odometry> odometry;
     std::unique_ptr<pid::PID> positionPID;
+    std::unique_ptr<pid::PID> headingPID;
 
     struct point {
 

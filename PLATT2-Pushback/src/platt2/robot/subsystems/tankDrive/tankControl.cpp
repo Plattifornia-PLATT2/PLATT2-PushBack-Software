@@ -1,7 +1,6 @@
 #include "platt2/robot/subsystems/tankDrive/tankControl.hpp"
 #include "platt2/robot/subsystems/odometry/OdometryPosition.hpp"
 #include <cmath>
-#include <math.h>
 #include <memory>
 #include <utility>
 #include <vector>
@@ -20,15 +19,19 @@ void TankControl::moveToPoint(odometry::Position target, double maxV, double max
     target.heading = target.heading*(M_PI/180);
     std::vector<odometry::Position> path = generatePath(target);
     
-    std::vector<double> timeoutArray(50,0);
+    std::vector<double> timeoutArray(50,1);
     bool exitCondition = false;
 
-    const double b = 1; 
-    const double L = 1; 
+    const double b = 1; //todo: tuned
+    const double L = 1; //todo: tuned
 
+    const double lookAheadDistance = 0.5;
     double currentVel = 0;
     bool usePID = false;
     int index = 0;
+
+    positionPID.reset();
+    headingPID.reset();
 
     for (auto pathTarget:path){
 
@@ -37,7 +40,7 @@ void TankControl::moveToPoint(odometry::Position target, double maxV, double max
             odometry::Position currentPos = odometry->getPos();
             double distanceToTarget = distanceBetweenPoints({currentPos.x, currentPos.y}, {pathTarget.x, pathTarget.y});
 
-            if (distanceToTarget < 0.05) {
+            if (distanceToTarget < lookAheadDistance) {
                 break; // Move to the next target in the path
             }
             
@@ -49,8 +52,8 @@ void TankControl::moveToPoint(odometry::Position target, double maxV, double max
                 break; // Exit if the robot is stuck
             }
 
-            double ex = pathTarget.x - currentPos.x;
-            double ey = pathTarget.y - currentPos.y;
+            double errorx = pathTarget.x - currentPos.x;
+            double errory = pathTarget.y - currentPos.y;
             double eth = pathTarget.heading - currentPos.heading;
 
             // adjust angle error for wraparound
@@ -59,22 +62,23 @@ void TankControl::moveToPoint(odometry::Position target, double maxV, double max
             }  
             
             //convert to local robot coordinates    
-            ex = ex*cos(currentPos.heading) + ey*sin(currentPos.heading);
-            ey = -ex*sin(currentPos.heading) + ey*cos(currentPos.heading);
+            double ex = errorx*cos(currentPos.heading) + errory*sin(currentPos.heading);
+            double ey = -errorx*sin(currentPos.heading) + errory*cos(currentPos.heading);
 
             currentVel = velocityProfile(path.size(), path.size()-index, currentVel, maxV, maxV, usePID);
             double vd = currentVel;
-            double wd = eth;
+            double wd = headingPID->calculate(0, eth);
 
             double k = 2*L*sqrt(pow(wd,2)+(b*pow(vd,2)));
 
             motionVector.v = vd*cos(eth) + k*ex;
-            motionVector.w = wd + k*eth + (b*vd*sin(eth)*ey)/(eth);
+            motionVector.w = wd + k*eth + (b*vd*ey)*(eth != 0 ? sin(eth)/eth : 1.0);
 
             drivetrain->moveVector(motionVector);
-            index++;
+            
             pros::delay(10);
         }
+        index++;
         if (exitCondition){break;}
     }
     motionVector.v = 0;
@@ -188,6 +192,7 @@ TankControl::TankControl(std::shared_ptr<TankDrive> drive, std::shared_ptr<odome
     drivetrain = drive;
     odometry = odom;
     this->positionPID = std::move(posPID);
+    this->headingPID = std::move(headingPID);
 
 }
 
