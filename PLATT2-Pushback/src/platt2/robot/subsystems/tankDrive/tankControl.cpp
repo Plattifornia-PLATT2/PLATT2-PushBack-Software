@@ -17,6 +17,11 @@ void TankControl::moveToPoint(odometry::Position target, double maxV, double max
     TankDrive::MovementVector motionVector;
 
     target.heading = target.heading*(M_PI/180);
+    target.heading = target.heading+(M_PI/2);
+
+    if(target.heading > M_PI || target.heading < -M_PI){
+        target.heading = -1 * sgn(target.heading) * (2*M_PI - std::abs(target.heading));
+    }  
     std::vector<odometry::Position> path = generatePath(target);
     
     std::vector<double> timeoutArray(50,1);
@@ -67,12 +72,15 @@ void TankControl::moveToPoint(odometry::Position target, double maxV, double max
 
             currentVel = velocityProfile(path.size(), path.size()-index, currentVel, maxV, maxV, usePID);
             double vd = currentVel;
-            double wd = headingPID->calculate(0, eth);
+            double wd = 0;//headingPID//->calculate(0, eth);
 
             double k = 2*L*sqrt(pow(wd,2)+(b*pow(vd,2)));
 
             motionVector.v = vd*cos(eth) + k*ex;
             motionVector.w = wd + k*eth + (b*vd*ey)*(eth != 0 ? sin(eth)/eth : 1.0);
+
+            motionVector.v = ey;
+            motionVector.w = eth;
 
             drivetrain->moveVector(motionVector);
             

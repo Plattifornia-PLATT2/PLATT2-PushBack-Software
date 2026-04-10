@@ -59,7 +59,7 @@ namespace odometry{
         double oldTheta = current_position.heading ;
         double dTheta = (current_position.heading  - oldTheta);
 
-        double newX = x_wheel->getPosition();
+        double newX = 0;//x_wheel->getPosition();
         double oldX = newX;
         double dX = newX - oldX;
 
@@ -82,7 +82,7 @@ namespace odometry{
             pros::screen::print(pros::E_TEXT_MEDIUM_CENTER, 3,"Heading: %.2f", current_position.heading*180/M_PI);
 
             //get new values and calculate deltas
-            newX = x_wheel->getPosition();
+            newX = 0;//x_wheel->getPosition();
             newY = y_wheel->getPosition();
             this->current_position.heading  = ((360 - imu->get_heading())*M_PI/180);
 

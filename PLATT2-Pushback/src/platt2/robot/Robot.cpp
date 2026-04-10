@@ -38,10 +38,6 @@ namespace robot{
         pros::Controller controller{pros::Controller(pros::E_CONTROLLER_MASTER)};
         controller.print(0, 0, "Sorted Color: %d", color_sort_subsystem->getSortedColor());
 
-        // initialize target heading from the odometry (adjusted if needed)
-        double targetHeading = odom_subsystem->getHeading() - M_PI/2;
-        double angle_error;
-
         while(true){
             
             double leftX = double(controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_X))/127;
@@ -56,7 +52,7 @@ namespace robot{
             // Create movement vector
             subsystems::tankDrive::TankDrive::MovementVector movement;   
 
-            movement.r = leftY;
+            movement.v = leftY;
             movement.w = rightX;    
 
             tankDrive_subsystem->moveVector(movement);
