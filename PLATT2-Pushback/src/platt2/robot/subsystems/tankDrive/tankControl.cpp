@@ -35,8 +35,8 @@ void TankControl::moveToPoint(odometry::Position target, double maxV, double max
     bool usePID = false;
     int index = 0;
 
-    positionPID.reset();
-    headingPID.reset();
+    positionPID->resetPID();
+    headingPID->resetPID();
 
     for (auto pathTarget:path){
 
