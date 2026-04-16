@@ -42,6 +42,22 @@ class MotorGroup{
     void setVelocity(double velocity);
 
     /**
+     * @brief Sets the brake mode of the motor group
+     * 
+     * @param brakeMode The brake mode to set to
+     */
+    void setBrakeMode(pros::MotorBrake brakeMode);
+
+     /**
+     * @brief Construct a new Motor Group object
+     * 
+     * @param motor_1 The first motor in the group
+     * @param motor_2 The second motor in the group
+     * @param motor_3 The third motor in the group
+     * @param motor_4 The fourth motor in the group
+     */
+
+    /**
      * @brief Adds a motor to the motor group
      * 
      * @param motor The motor to add

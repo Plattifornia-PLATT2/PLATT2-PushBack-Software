@@ -1,4 +1,6 @@
 #include "platt2/hal/MotorGroup.hpp"
+#include "pros/abstract_motor.hpp"
+#include "pros/motors.h"
 #include <memory>
 
 namespace platt2{
@@ -13,6 +15,11 @@ void MotorGroup::setVoltage(double voltage){
 void MotorGroup::setVelocity(double velocity){
     for(auto &motor: motors)
         if(motor) motor->move_velocity(velocity*600);
+}
+
+void MotorGroup::setBrakeMode(pros::MotorBrake brakeMode){
+    for(auto &motor: motors)
+        if(motor) motor->set_brake_mode(brakeMode);
 }
 
 void MotorGroup::addMotor(std::unique_ptr<pros::Motor> &motor){

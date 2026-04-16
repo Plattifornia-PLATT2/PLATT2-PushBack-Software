@@ -35,7 +35,7 @@ std::string PinkCompAuton::getName() const {
 void PinkCompAuton::run() {
     //Auto Run 1: Scores one ball in upper Middle goal. Pumps a few blocks from matchloaded into control zone
 
-    tank_subsytem->moveToPoint({0,24,90}, 0.8, 0.4);
+    tank_subsytem->moveToPoint({0,0,180}, 0.2, 0.4);
 
 
 }

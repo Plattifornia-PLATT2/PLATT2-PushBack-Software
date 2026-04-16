@@ -58,7 +58,7 @@ public:
      * @param heading_target Target heading to achieve at the end of the movement.
      */
     void moveToPoint(odometry::Position target, double rSpeed = 0.8, double wSpeed = 0.4);
-
+    void turnToHeading(double targetHeading, double maxAngularVel);
 
     /**
      * @brief Used for debugging purposes.
@@ -76,10 +76,24 @@ private:
         double y;
 
     };
+
+    struct definedPath{
+
+        odometry::Position p0; 
+        point p1; 
+        point p2; 
+        odometry::Position p3;
+    
+    };
+
     
     double velocityProfile(double TotalDistance, double remainingDistance, double currentVel, double maxVel, double maxAccel, bool& usePid);
-    double arcLength(odometry::Position start, point controlPoint1, point controlPoint2, odometry::Position end);
+    double trapezoidalVelocity(double distanceTravelled, double totalDistance, double maxVel, double maxAccel);
+    double arcLength(definedPath path);
     std::vector<odometry::Position> generatePath(odometry::Position target);
+    double remainingPathDistance(std::vector<odometry::Position> path, odometry::Position currentPos);
+
+    double pathLength;
 
 
 };
