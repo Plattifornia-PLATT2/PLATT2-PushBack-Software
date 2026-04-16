@@ -6,7 +6,6 @@
 #include <vector>
 #include "platt2/helperFunctions.h"
 
-
 namespace platt2{
 namespace robot{
 namespace subsystems{
