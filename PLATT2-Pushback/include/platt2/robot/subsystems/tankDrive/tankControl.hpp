@@ -50,13 +50,13 @@ public:
      */
     TankControl(std::shared_ptr<TankDrive> drive, std::shared_ptr<odometry::Odometry> odom, std::unique_ptr<robot::pid::PID> posPID, std::unique_ptr<robot::pid::PID> headingPID);
     
-    struct parameter {
-        double qx;
-        double qy;
-        double qtheta;
-        double rV;
-        double rW;
-    };
+        struct parameter {
+            double qx = 2000;
+            double qy = 1000;
+            double qtheta = 1000;
+            double rV = 0.00001;
+            double rW = 0.00001;
+        };
 
     /**
      * @brief Moves the holonomic drive to a specified point with a target heading.
@@ -109,7 +109,7 @@ private:
 
     Eigen::Matrix3d solveRiccati(const Eigen::Matrix3d Ad,const Eigen::Matrix<double,3,2> Bd, const Eigen::Matrix3d Q, const Eigen::Matrix2d R, int iterations = 30);
 
-    double trapezoidalVelocity(double t, double pathLength, double maxVel);
+    double trapezoidalVelocity(double t, double maxVel);
     double arcLength();
     std::vector<waypoint> generatePath(odometry::Position target);
     double remainingPathDistance(std::vector<waypoint> path, odometry::Position currentPos);

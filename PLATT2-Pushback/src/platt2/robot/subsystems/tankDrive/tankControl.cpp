@@ -31,7 +31,7 @@ void TankControl::moveToPoint(odometry::Position target, double maxV, parameter 
     
     Eigen::Matrix2d m_R = Eigen::Matrix2d::Zero();
         m_R(0, 0) = params.rV;
-        m_R(1, 1) = params.rW;
+        m_R(1, 1) = params.rW;    
     
     while (!finished) {
 
@@ -56,6 +56,14 @@ void TankControl::moveToPoint(odometry::Position target, double maxV, parameter 
         error(2) = wrapHeading(currentPos.heading - wp.pos.heading);
 
         double vRef = wp.v;
+
+        if (std::abs(vRef) < 0.01) {
+            motionVector.v = 0;
+            motionVector.w = 0;
+            drivetrain->moveVector(motionVector);
+            pros::delay(10);
+            continue;
+        }
         
         Eigen::Matrix3d Ac = Eigen::Matrix3d::Zero();
         Ac(0, 1) =  wp.w;
@@ -71,19 +79,32 @@ void TankControl::moveToPoint(odometry::Position target, double maxV, parameter 
 
         Eigen::Matrix3d P = solveRiccati(Ad, Bd, m_Q, m_R);
 
-        Eigen::Matrix2d S    = m_R + Bd.transpose() * P * Bd;
-        Eigen::Matrix<double, 2, 3> K = S.inverse() * Bd.transpose() * P * Ad;
+        Eigen::Matrix2d S = m_R + Bd.transpose() * P * Bd;
+        Eigen::Matrix<double, 2, 3> K = S.ldlt().solve(Bd.transpose() * P * Ad);
 
         Eigen::Vector2d correction = -K * error;
- 
+        
+        if (std::isnan(correction(0)) || std::isnan(correction(1))) {
+            correction << 0, 0;
+        }
+
         motionVector.v = vRef + correction(0);
-        motionVector.w = wp.w + correction(1);
+        motionVector.w = -(wp.w + correction(1));
+
+        std::cout << motionVector.v << ", " << motionVector.w << std::endl;
+
+
         drivetrain->moveVector(motionVector);
+        pros::delay(10);
+
 
     }
+
+    std::cout << "Finished moving to point." << std::endl;
     
     motionVector.v = 0;
     motionVector.w = 0;
+
     drivetrain->moveVector(motionVector);
 }
 
@@ -96,6 +117,9 @@ void TankControl::advanceIndex(std::vector<waypoint>& path, odometry::Position c
             if (dist < kSwitchRadius) {
                 ++waypointIndex;
             } else {
+                //if (waypointIndex == static_cast<int>(path.size()) - 1) {
+                //    finished = true;
+                //}
                 break;
             }
         }
@@ -110,21 +134,20 @@ void TankControl::isImpeded() {
 
 std::vector<TankControl::waypoint> TankControl::generatePath(odometry::Position endPos) {
     
+    double tankWidth = 14.0; //TODO: add as parameter and tune
     double maxVel = 0.3; // TODO: add as parameter and tune
-
-    endPos.heading = endPos.heading+(M_PI);
 
     std::vector<waypoint> path;
     p0 = odometry->getPos();
     p3 = endPos;
 
-    double angleDiff = std::min(std::abs(endPos.heading - p0.heading), 2 * M_PI - std::abs(endPos.heading - p0.heading));
+    double angleDiff = std::min(std::abs(endPos.heading+M_PI - p0.heading), 2 * M_PI - std::abs(endPos.heading+M_PI - p0.heading));
     double scaler = 4; //TODO: add as parameter and tune
 
     p1.x = p0.x + angleDiff*scaler*cos(p0.heading);
     p1.y = p0.y + angleDiff*scaler*sin(p0.heading);
-    p2.x = p3.x + angleDiff*scaler*cos(p3.heading);
-    p2.y = p3.y + angleDiff*scaler*sin(p3.heading);
+    p2.x = p3.x + angleDiff*scaler*cos(p3.heading+M_PI);
+    p2.y = p3.y + angleDiff*scaler*sin(p3.heading+M_PI);
 
     pathLength = arcLength();
 
@@ -134,8 +157,8 @@ std::vector<TankControl::waypoint> TankControl::generatePath(odometry::Position 
 
     for (int i = 0; i <= n; i++) {
         double t = (double)i / n;
-        double v = trapezoidalVelocity(t,pathLength, maxVel);
-        waypoint wp = {{x(t), y(t), tangentAngle(t)}, v, v*curvature(t)};
+        double v = trapezoidalVelocity(t, maxVel);
+        waypoint wp = {{x(t), y(t), tangentAngle(t)}, v, v*curvature(t)*(tankWidth/2)};
         
         path.push_back(wp);
     }
@@ -176,28 +199,22 @@ double TankControl::arcLength() {
 }
 
 
-double TankControl::trapezoidalVelocity(double t, double pathLength, double maxVel) {
-    
-    double maxAccel = 1; //TODO: add as parameter and tune
+double TankControl::trapezoidalVelocity(double t, double maxVel) {
+     
+    double maxAccel = 0.3; //TODO: add as parameter and tune
+    t = std::clamp(t, 0.0, 1.0);
 
-    double distanceTravelled = t * pathLength;
+    double rf = std::clamp(maxVel / (2.0 * maxAccel), 0.0, 0.5);
+    double peakVel = (rf < 0.5) ? maxVel : maxVel * (rf / 0.5);
 
-    // Distance needed to ramp up / down
-    double rampDist = (maxVel * maxVel) / (2.0 * maxAccel);
-
-    // If total distance is too short to reach maxVel, triangle profile
-    double peakVel = maxVel;
-    if (2.0 * rampDist > pathLength) {
-        peakVel = sqrt(maxAccel * pathLength);
-        rampDist = pathLength / 2.0;
+    if (t < rf) {
+        return peakVel * (t / rf);           // ramp up
+    } else if (t <= 1.0 - rf) {
+        return peakVel;                       // cruise
+    } else {
+        return peakVel * ((1.0 - t) / rf);  // ramp down
     }
 
-    double remaining = pathLength - distanceTravelled;
-
-    double velFromAccel  = sqrt(2.0 * maxAccel * distanceTravelled); // ramp up
-    double velFromDecel  = sqrt(2.0 * maxAccel * remaining);          // ramp down
-
-    return std::clamp(std::min({velFromAccel, velFromDecel, peakVel}), 0.0, maxVel);
 }
 
 
@@ -234,18 +251,33 @@ void TankControl::turnToHeading(double targetAngle, double maxAngularVel) {
 
 Eigen::Matrix3d TankControl::solveRiccati(const Eigen::Matrix3d Ad,const Eigen::Matrix<double,3,2> Bd, const Eigen::Matrix3d Q, const Eigen::Matrix2d R, int iterations){
     
-    Eigen::Matrix3d P = Q;
+    Eigen::Matrix3d P = Q * 100.0;  // warm start larger
+    Eigen::Matrix3d Pprev;
 
-    for (int i = 0; i < iterations; ++i) {
+    for (int i = 0; i < 1000; ++i) {
         Eigen::Matrix2d S = R + Bd.transpose() * P * Bd;
-        P = Q + Ad.transpose() * P * Ad - Ad.transpose() * P * Bd * S.inverse() * Bd.transpose() * P * Ad;
+        Pprev = P;
+        P = Q + Ad.transpose() * P * Ad
+              - Ad.transpose() * P * Bd
+                * S.ldlt().solve(Bd.transpose() * P * Ad);
+
+        // Check for convergence
+        if ((P - Pprev).norm() < 1e-10) {
+            break;
+        }
+
+        // Check for collapse
+        if (!P.allFinite() || P.norm() < 1e-12) {
+            std::cerr << "Riccati collapsed at iteration " << i << "\n";
+            return Q;  // fallback: return Q so controller gets some gain
+        }
     }
     return P;
 }
 
 
 double TankControl::tangentAngle(double t){
-    return atan2(dy(t), dx(t));
+    return wrapHeading(atan2(dy(t), dx(t)));
 }
 double TankControl::x(double t){ 
     return pow((1-t),3)*p0.x + 3*pow((1-t),2)*t*p1.x + 3*(1-t)*pow(t,2)*p2.x + pow(t,3)*p3.x;
