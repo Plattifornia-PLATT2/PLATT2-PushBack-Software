@@ -5,189 +5,153 @@
 #include <utility>
 #include <vector>
 #include "platt2/helperFunctions.h"
+#include "Eigen/Dense"
 
 namespace platt2{
 namespace robot{
 namespace subsystems{
 namespace tankDrive{
 
-void TankControl::moveToPoint(odometry::Position target, double maxV, double maxW) {
+void TankControl::moveToPoint(odometry::Position target, double maxV, parameter params) {
 
     TankDrive::MovementVector motionVector;
 
     target.heading = target.heading*(M_PI/180);
-    target.heading = target.heading+(M_PI);
+    target.heading = wrapHeading(target.heading);
+  
+    std::vector<waypoint> path = generatePath(target);
 
-    if(target.heading > M_PI || target.heading < -M_PI){
-        target.heading = -1 * sgn(target.heading) * (2*M_PI - std::abs(target.heading));
-    }  
-    std::vector<odometry::Position> path = generatePath(target);
+    waypointIndex = 0;
+    finished = false;
+
+    Eigen::Matrix3d m_Q = Eigen::Matrix3d::Zero();
+        m_Q(0, 0) = params.qx;
+        m_Q(1, 1) = params.qy;
+        m_Q(2, 2) = params.qtheta;
     
-    std::vector<double> timeoutArray(50,1);
-    std::vector<double> posArray(50,1);
-    std::vector<double> angleArray(50,10);
-    bool exitCondition = false;
-
-    const double b = .6; //todo: tuned
-    const double L = 0.2; //todo: tuned
-
-    const double lookAheadDistance = 2;
-    double currentVel = 0;
-    bool usePID = false;
-    int index = 0;
-
-    positionPID->resetPID();
-    headingPID->resetPID();
-
-    for (auto pathTarget:path){
-
-        while (true){
-            
-            odometry::Position currentPos = odometry->getPos();
-            double distanceToTarget = distanceBetweenPoints({currentPos.x, currentPos.y}, {pathTarget.x, pathTarget.y});
-
-            if ((distanceToTarget < lookAheadDistance) and index != path.size()-1){ 
-                break; // Move to the next target in the path
-            }
-
-            double errorx = pathTarget.x - currentPos.x;
-            double errory = pathTarget.y - currentPos.y;
-            double eth = -pathTarget.heading + currentPos.heading;
-
-            //adjust angle error for wraparound
-            if(eth > M_PI || eth < -M_PI){
-                eth = -1 * sgn(eth) * (2*M_PI - std::abs(eth));
-            }  
+    Eigen::Matrix2d m_R = Eigen::Matrix2d::Zero();
+        m_R(0, 0) = params.rV;
+        m_R(1, 1) = params.rW;
     
-            //convert to local robot coordinates    
-            double ex = errorx*sin(currentPos.heading) - errory*cos(currentPos.heading);
-            double ey = errorx*sin(currentPos.heading) + errory*cos(currentPos.heading);
-            //std::cout <<eth<< ", " << ey << std::endl;
+    while (!finished) {
 
-            double vd = trapezoidalVelocity(pathLength-remainingPathDistance(path, currentPos), pathLength, maxV, 1);
-            double wd = eth*0.1;//headingPID//->calculate(0, eth);
+        odometry::Position currentPos = odometry->getPos();
 
-            double k = 2*L*sqrt(pow(wd,2)+(b*pow(vd,2)));
+        advanceIndex(path, currentPos);
 
-            if (index == path.size()-1){
+        isImpeded();
 
-                std::cout << "Final Point Reached" << std::endl;
-                bool posExit = false;
-                bool angleExit = false;
-                
-                motionVector.v = vd;
-                motionVector.w = headingPID->calculate(0, eth);
+        const waypoint wp = path[waypointIndex];
 
-                avg angleAvg = rollAverage(eth, angleArray);
-                angleArray = angleAvg.data;
-                
-                if (angleAvg.average < 0.025) {
-                   bool angleExit = true;
-                }
-                
-                avg posAvg = rollAverage(std::abs(sin(atan2(ey, ex))), posArray);
-                posArray = posAvg.data;
-                if (posAvg.average < 0.1) {
-                    bool posExit = true; 
-                }
-                if (posExit && angleExit){
-                    exitCondition = true;
-                    break;
-                }
+        double cosRef = std::cos(wp.pos.heading);
+        double sinRef = std::sin(wp.pos.heading);
+ 
+        double dx = currentPos.x - wp.pos.x;
+        double dy = currentPos.y - wp.pos.y;
+ 
+        // Rotate global error into reference frame
+        Eigen::Vector3d error;
+        error(0) =  cosRef * dx + sinRef * dy;          
+        error(1) = -sinRef * dx + cosRef * dy;       
+        error(2) = wrapHeading(currentPos.heading - wp.pos.heading);
 
+        double vRef = wp.v;
+        
+        Eigen::Matrix3d Ac = Eigen::Matrix3d::Zero();
+        Ac(0, 1) =  wp.w;
+        Ac(1, 0) = -wp.w;
+        Ac(1, 2) =  vRef;
 
-            }else {
-                
-                motionVector.v = vd*cos(eth) + k*ey;
-                motionVector.w = wd + k*eth + (eth != 0 ? ((b*vd*ex*sin(eth))/eth) : 1.0);
+        Eigen::Matrix<double, 3, 2> Bc = Eigen::Matrix<double, 3, 2>::Zero();
+        Bc(0, 0) = 1.0;
+        Bc(2, 1) = 1.0;
 
-                
-            }
-            
-            //motionVector.v = currentVel;
-            //motionVector.w = ex;
+        Eigen::Matrix3d Ad = Eigen::Matrix3d::Identity() + Ac * 0.01;
+        Eigen::Matrix<double, 3, 2> Bd = Bc * 0.01;
 
-            
-            drivetrain->moveVector(motionVector);
-            
-            pros::delay(10);
-        }
-        index++;
-        if (exitCondition){break;}
+        Eigen::Matrix3d P = solveRiccati(Ad, Bd, m_Q, m_R);
+
+        Eigen::Matrix2d S    = m_R + Bd.transpose() * P * Bd;
+        Eigen::Matrix<double, 2, 3> K = S.inverse() * Bd.transpose() * P * Ad;
+
+        Eigen::Vector2d correction = -K * error;
+ 
+        motionVector.v = vRef + correction(0);
+        motionVector.w = wp.w + correction(1);
+        drivetrain->moveVector(motionVector);
+
     }
-
     
-            //avg timeoutAvg = rollAverage(odometry->getVelocity(), timeoutArray);
-            //timeoutArray = timeoutAvg.data;
-            
-           // if (timeoutAvg.average < 0.01) {
-           //     exitCondition = true;
-           //     break; // Exit if the robot is stuck
-           // }
-
-
     motionVector.v = 0;
     motionVector.w = 0;
     drivetrain->moveVector(motionVector);
 }
 
-std::vector<odometry::Position> TankControl::generatePath(odometry::Position endPos) {
+void TankControl::advanceIndex(std::vector<waypoint>& path, odometry::Position current) {
+        constexpr double kSwitchRadius = 2;  // lookahead distance in inches 
+        while (waypointIndex < static_cast<int>(path.size()) - 1) {
+            const odometry::Position target = path[waypointIndex].pos;
+            double dist = std::hypot(current.x - target.x,
+                                     current.y - target.y);
+            if (dist < kSwitchRadius) {
+                ++waypointIndex;
+            } else {
+                break;
+            }
+        }
+    }
+
+void TankControl::isImpeded() {
+
+}
+
+
+
+
+std::vector<TankControl::waypoint> TankControl::generatePath(odometry::Position endPos) {
     
-    std::vector<odometry::Position> path;
-    definedPath pathDef;
-    pathDef.p0 = odometry->getPos();
-    pathDef.p3 = endPos;
+    double maxVel = 0.3; // TODO: add as parameter and tune
 
-    double angleDiff = std::min(std::abs(endPos.heading - pathDef.p0.heading), 2 * M_PI - std::abs(endPos.heading - pathDef.p0.heading));
-    double scaler = 4; // Adjus t this value to change the distance of control points from start and end positions
+    endPos.heading = endPos.heading+(M_PI);
 
-    
-    pathDef.p1.x = pathDef.p0.x + angleDiff*scaler*cos(pathDef.p0.heading);
-    pathDef.p1.y = pathDef.p0.y + angleDiff*scaler*sin(pathDef.p0.heading);
-    pathDef.p2.x = pathDef.p3.x + angleDiff*scaler*cos(pathDef.p3.heading);
-    pathDef.p2.y = pathDef.p3.y + angleDiff*scaler*sin(pathDef.p3.heading);
+    std::vector<waypoint> path;
+    p0 = odometry->getPos();
+    p3 = endPos;
 
-    pathLength = arcLength(pathDef);
+    double angleDiff = std::min(std::abs(endPos.heading - p0.heading), 2 * M_PI - std::abs(endPos.heading - p0.heading));
+    double scaler = 4; //TODO: add as parameter and tune
 
-    auto x = [&](double t){ 
-        return pow((1-t),3)*pathDef.p0.x + 3*pow((1-t),2)*t*pathDef.p1.x + 3*(1-t)*pow(t,2)*pathDef.p2.x + pow(t,3)*pathDef.p3.x;
-    };
+    p1.x = p0.x + angleDiff*scaler*cos(p0.heading);
+    p1.y = p0.y + angleDiff*scaler*sin(p0.heading);
+    p2.x = p3.x + angleDiff*scaler*cos(p3.heading);
+    p2.y = p3.y + angleDiff*scaler*sin(p3.heading);
 
-    auto y = [&](double t){
-        return pow((1-t),3)*pathDef.p0.y + 3*pow((1-t),2)*t*pathDef.p1.y + 3*(1-t)*pow(t,2)*pathDef.p2.y + pow(t,3)*pathDef.p3.y;
-    };
+    pathLength = arcLength();
 
-    auto dx = [&](double t){
-        return 3*pow(1-t,2)*(pathDef.p1.x-pathDef.p0.x) + 6*(1-t)*t*(pathDef.p2.x-pathDef.p1.x) + 3*pow(t,2)*(pathDef.p3.x-pathDef.p2.x);
-    };
+    double pointsPerInch = 2;//TODO: add as parameter and tune
 
-    auto dy = [&](double t){
-        return 3*pow(1-t,2)*(pathDef.p1.y-pathDef.p0.y) + 6*(1-t)*t*(pathDef.p2.y-pathDef.p1.y) + 3*pow(t,2)*(pathDef.p3.y-pathDef.p2.y);
-    };
-
-    auto tangentAngle = [&](double t){
-        return atan2(dy(t), dx(t));
-    };
-
-    double n = pathLength/0.5;
+    double n = pathLength*pointsPerInch;
 
     for (int i = 0; i <= n; i++) {
         double t = (double)i / n;
-        path.push_back({x(t), y(t), tangentAngle(t)});
+        double v = trapezoidalVelocity(t,pathLength, maxVel);
+        waypoint wp = {{x(t), y(t), tangentAngle(t)}, v, v*curvature(t)};
+        
+        path.push_back(wp);
     }
 
     return path;
 
 }
 
-double TankControl::arcLength(definedPath path) {
+double TankControl::arcLength() {
     
     auto dx = [&](double t){
-        return 3*pow(1-t,2)*(path.p1.x-path.p0.x) + 6*(1-t)*t*(path.p2.x-path.p1.x) + 3*pow(t,2)*(path.p3.x-path.p2.x);
+        return 3*pow(1-t,2)*(p1.x-p0.x) + 6*(1-t)*t*(p2.x-p1.x) + 3*pow(t,2)*(p3.x-p2.x);
         };
 
     auto dy = [&](double t){
-        return 3*pow(1-t,2)*(path.p1.y-path.p0.y) + 6*(1-t)*t*(path.p2.y-path.p1.y) + 3*pow(t,2)*(path.p3.y-path.p2.y);
+        return 3*pow(1-t,2)*(p1.y-p0.y) + 6*(1-t)*t*(p2.y-p1.y) + 3*pow(t,2)*(p3.y-p2.y);
     };
 
     auto vel = [&](double t){
@@ -211,67 +175,31 @@ double TankControl::arcLength(definedPath path) {
     return length;
 }
 
-double TankControl::velocityProfile(double totalDistance, double remainingDistance, double currentVel, double maxVel, double maxAccel, bool& usePID) {
 
-    double distanceTravelled = totalDistance - remainingDistance;
-    bool reachedMaxVel       = currentVel >= maxVel;
-    bool pastHalfway         = distanceTravelled >= totalDistance * 0.5;
-
-    if ((!reachedMaxVel && !pastHalfway) && !usePID ) {
-    //if (false) {
-        // --- Acceleration phase ---
-        double max_accel_delta = maxAccel * 0.02;
-        double output = std::clamp(currentVel + max_accel_delta, 0.0, maxVel);
-        return output;
-
-    } else {
-        // --- Handoff to decel/approach controller ---
-        usePID = true;
-        return std::clamp((positionPID->calculate(remainingDistance, 0)), 0.0, maxVel);
-    }
-}
-
-double TankControl::trapezoidalVelocity(double distanceTravelled, double totalDistance, double maxVel, double maxAccel) {
+double TankControl::trapezoidalVelocity(double t, double pathLength, double maxVel) {
     
+    double maxAccel = 1; //TODO: add as parameter and tune
+
+    double distanceTravelled = t * pathLength;
+
     // Distance needed to ramp up / down
     double rampDist = (maxVel * maxVel) / (2.0 * maxAccel);
 
     // If total distance is too short to reach maxVel, triangle profile
     double peakVel = maxVel;
-    if (2.0 * rampDist > totalDistance) {
-        peakVel = sqrt(maxAccel * totalDistance);
-        rampDist = totalDistance / 2.0;
+    if (2.0 * rampDist > pathLength) {
+        peakVel = sqrt(maxAccel * pathLength);
+        rampDist = pathLength / 2.0;
     }
 
-    double remaining = totalDistance - distanceTravelled;
+    double remaining = pathLength - distanceTravelled;
 
     double velFromAccel  = sqrt(2.0 * maxAccel * distanceTravelled); // ramp up
     double velFromDecel  = sqrt(2.0 * maxAccel * remaining);          // ramp down
 
     return std::clamp(std::min({velFromAccel, velFromDecel, peakVel}), 0.0, maxVel);
 }
-double TankControl::remainingPathDistance(std::vector<odometry::Position> path, odometry::Position currentPos) {
-    
-    // Find the closest point on the path to the robot's current position
-    int closestIndex = 0;
-    double closestDist = std::numeric_limits<double>::max();
 
-    for (int i = 0; i < path.size(); i++) {
-        double d = distanceBetweenPoints({currentPos.x, currentPos.y}, {path[i].x, path[i].y});
-        if (d < closestDist) {
-            closestDist = d;
-            closestIndex = i;
-        }
-    }
-
-    // Sum arc length from closest point to end of path
-    double remaining = 0;
-    for (int i = closestIndex; i < (int)path.size() - 1; i++) {
-        remaining += distanceBetweenPoints({path[i].x, path[i].y}, {path[i+1].x, path[i+1].y});
-    }
-
-    return remaining;
-}
 
 void TankControl::turnToHeading(double targetAngle, double maxAngularVel) {
     
@@ -303,6 +231,47 @@ void TankControl::turnToHeading(double targetAngle, double maxAngularVel) {
 }
 
 }
+
+Eigen::Matrix3d TankControl::solveRiccati(const Eigen::Matrix3d Ad,const Eigen::Matrix<double,3,2> Bd, const Eigen::Matrix3d Q, const Eigen::Matrix2d R, int iterations){
+    
+    Eigen::Matrix3d P = Q;
+
+    for (int i = 0; i < iterations; ++i) {
+        Eigen::Matrix2d S = R + Bd.transpose() * P * Bd;
+        P = Q + Ad.transpose() * P * Ad - Ad.transpose() * P * Bd * S.inverse() * Bd.transpose() * P * Ad;
+    }
+    return P;
+}
+
+
+double TankControl::tangentAngle(double t){
+    return atan2(dy(t), dx(t));
+}
+double TankControl::x(double t){ 
+    return pow((1-t),3)*p0.x + 3*pow((1-t),2)*t*p1.x + 3*(1-t)*pow(t,2)*p2.x + pow(t,3)*p3.x;
+}
+double TankControl::y(double t){
+    return pow((1-t),3)*p0.y + 3*pow((1-t),2)*t*p1.y + 3*(1-t)*pow(t,2)*p2.y + pow(t,3)*p3.y;
+}
+double TankControl::dx(double t){
+    return 3*pow(1-t,2)*(p1.x-p0.x) + 6*(1-t)*t*(p2.x-p1.x) + 3*pow(t,2)*(p3.x-p2.x);
+}
+double TankControl::dy(double t){
+    return 3*pow(1-t,2)*(p1.y-p0.y) + 6*(1-t)*t*(p2.y-p1.y) + 3*pow(t,2)*(p3.y-p2.y);
+}
+double TankControl::ddx(double t){
+    return -6*(1-t)*(p1.x-p0.x) + 6*(1-2*t)*(p2.x-p1.x) + 6*t*(p3.x-p2.x);
+} 
+double TankControl::ddy(double t){
+    return -6*(1-t)*(p1.y-p0.y) + 6*(1-2*t)*(p2.y-p1.y) + 6*t*(p3.y-p2.y);
+}
+double TankControl::curvature(double t) {
+    double num   = dx(t) * ddy(t) - dy(t) * ddx(t);
+    double denom = std::pow(dx(t)*dx(t) + dy(t)*dy(t), 1.5);
+    return (std::abs(denom) > 1e-9) ? num / denom : 0.0;
+}
+
+
 
 TankControl::TankControl(std::shared_ptr<TankDrive> drive, std::shared_ptr<odometry::Odometry> odom, std::unique_ptr<robot::pid::PID> posPID, std::unique_ptr<robot::pid::PID> headingPID)
 {

@@ -6,7 +6,7 @@
 #include "platt2/robot/subsystems/odometry/Odometry.hpp"
 #include "platt2/robot/pid/pid.hpp"
 #include "platt2/helperFunctions.h"
-
+#include "Eigen/Dense"
 #include <memory>
 
 /**
@@ -49,6 +49,14 @@ public:
      * @param headingPID PID controller for heading control
      */
     TankControl(std::shared_ptr<TankDrive> drive, std::shared_ptr<odometry::Odometry> odom, std::unique_ptr<robot::pid::PID> posPID, std::unique_ptr<robot::pid::PID> headingPID);
+    
+    struct parameter {
+        double qx;
+        double qy;
+        double qtheta;
+        double rV;
+        double rW;
+    };
 
     /**
      * @brief Moves the holonomic drive to a specified point with a target heading.
@@ -57,7 +65,7 @@ public:
      * @param y_target Target Y value to move to.
      * @param heading_target Target heading to achieve at the end of the movement.
      */
-    void moveToPoint(odometry::Position target, double rSpeed = 0.8, double wSpeed = 0.4);
+    void moveToPoint(odometry::Position target, double rSpeed = 0.8, parameter params = {0,0,0,0,0});
     void turnToHeading(double targetHeading, double maxAngularVel);
 
     /**
@@ -71,29 +79,46 @@ private:
     std::unique_ptr<pid::PID> headingPID;
 
     struct point {
-
         double x;
         double y;
-
     };
 
-    struct definedPath{
 
-        odometry::Position p0; 
-        point p1; 
-        point p2; 
-        odometry::Position p3;
-    
+    struct waypoint {
+        odometry::Position pos;
+        double v;
+        double w;
     };
 
+
+
+    odometry::Position p0; 
+    point p1; 
+    point p2; 
+    odometry::Position p3;
+
+    double tangentAngle(double t);
+    double x(double t);
+    double y(double t);
+    double dx(double t);    
+    double dy(double t);
+    double ddx(double t);
+    double ddy(double t);
     
-    double velocityProfile(double TotalDistance, double remainingDistance, double currentVel, double maxVel, double maxAccel, bool& usePid);
-    double trapezoidalVelocity(double distanceTravelled, double totalDistance, double maxVel, double maxAccel);
-    double arcLength(definedPath path);
-    std::vector<odometry::Position> generatePath(odometry::Position target);
-    double remainingPathDistance(std::vector<odometry::Position> path, odometry::Position currentPos);
+    double curvature(double t);
+
+    Eigen::Matrix3d solveRiccati(const Eigen::Matrix3d Ad,const Eigen::Matrix<double,3,2> Bd, const Eigen::Matrix3d Q, const Eigen::Matrix2d R, int iterations = 30);
+
+    double trapezoidalVelocity(double t, double pathLength, double maxVel);
+    double arcLength();
+    std::vector<waypoint> generatePath(odometry::Position target);
+    double remainingPathDistance(std::vector<waypoint> path, odometry::Position currentPos);
+    void advanceIndex(std::vector<waypoint>& path, odometry::Position current);
+    void isImpeded();
 
     double pathLength;
+    int waypointIndex;
+    bool finished;
 
 
 };

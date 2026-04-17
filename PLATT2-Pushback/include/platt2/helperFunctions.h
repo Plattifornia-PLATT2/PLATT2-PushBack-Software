@@ -132,4 +132,13 @@ inline double distanceBetweenPoints(cart P1, cart P2){
 
 }
 
+
+    
+inline double wrapHeading(double a) {
+    while (a >  M_PI) a -= 2.0 * M_PI;
+    while (a < -M_PI) a += 2.0 * M_PI;
+    return a;
+}
+
+
 #endif
