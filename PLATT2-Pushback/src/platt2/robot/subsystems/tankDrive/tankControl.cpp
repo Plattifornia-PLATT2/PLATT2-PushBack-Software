@@ -24,6 +24,9 @@ void TankControl::moveToPoint(odometry::Position target, double maxV, parameter 
     waypointIndex = 0;
     finished = false;
 
+
+    std::vector<double> endArray(40,1);
+
     Eigen::Matrix3d m_Q = Eigen::Matrix3d::Zero();
         m_Q(0, 0) = params.qx;
         m_Q(1, 1) = params.qy;
@@ -39,7 +42,11 @@ void TankControl::moveToPoint(odometry::Position target, double maxV, parameter 
 
         advanceIndex(path, currentPos);
 
-        isImpeded();
+        double distToEnd = std::hypot(currentPos.x - path.back().pos.x,
+                                      currentPos.y - path.back().pos.y);
+        if (distToEnd < 3.0) {  // within 4 inches, hand off
+            break;
+        }
 
         const waypoint wp = path[waypointIndex];
 
@@ -56,14 +63,6 @@ void TankControl::moveToPoint(odometry::Position target, double maxV, parameter 
         error(2) = wrapHeading(currentPos.heading - wp.pos.heading);
 
         double vRef = wp.v;
-
-        if (std::abs(vRef) < 0.01) {
-            motionVector.v = 0;
-            motionVector.w = 0;
-            drivetrain->moveVector(motionVector);
-            pros::delay(10);
-            continue;
-        }
         
         Eigen::Matrix3d Ac = Eigen::Matrix3d::Zero();
         Ac(0, 1) =  wp.w;
@@ -89,15 +88,54 @@ void TankControl::moveToPoint(odometry::Position target, double maxV, parameter 
         }
 
         motionVector.v = vRef + correction(0);
-        motionVector.w = -(wp.w + correction(1));
+        motionVector.w = -wp.w + correction(1);
 
-        std::cout << motionVector.v << ", " << motionVector.w << std::endl;
-
+        
 
         drivetrain->moveVector(motionVector);
         pros::delay(10);
 
+        double avgVel = rollAverage(std::abs(odometry->getVelocity()), endArray);
+        //std::cout << avgVel << std::endl;
 
+
+        if (avgVel < 0.1) {
+            finished = true;
+        }
+
+    }
+    std::vector<double> approachArray(10, 3);
+
+    while (true) {
+        odometry::Position currentPos = odometry->getPos();
+
+        double dx = target.x - currentPos.x;
+        double dy = target.y - currentPos.y;
+        double distToEnd = std::hypot(dx, dy);
+
+        double headingError = wrapHeading(target.heading - currentPos.heading);
+
+
+        double avgVel = rollAverage(std::abs(odometry->getVelocity()), endArray);
+        if (avgVel < 0.1) {
+            break;
+        }
+        double approachDist = rollAverage(distToEnd, approachArray);
+        if (approachDist < 1) {
+            break;
+        }
+
+        // Position PID drives forward speed, heading PID corrects steering
+        double v = -std::clamp(positionPID->calculate(0, distToEnd), -maxV, maxV);
+        double w = headingPID->calculate(0, headingError);
+
+        // Scale down speed as we get close so we don't overshoot
+        v *= std::clamp(distToEnd / 4.0, 0.0, 1.0);
+
+        motionVector.v = v;
+        motionVector.w = w;
+        drivetrain->moveVector(motionVector);
+        pros::delay(10);
     }
 
     std::cout << "Finished moving to point." << std::endl;
@@ -125,13 +163,6 @@ void TankControl::advanceIndex(std::vector<waypoint>& path, odometry::Position c
         }
     }
 
-void TankControl::isImpeded() {
-
-}
-
-
-
-
 std::vector<TankControl::waypoint> TankControl::generatePath(odometry::Position endPos) {
     
     double tankWidth = 14.0; //TODO: add as parameter and tune
@@ -157,11 +188,13 @@ std::vector<TankControl::waypoint> TankControl::generatePath(odometry::Position 
 
     for (int i = 0; i <= n; i++) {
         double t = (double)i / n;
-        double v = trapezoidalVelocity(t, maxVel);
+        double v = trapezoidalVelocity(t, maxVel, pathLength);
         waypoint wp = {{x(t), y(t), tangentAngle(t)}, v, v*curvature(t)*(tankWidth/2)};
         
         path.push_back(wp);
     }
+
+    path.push_back({endPos, 0, 0}); // ensure final point is exactly the target
 
     return path;
 
@@ -199,22 +232,24 @@ double TankControl::arcLength() {
 }
 
 
-double TankControl::trapezoidalVelocity(double t, double maxVel) {
-     
-    double maxAccel = 0.3; //TODO: add as parameter and tune
+double TankControl::trapezoidalVelocity(double t, double maxVel, double pathLength) {
+
+    double maxAccel = 0.6;
     t = std::clamp(t, 0.0, 1.0);
 
-    double rf = std::clamp(maxVel / (2.0 * maxAccel), 0.0, 0.5);
-    double peakVel = (rf < 0.5) ? maxVel : maxVel * (rf / 0.5);
+    double physicsPeak = std::sqrt(maxAccel * pathLength);
+    double actualMaxVel = std::min(maxVel, physicsPeak);
+
+    double rf = std::clamp(actualMaxVel / (2.0 * maxAccel), 0.0, 0.5);
+    double peakVel = (rf < 0.5) ? actualMaxVel : actualMaxVel * (rf / 0.5);
 
     if (t < rf) {
-        return peakVel * (t / rf);           // ramp up
+        return peakVel * (t / rf);
     } else if (t <= 1.0 - rf) {
-        return peakVel;                       // cruise
+        return peakVel;
     } else {
-        return peakVel * ((1.0 - t) / rf);  // ramp down
+        return peakVel * ((1.0 - t) / rf);
     }
-
 }
 
 
@@ -224,28 +259,37 @@ void TankControl::turnToHeading(double targetAngle, double maxAngularVel) {
     odometry::Position currentPos;
     std::vector<double> angleArray(50,10);
 
+    targetAngle = targetAngle*(M_PI/180);
+
     headingPID->resetPID();
 
     while (true) {
         
         currentPos = odometry->getPos();
         double angleError = targetAngle - currentPos.heading;
+    
 
         if(angleError > M_PI || angleError < -M_PI){
             angleError = -1 * sgn(angleError) * (2*M_PI - std::abs(angleError));
         }  
 
-        avg posAvg = rollAverage(std::abs(angleError), angleArray);
-        angleArray = posAvg.data;
-        if (posAvg.average < 0.025) {
+        double posAvg = rollAverage(std::abs(angleError), angleArray);
+        if (posAvg < 0.025) {
             break; // Exit if the robot is within 0.025 radians of the target angle
         }
 
+        double w = std::clamp(headingPID->calculate(0, angleError), -maxAngularVel, maxAngularVel);
 
-        motionVector.w = std::clamp(headingPID->calculate(0, angleError), -maxAngularVel, maxAngularVel);
+        std::cout << angleError << " " << w << std::endl;
+        motionVector.w = w;
         motionVector.v = 0;
         drivetrain->moveVector(motionVector);
-}
+        pros::delay(10);
+    }
+
+    motionVector.w = 0;
+    motionVector.v = 0;
+    drivetrain->moveVector(motionVector);
 
 }
 

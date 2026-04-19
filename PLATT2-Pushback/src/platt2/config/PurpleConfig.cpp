@@ -38,6 +38,9 @@ std::shared_ptr<robot::Robot> PurpleConfig::buildRobot(robot::AutonConfig auton,
     std::unique_ptr<platt2::robot::subsystems::tankDrive::TankDrive::TankModule> right_module{std::make_unique<platt2::robot::subsystems::tankDrive::TankDrive::TankModule>(right1, right2, right3, right4)};
     std::unique_ptr<platt2::robot::subsystems::tankDrive::TankDrive::TankModule> left_module{std::make_unique<platt2::robot::subsystems::tankDrive::TankDrive::TankModule>(left1, left2, left3, left4)};
 
+    left_module->module_motors.setBrakeMode(pros::MotorBrake::brake);
+    right_module->module_motors.setBrakeMode(pros::MotorBrake::brake);
+
     std::vector<std::unique_ptr<platt2::robot::subsystems::tankDrive::TankDrive::TankModule>> modules;
     modules.push_back(std::move(left_module));
     modules.push_back(std::move(right_module));

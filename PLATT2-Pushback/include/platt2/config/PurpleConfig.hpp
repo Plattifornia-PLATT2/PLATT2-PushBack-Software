@@ -59,8 +59,8 @@ class PurpleConfig : public IConfig {
 
     static constexpr int LEFT_1_PORT{11};
     static constexpr int LEFT_2_PORT{-12}; 
-    static constexpr int LEFT_3_PORT{9};
-    static constexpr int LEFT_4_PORT{-10};
+    static constexpr int LEFT_3_PORT{-9};
+    static constexpr int LEFT_4_PORT{10};
 
     // ** Intake Ports **
     static constexpr int FRONT_INTAKE_MOTOR_PORT{-5};

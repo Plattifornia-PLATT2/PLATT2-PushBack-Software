@@ -19,8 +19,8 @@ namespace tankDrive{
 
         //TODO: needs min voltage Scaling 
         
-        drive_modules[0]->TankDrive::TankModule::module_motors.setVelocity(vec.v+vec.w);
-        drive_modules[1]->TankDrive::TankModule::module_motors.setVelocity(vec.v-vec.w);
+        drive_modules[0]->TankDrive::TankModule::module_motors.setVelocity(vec.v-vec.w);
+        drive_modules[1]->TankDrive::TankModule::module_motors.setVelocity(vec.v+vec.w);
        
     }
 

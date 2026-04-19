@@ -36,7 +36,7 @@ void PinkCompAuton::run() {
     //Auto Run 1: Scores one ball in upper Middle goal. Pumps a few blocks from matchloaded into control zone
 
     tank_subsytem->moveToPoint({0,24,135}, 0.3);
-
+    //tank_subsytem->turnToHeading(135);
 
 }
 

@@ -33,10 +33,7 @@ struct polar {
  * @brief A struct to hold a rolling average.
  * @author Logan Wolf
  */
-struct avg {
-    double average;
-    std::vector<double> data;
-};
+
 
 /**
  * @brief Returns the sign of a given value.
@@ -91,17 +88,15 @@ inline polar CtoP(double x, double y)  {
  * @param data The current data set.
  * @return avg The updated rolling average and data set.
  */
-inline avg rollAverage(double var, std::vector<double> data){
+inline double rollAverage(double var, std::vector<double>& data){
 
     data.emplace_back(var);
     data.erase(data.begin());
-
-    avg result;
     
-    result.data = data;
-    result.average = std::accumulate(data.begin(),data.end(), (double)0)/data.size();
 
-    return result;
+    double average = std::accumulate(data.begin(),data.end(), (double)0)/data.size();
+
+    return average;
 
 }
 

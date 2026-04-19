@@ -51,11 +51,11 @@ public:
     TankControl(std::shared_ptr<TankDrive> drive, std::shared_ptr<odometry::Odometry> odom, std::unique_ptr<robot::pid::PID> posPID, std::unique_ptr<robot::pid::PID> headingPID);
     
         struct parameter {
-            double qx = 2000;
-            double qy = 1000;
-            double qtheta = 1000;
-            double rV = 0.00001;
-            double rW = 0.00001;
+    double qx     = 2;   // longitudinal — keep low, feedforward handles this
+    double qy     = 5.0;   // lateral — high, this is what LTV is best at correcting
+    double qtheta = 15.0;   // heading — moderate
+    double rV     = 1.0;   // resist large velocity corrections
+    double rW     = 0.5; 
         };
 
     /**
@@ -66,7 +66,7 @@ public:
      * @param heading_target Target heading to achieve at the end of the movement.
      */
     void moveToPoint(odometry::Position target, double rSpeed = 0.8, parameter params = {0,0,0,0,0});
-    void turnToHeading(double targetHeading, double maxAngularVel);
+    void turnToHeading(double targetHeading, double maxAngularVel=0.3);
 
     /**
      * @brief Used for debugging purposes.
@@ -109,17 +109,15 @@ private:
 
     Eigen::Matrix3d solveRiccati(const Eigen::Matrix3d Ad,const Eigen::Matrix<double,3,2> Bd, const Eigen::Matrix3d Q, const Eigen::Matrix2d R, int iterations = 30);
 
-    double trapezoidalVelocity(double t, double maxVel);
+    double trapezoidalVelocity(double t, double maxVel, double pathLength);
     double arcLength();
     std::vector<waypoint> generatePath(odometry::Position target);
     double remainingPathDistance(std::vector<waypoint> path, odometry::Position currentPos);
     void advanceIndex(std::vector<waypoint>& path, odometry::Position current);
-    void isImpeded();
-
+    
     double pathLength;
     int waypointIndex;
     bool finished;
-
 
 };
 }}}}
