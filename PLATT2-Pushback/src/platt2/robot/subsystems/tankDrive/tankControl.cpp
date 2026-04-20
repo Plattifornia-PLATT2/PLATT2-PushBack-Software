@@ -1,18 +1,25 @@
 #include "platt2/robot/subsystems/tankDrive/tankControl.hpp"
 #include "platt2/robot/subsystems/odometry/OdometryPosition.hpp"
 #include <cmath>
+#include <iostream>
 #include <memory>
 #include <utility>
 #include <vector>
 #include "platt2/helperFunctions.h"
 #include "Eigen/Dense"
 
+
 namespace platt2{
 namespace robot{
 namespace subsystems{
 namespace tankDrive{
 
-void TankControl::moveToPoint(odometry::Position target, double maxV, parameter params) {
+void TankControl::moveToPoint(odometry::Position target, double maxV) {
+
+    parameter params;
+
+    maxVel = maxV;
+    maxAccel = 1.0; //TODO: add as parameter and tune
 
     TankDrive::MovementVector motionVector;
 
@@ -24,7 +31,13 @@ void TankControl::moveToPoint(odometry::Position target, double maxV, parameter 
     waypointIndex = 0;
     finished = false;
 
+    std::cout<<params.qtheta<<std::endl;
 
+    double lookAheadDistance = (maxVel* maxVel) / (2.0 * maxAccel) + 1.0; // +1in margin
+
+
+    std::vector<double> velArray(40,1);
+    std::vector<double> angArray(40,1);
     std::vector<double> endArray(40,1);
 
     Eigen::Matrix3d m_Q = Eigen::Matrix3d::Zero();
@@ -44,7 +57,7 @@ void TankControl::moveToPoint(odometry::Position target, double maxV, parameter 
 
         double distToEnd = std::hypot(currentPos.x - path.back().pos.x,
                                       currentPos.y - path.back().pos.y);
-        if (distToEnd < 3.0) {  // within 4 inches, hand off
+        if (distToEnd < lookAheadDistance) {  // within 4 inches, hand off
             break;
         }
 
@@ -88,49 +101,43 @@ void TankControl::moveToPoint(odometry::Position target, double maxV, parameter 
         }
 
         motionVector.v = vRef + correction(0);
-        motionVector.w = -wp.w + correction(1);
-
-        
+        motionVector.w = -(wp.w + correction(1));
 
         drivetrain->moveVector(motionVector);
         pros::delay(10);
 
         double avgVel = rollAverage(std::abs(odometry->getVelocity()), endArray);
-        //std::cout << avgVel << std::endl;
-
 
         if (avgVel < 0.1) {
             finished = true;
         }
 
     }
-    std::vector<double> approachArray(10, 3);
+    std::cout << "Approaching final point..." << std::endl;
 
     while (true) {
+
         odometry::Position currentPos = odometry->getPos();
 
-        double dx = target.x - currentPos.x;
-        double dy = target.y - currentPos.y;
-        double distToEnd = std::hypot(dx, dy);
+        double globalDx = target.x - currentPos.x;
+        double globalDy = target.y - currentPos.y;
+
+        double distToEnd =  std::cos(currentPos.heading) * globalDx
+                          + std::sin(currentPos.heading) * globalDy;
+
+        //std::cout << "Distance to end: " << distToEnd << std::endl;     
 
         double headingError = wrapHeading(target.heading - currentPos.heading);
 
-
-        double avgVel = rollAverage(std::abs(odometry->getVelocity()), endArray);
-        if (avgVel < 0.1) {
-            break;
-        }
-        double approachDist = rollAverage(distToEnd, approachArray);
-        if (approachDist < 1) {
-            break;
-        }
-
-        // Position PID drives forward speed, heading PID corrects steering
         double v = -std::clamp(positionPID->calculate(0, distToEnd), -maxV, maxV);
         double w = headingPID->calculate(0, headingError);
 
-        // Scale down speed as we get close so we don't overshoot
-        v *= std::clamp(distToEnd / 4.0, 0.0, 1.0);
+        double avgVel    = rollAverage(std::abs(odometry->getVelocity()),        velArray);
+        double avgAngVel = rollAverage(std::abs(odometry->getAngularVelocity()), angArray);
+
+        if (avgVel < 0.05 && avgAngVel < 0.05) {
+            break;
+        }
 
         motionVector.v = v;
         motionVector.w = w;
@@ -166,7 +173,6 @@ void TankControl::advanceIndex(std::vector<waypoint>& path, odometry::Position c
 std::vector<TankControl::waypoint> TankControl::generatePath(odometry::Position endPos) {
     
     double tankWidth = 14.0; //TODO: add as parameter and tune
-    double maxVel = 0.3; // TODO: add as parameter and tune
 
     std::vector<waypoint> path;
     p0 = odometry->getPos();
@@ -234,21 +240,18 @@ double TankControl::arcLength() {
 
 double TankControl::trapezoidalVelocity(double t, double maxVel, double pathLength) {
 
-    double maxAccel = 0.6;
     t = std::clamp(t, 0.0, 1.0);
 
     double physicsPeak = std::sqrt(maxAccel * pathLength);
     double actualMaxVel = std::min(maxVel, physicsPeak);
 
-    double rf = std::clamp(actualMaxVel / (2.0 * maxAccel), 0.0, 0.5);
-    double peakVel = (rf < 0.5) ? actualMaxVel : actualMaxVel * (rf / 0.5);
+    // Only ramp UP — no decel tail. PID approach handles the slowdown.
+    double rampUpEnd = std::clamp(actualMaxVel / maxAccel, 0.0, 1.0);
 
-    if (t < rf) {
-        return peakVel * (t / rf);
-    } else if (t <= 1.0 - rf) {
-        return peakVel;
+    if (t < rampUpEnd) {
+        return actualMaxVel * (t / rampUpEnd);  // ramp up
     } else {
-        return peakVel * ((1.0 - t) / rf);
+        return actualMaxVel;                     // cruise at peak until handoff
     }
 }
 

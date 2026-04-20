@@ -50,13 +50,13 @@ public:
      */
     TankControl(std::shared_ptr<TankDrive> drive, std::shared_ptr<odometry::Odometry> odom, std::unique_ptr<robot::pid::PID> posPID, std::unique_ptr<robot::pid::PID> headingPID);
     
-        struct parameter {
-    double qx     = 2;   // longitudinal — keep low, feedforward handles this
-    double qy     = 5.0;   // lateral — high, this is what LTV is best at correcting
-    double qtheta = 15.0;   // heading — moderate
-    double rV     = 1.0;   // resist large velocity corrections
-    double rW     = 0.5; 
-        };
+struct parameter {
+    double qx     = 1.0;    // longitudinal
+    double qy     = 5.0;    // lateral — most important
+    double qtheta = 3.0;    // heading
+    double rV     = 500.0;   // strongly resist velocity corrections — feedforward handles speed
+    double rW     = 200.0;   // moderately resist angular corrections
+};
 
     /**
      * @brief Moves the holonomic drive to a specified point with a target heading.
@@ -65,7 +65,7 @@ public:
      * @param y_target Target Y value to move to.
      * @param heading_target Target heading to achieve at the end of the movement.
      */
-    void moveToPoint(odometry::Position target, double rSpeed = 0.8, parameter params = {0,0,0,0,0});
+    void moveToPoint(odometry::Position target, double rSpeed);
     void turnToHeading(double targetHeading, double maxAngularVel=0.3);
 
     /**
@@ -118,6 +118,8 @@ private:
     double pathLength;
     int waypointIndex;
     bool finished;
+    double maxVel;
+    double maxAccel;
 
 };
 }}}}

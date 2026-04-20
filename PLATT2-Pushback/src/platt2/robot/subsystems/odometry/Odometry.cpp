@@ -43,6 +43,10 @@ double Odometry::getVelocity(){
   return position_tracker->getVelocity();
 }
 
+double Odometry::getAngularVelocity(){
+  return position_tracker->getAngularVelocity();
+}
+
 Odometry::Odometry(std::unique_ptr<IPositionTracker> position_tracker):
 m_trackingTask(taskThunk, this)
 {

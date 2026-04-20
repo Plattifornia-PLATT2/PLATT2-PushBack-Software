@@ -89,25 +89,25 @@ class PurpleConfig : public IConfig {
 
     // ** Odometry Offsets **
     static constexpr int HORIZONTAL_ENCODER_PORT{-16};
-    static constexpr int VERTICAL_ENCODER_PORT{13};
-    static constexpr double TRACKING_WHEEL_DIAMETER{2.2725};
-    static constexpr double HORIZONTAL_TRACKING_WHEEL_OFFSET{.5};
-    static constexpr double VERTICAL_TRACKING_WHEEL_OFFSET{2.45};
+    static constexpr int VERTICAL_ENCODER_PORT{-13};
+    static constexpr double TRACKING_WHEEL_DIAMETER{2};
+    static constexpr double HORIZONTAL_TRACKING_WHEEL_OFFSET{-.5};
+    static constexpr double VERTICAL_TRACKING_WHEEL_OFFSET{-3.15};
 
     // ** Linear PID Tuning Values **
     static constexpr double position_dt{0.01};
     static constexpr double position_max{1};
     static constexpr double position_min{-1};
-    static constexpr double position_Kp{0.25};
-    static constexpr double position_Kd{0.025};
+    static constexpr double position_Kp{0.05};
+    static constexpr double position_Kd{0.0};
     static constexpr double position_Ki{0};
 
     // ** Angular PID Tuning Values **
-    static constexpr double heading_dt{0.01};
+    static constexpr double heading_dt{0.01}; 
     static constexpr double heading_max{1};
     static constexpr double heading_min{-1};
-    static constexpr double heading_Kp{0.6};
-    static constexpr double heading_Kd{0.01}; 
+    static constexpr double heading_Kp{0.28};
+    static constexpr double heading_Kd{0.012};
     static constexpr double heading_Ki{0};
 
     

@@ -78,6 +78,7 @@ namespace odometry{
         double getHeading();
 
         double getVelocity();
+        double getAngularVelocity();
 
         /**
          * @brief Resets the current heading of the robot to zero.

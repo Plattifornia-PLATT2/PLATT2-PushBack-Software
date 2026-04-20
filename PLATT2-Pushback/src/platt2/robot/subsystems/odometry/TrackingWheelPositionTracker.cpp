@@ -52,6 +52,10 @@ namespace odometry{
         return this->velocity;
     }
 
+    double TrackingWheelPositionTracker::getAngularVelocity(){
+        return this->angular_velocity;
+    }
+
     void TrackingWheelPositionTracker::updatePosition(){
         pros::delay(1000);
 
@@ -96,6 +100,7 @@ namespace odometry{
             }
 
             this->velocity = sqrt(pow(dX, 2) + pow(dY, 2))/0.01;
+            this->angular_velocity = dTheta/0.01;
 
             // save new values as old values for next loop
             oldX = newX;

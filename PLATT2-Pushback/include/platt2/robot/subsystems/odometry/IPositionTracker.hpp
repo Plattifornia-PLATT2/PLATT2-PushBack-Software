@@ -66,6 +66,7 @@ namespace odometry{
         virtual double getHeading() = 0;
 
         virtual double getVelocity() = 0;
+        virtual double getAngularVelocity() = 0;
 
         /**
          * @brief Sets the offsets for the position tracker.

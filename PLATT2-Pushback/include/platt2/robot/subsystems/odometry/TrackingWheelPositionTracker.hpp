@@ -50,6 +50,7 @@ namespace odometry{
         double y_offset{};
         double heading_offset{};
         double velocity{};
+        double angular_velocity{};
 
         public:
         /**
@@ -87,6 +88,7 @@ namespace odometry{
         double getHeading() override;
 
         double getVelocity() override;
+        double getAngularVelocity() override;
 
         /**
          * @brief Sets the offsets for the position tracker.
