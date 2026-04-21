@@ -49,14 +49,21 @@ public:
      * @param headingPID PID controller for heading control
      */
     TankControl(std::shared_ptr<TankDrive> drive, std::shared_ptr<odometry::Odometry> odom, std::unique_ptr<robot::pid::PID> posPID, std::unique_ptr<robot::pid::PID> headingPID);
-    
+
 struct parameter {
-    double qx     = 1.0;    // longitudinal
-    double qy     = 5.0;    // lateral — most important
-    double qtheta = 3.0;    // heading
-    double rV     = 500.0;   // strongly resist velocity corrections — feedforward handles speed
-    double rW     = 200.0;   // moderately resist angular corrections
+    double qx     = 0.0;   
+    double qy     = 5.0;   // Lower pull toward the line
+    double qtheta = 40.0;  // VERY high penalty for heading (Damping)
+    double rV     = 20000.0;  
+    double rW     = 2500.0; // Massive penalty for steering to stop the "snapping"
 };
+//struct parameter {
+//    double qx     = 0;   
+//    double qy     = 0;   // Lower pull toward the line
+//    double qtheta = 0;  // VERY high penalty for heading (Damping)
+//    double rV     = 1000.0;  
+//    double rW     = 400.0; // Massive penalty for steering to stop the "snapping"
+//};
 
     /**
      * @brief Moves the holonomic drive to a specified point with a target heading.
@@ -65,7 +72,7 @@ struct parameter {
      * @param y_target Target Y value to move to.
      * @param heading_target Target heading to achieve at the end of the movement.
      */
-    void moveToPoint(odometry::Position target, double rSpeed);
+    void moveToPoint(odometry::Position target, double rSpeed, double scaler=4);
     void turnToHeading(double targetHeading, double maxAngularVel=0.3);
 
     /**
@@ -88,7 +95,10 @@ private:
         odometry::Position pos;
         double v;
         double w;
+        Eigen::Matrix<double, 2, 3> K;
     };
+
+    parameter params;
 
 
 
@@ -107,11 +117,11 @@ private:
     
     double curvature(double t);
 
-    Eigen::Matrix3d solveRiccati(const Eigen::Matrix3d Ad,const Eigen::Matrix<double,3,2> Bd, const Eigen::Matrix3d Q, const Eigen::Matrix2d R, int iterations = 30);
+    Eigen::Matrix3d solveRiccati(const Eigen::Matrix3d& Ad,const Eigen::Matrix<double,3,2>& Bd, const Eigen::Matrix3d& Q, const Eigen::Matrix2d& R, Eigen::Matrix3d& P);
 
     double trapezoidalVelocity(double t, double maxVel, double pathLength);
     double arcLength();
-    std::vector<waypoint> generatePath(odometry::Position target);
+    std::vector<waypoint> generatePath(odometry::Position target, double scaler);
     double remainingPathDistance(std::vector<waypoint> path, odometry::Position currentPos);
     void advanceIndex(std::vector<waypoint>& path, odometry::Position current);
     

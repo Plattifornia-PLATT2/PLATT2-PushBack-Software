@@ -98,15 +98,15 @@ class PurpleConfig : public IConfig {
     static constexpr double position_dt{0.01};
     static constexpr double position_max{1};
     static constexpr double position_min{-1};
-    static constexpr double position_Kp{0.05};
-    static constexpr double position_Kd{0.0};
+    static constexpr double position_Kp{0.015};
+    static constexpr double position_Kd{0.009};
     static constexpr double position_Ki{0};
 
     // ** Angular PID Tuning Values **
     static constexpr double heading_dt{0.01}; 
     static constexpr double heading_max{1};
     static constexpr double heading_min{-1};
-    static constexpr double heading_Kp{0.28};
+    static constexpr double heading_Kp{0.26};
     static constexpr double heading_Kd{0.012};
     static constexpr double heading_Ki{0};
 
