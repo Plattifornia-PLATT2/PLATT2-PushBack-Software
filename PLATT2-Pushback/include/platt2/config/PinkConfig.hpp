@@ -65,7 +65,7 @@ class PinkConfig : public IConfig {
     static constexpr int FRONT_INTAKE_MOTOR_PORT{-8};
     static constexpr int MIDDLE_INTAKE_MOTOR_PORT{12};
     static constexpr int REAR_INTAKE_MOTOR_PORT{9};
-    static constexpr int LOWER_ROLLER_MOTOR_PORT{-11};
+    static constexpr int LOWER_ROLLER_MOTOR_PORT{11};
     static constexpr int UPPER_CONVEYOR_MOTOR_PORT{15};
     static constexpr int REAR_INTAKE_LEFT_MOTOR_PORT{13};
     static constexpr int REAR_INTAKE_RIGHT_MOTOR_PORT{-14};
