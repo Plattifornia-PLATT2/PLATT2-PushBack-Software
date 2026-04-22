@@ -1,4 +1,5 @@
 #include "platt2/robot/subsystems/tankDrive/tankControl.hpp"
+#include "Eigen/src/Core/Reverse.h"
 #include "platt2/robot/subsystems/odometry/OdometryPosition.hpp"
 #include <algorithm>
 #include <cmath>
@@ -15,12 +16,14 @@ namespace robot{
 namespace subsystems{
 namespace tankDrive{
 
-void TankControl::moveToPoint(odometry::Position target, double maxV, double c) {
+void TankControl::moveToPoint(odometry::Position target, bool reverse, double maxV, double c) {
+
+    reversed = reverse;
 
     uint32_t now = pros::millis();
 
     maxVel = maxV;
-    maxAccel = 0.7; //TODO: add as parameter and tune
+    maxAccel = 1.5; //TODO: add as parameter and tune
 
     TankDrive::MovementVector motionVector;
 
@@ -29,9 +32,9 @@ void TankControl::moveToPoint(odometry::Position target, double maxV, double c) 
   
     std::vector<waypoint> path = generatePath(target, c);
     
-    //for(const auto& wp : path) {
-    //    std::cout << "Waypoint: (" << wp.pos.x << ", " << wp.pos.y << ", " << wp.pos.heading*(180/M_PI) << ") v: " << wp.v << " w: " << wp.w << std::endl;
-    //}
+    for(const auto& wp : path) {
+        std::cout << "("<<wp.pos.x << ", " << wp.pos.y <<"),"<<std::endl;
+    }
 
     waypointIndex = 0;
     finished = false;
@@ -41,9 +44,9 @@ void TankControl::moveToPoint(odometry::Position target, double maxV, double c) 
     double lookAheadDistance = 4; 
 
 
-    std::vector<double> velArray(60,1);
-    std::vector<double> angArray(60,1);
-    std::vector<double> endArray(60,1);
+    std::vector<double> velArray(40,2);
+    std::vector<double> angArray(40,1);
+    std::vector<double> endArray(40,1);
 
     Eigen::Vector3d error;
     Eigen::Vector2d correction;
@@ -51,7 +54,11 @@ void TankControl::moveToPoint(odometry::Position target, double maxV, double c) 
 
     while (!finished) {
 
-        odometry::Position currentPos = odometry->getPos();
+        odometry::Position currentPos = odometry->getPos();  
+
+        if (reversed){
+            currentPos.heading = wrapHeading(currentPos.heading + M_PI);
+        }
 
         advanceIndex(path, currentPos);
 
@@ -74,26 +81,26 @@ void TankControl::moveToPoint(odometry::Position target, double maxV, double c) 
         error(1) = -sinRef * dx + cosRef * dy;                        // lateral
         error(2) =  wrapHeading(wp.pos.heading - currentPos.heading);
 
-        correction = wp.K * error;
+        correction = wp.K * error;//may be wrong
 
 ;
         if (std::isnan(correction(0)) || std::isnan(correction(1))) {
             correction << 0, 0;
         }
 
-        motionVector.v = wp.v + correction(0);
+        motionVector.v = (reversed ? -1 : 1) *(wp.v + correction(0));
         motionVector.w = -(wp.w + correction(1));
 
-        std::cout << "Target: (" << wp.pos.x << ", " << wp.pos.y << ", " << wp.pos.heading*(180/M_PI) << ")" << std::endl;
-        std::cout << "Current: (" << currentPos.x << ", " << currentPos.y << ", " << currentPos.heading*(180/M_PI) << ")" << std::endl;
-        std::cout << "Error (x, y, theta): (" << error(0) << ", " << error(1) << ", " << error(2)*(180/M_PI) << ") Correction (v, w): (" << correction(0) << ", " << correction(1) << ") Ref (v, w): (" << wp.v << ", " << wp.w << ")"<< std::endl;
+        //std::cout << "Target: (" << wp.pos.x << ", " << wp.pos.y << ", " << wp.pos.heading*(180/M_PI) << ")" << std::endl;
+        //std::cout << "Current: (" << currentPos.x << ", " << currentPos.y << ", " << currentPos.heading*(180/M_PI) << ")" << std::endl;
+        //std::cout << "Error (x, y, theta): (" << error(0) << ", " << error(1) << ", " << error(2)*(180/M_PI) << ") Correction (v, w): (" << correction(0) << ", " << correction(1) << ") Ref (v, w): (" << wp.v << ", " << wp.w << ")"<< std::endl;
 
         drivetrain->moveVector(motionVector);
         pros::Task::delay_until(&now, 10); 
 
         double avgVel = rollAverage(std::abs(odometry->getVelocity()), endArray);
 
-        if (avgVel < 0.05) {
+        if (avgVel < 0.025) {
             std::cout << "Average velocity below threshold, finishing path." << std::endl;
             finished = true;
         }
@@ -105,29 +112,29 @@ void TankControl::moveToPoint(odometry::Position target, double maxV, double c) 
 
     while (true) {
 
-        
-
         odometry::Position currentPos = odometry->getPos();
 
         double globalDx = target.x - currentPos.x;
         double globalDy = target.y - currentPos.y;
 
-        double distToEnd =  std::cos(currentPos.heading) * globalDx
-                          + std::sin(currentPos.heading) * globalDy;
+        double distToEnd =  std::cos((reversed ? target.heading + M_PI : target.heading)) * globalDx
+                          + std::sin((reversed ? target.heading + M_PI : target.heading)) * globalDy;
+
+        //std::cout << "Distance to end: " << distToEnd << std::endl;
 
         double headingError = wrapHeading(target.heading - currentPos.heading);
 
-        double v = -std::clamp(positionPID->calculate(0, distToEnd), -maxV, maxV);
+        double v = (reversed ? 1 : -1) * std::clamp(positionPID->calculate(0, distToEnd), -maxV, maxV);
         double w = std::clamp(headingPID->calculate(0, headingError), -0.15, 0.15);
 
         double avgVel    = rollAverage(std::abs(odometry->getVelocity()),        velArray);
         double avgAngVel = rollAverage(std::abs(odometry->getAngularVelocity()), angArray);
 
-        if (avgVel < 0.05 && avgAngVel < 0.05) {
+        if (avgVel < 0.1 && avgAngVel < 0.1) {
             break;
         }
         //std::cout<< " Heading Error: "  << headingError << " W: " << w << std::endl;
-        motionVector.v = v*std::abs(std::cos(headingError)) ;
+        motionVector.v = v * std::abs(std::cos(headingError));
         motionVector.w = w;
         drivetrain->moveVector(motionVector);
         pros::delay(10);
@@ -168,14 +175,23 @@ std::vector<TankControl::waypoint> TankControl::generatePath(odometry::Position 
 
     std::vector<waypoint> path;
     p0 = odometry->getPos();
+
+    if (reversed) {
+        p0.heading = wrapHeading(p0.heading + M_PI);
+    }
+
     p3 = endPos;
 
-    double angleDiff = std::min(std::abs(endPos.heading+M_PI - p0.heading), 2 * M_PI - std::abs(endPos.heading+M_PI - p0.heading));
+    if (reversed) {
+        p3.heading = wrapHeading(p3.heading + M_PI);
+    }
 
-    p1.x = p0.x + 3*cos(p0.heading);
-    p1.y = p0.y + 3*sin(p0.heading);
-    p2.x = p3.x + angleDiff*scaler*cos(p3.heading+M_PI);
-    p2.y = p3.y + angleDiff*scaler*sin(p3.heading+M_PI);
+    //double angleDiff = std::min(std::abs(endPos.heading+M_PI - p0.heading), 2 * M_PI - std::abs(endPos.heading+M_PI - p0.heading));
+
+    p1.x = p0.x + 5*cos(p0.heading);
+    p1.y = p0.y + 5*sin(p0.heading);
+    p2.x = p3.x + scaler*cos(p3.heading+M_PI);
+    p2.y = p3.y + scaler*sin(p3.heading+M_PI);
 
     pathLength = arcLength();
 
@@ -228,7 +244,7 @@ std::vector<TankControl::waypoint> TankControl::generatePath(odometry::Position 
     for (int i = n - 1; i >= 0; i--) {
         double ds_actual = arcLengths[i + 1];
         double vMax = std::sqrt(vels[i+1]*vels[i+1] + 2.0 * maxAccel * ds_actual);
-        vels[i] = std::min(vels[i], vMax);
+        vels[i] =  std::min(vels[i], vMax);
     }
 
     for (int i = 0; i <= n; i++) {
@@ -327,6 +343,7 @@ void TankControl::turnToHeading(double targetAngle, double maxAngularVel) {
     while (true) {
         
         currentPos = odometry->getPos();
+
         double angleError = targetAngle - currentPos.heading;
     
 

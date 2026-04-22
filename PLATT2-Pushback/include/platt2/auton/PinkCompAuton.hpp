@@ -37,8 +37,8 @@ class PinkCompAuton : public auton::IAuton {
 
     const std::string AUTON_NAME {"Pink_Comp_WP"};
 
-    const double STARTING_X_POSITION {0};
-    const double STARTING_Y_POSITION {0};
+    const double STARTING_X_POSITION {86.5};
+    const double STARTING_Y_POSITION {8.5};
     const double STARTING_HEADING {90.0};
     
     public:

@@ -63,11 +63,11 @@ class PurpleConfig : public IConfig {
     static constexpr int LEFT_4_PORT{10};
 
     // ** Intake Ports **
-    static constexpr int FRONT_INTAKE_MOTOR_PORT{-5};
-    static constexpr int MIDDLE_INTAKE_MOTOR_PORT{4};
+    static constexpr int FRONT_INTAKE_MOTOR_PORT{5};
+    static constexpr int MIDDLE_INTAKE_MOTOR_PORT{-4};
     static constexpr int REAR_INTAKE_MOTOR_PORT{-3};
     static constexpr int LOWER_ROLLER_MOTOR_PORT{-17};
-    static constexpr int UPPER_CONVEYOR_MOTOR_PORT{20};
+    static constexpr int UPPER_CONVEYOR_MOTOR_PORT{-20};
     static constexpr int REAR_INTAKE_LEFT_MOTOR_PORT{19};
     static constexpr int REAR_INTAKE_RIGHT_MOTOR_PORT{-18};
     //static constexpr int DISTANCE_SENSOR_PORT{14};
@@ -98,16 +98,16 @@ class PurpleConfig : public IConfig {
     static constexpr double position_dt{0.01};
     static constexpr double position_max{1};
     static constexpr double position_min{-1};
-    static constexpr double position_Kp{0.015};
-    static constexpr double position_Kd{0.009};
+    static constexpr double position_Kp{0.013};
+    static constexpr double position_Kd{0.01};
     static constexpr double position_Ki{0};
 
     // ** Angular PID Tuning Values **
     static constexpr double heading_dt{0.01}; 
     static constexpr double heading_max{1};
     static constexpr double heading_min{-1};
-    static constexpr double heading_Kp{0.26};
-    static constexpr double heading_Kd{0.012};
+    static constexpr double heading_Kp{0.29};
+    static constexpr double heading_Kd{0.05};
     static constexpr double heading_Ki{0};
 
     

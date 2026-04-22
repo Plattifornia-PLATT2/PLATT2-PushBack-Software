@@ -42,6 +42,14 @@ std::string PurpleCompAuton::getName() const {
 
 void PurpleCompAuton::run() {
 
+    tank_subsytem->moveToPoint({80,62,137},false, 0.5, 15);
+    intake_subsystem->move_intake(robot::subsystems::intake::OUT);
+    pros::delay(500);
+    intake_subsystem->move_intake(robot::subsystems::intake::STOP);
+    tank_subsytem->moveToPoint({116.5,11,90},true, 0.5, 25);
+    //tank_subsytem->moveToPoint({120,24,90},false, 0.5, 5);
+
+
 }
 
 }

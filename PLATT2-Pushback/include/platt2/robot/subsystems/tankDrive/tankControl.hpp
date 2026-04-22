@@ -72,7 +72,7 @@ struct parameter {
      * @param y_target Target Y value to move to.
      * @param heading_target Target heading to achieve at the end of the movement.
      */
-    void moveToPoint(odometry::Position target, double rSpeed, double scaler=4);
+    void moveToPoint(odometry::Position target,bool reverse, double rSpeed, double scaler=4);
     void turnToHeading(double targetHeading, double maxAngularVel=0.3);
 
     /**
@@ -93,7 +93,7 @@ private:
 
     struct waypoint {
         odometry::Position pos;
-        double v;
+        double v; 
         double w;
         Eigen::Matrix<double, 2, 3> K;
     };
@@ -130,6 +130,7 @@ private:
     bool finished;
     double maxVel;
     double maxAccel;
+    bool reversed;
 
 };
 }}}}
