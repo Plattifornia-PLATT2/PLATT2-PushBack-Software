@@ -32,9 +32,9 @@ void TankControl::moveToPoint(odometry::Position target, bool reverse, double ma
   
     std::vector<waypoint> path = generatePath(target, c);
     
-    for(const auto& wp : path) {
-        std::cout << "("<<wp.pos.x << ", " << wp.pos.y <<") V:"<<wp.v<<std::endl;
-    }
+    //for(const auto& wp : path) {
+    //    std::cout << "("<<wp.pos.x << ", " << wp.pos.y <<") V:"<<wp.v<<std::endl;
+    //}
 
     waypointIndex = 0;
     finished = false;
@@ -110,6 +110,8 @@ void TankControl::moveToPoint(odometry::Position target, bool reverse, double ma
     positionPID->resetPID();
     headingPID->resetPID();
 
+    maxVel = motionVector.v;
+
     while (true) {
 
         odometry::Position currentPos = odometry->getPos();
@@ -124,13 +126,14 @@ void TankControl::moveToPoint(odometry::Position target, bool reverse, double ma
 
         double headingError = wrapHeading(target.heading - currentPos.heading);
 
-        double v = (reversed ? 1 : -1) * std::clamp(positionPID->calculate(0, distToEnd), -maxV, maxV);
+       //double v = (reversed ? 1 : -1) * std::clamp(positionPID->calculate(0, distToEnd), -maxV, maxV);
+        double v = (reversed ? -1 : 1) * ((maxVel-0.1)/(lookAheadDistance)) * distToEnd;
         double w = std::clamp(headingPID->calculate(0, headingError), -0.15, 0.15);
 
         double avgVel    = rollAverage(std::abs(odometry->getVelocity()),        velArray);
         double avgAngVel = rollAverage(std::abs(odometry->getAngularVelocity()), angArray);
 
-        //std::cout<<"DistToEnd: "<<distToEnd<< "v: "<<v<<std::endl;
+        std::cout<<"DistToEnd: "<<distToEnd<< "v: "<<v<<std::endl;
 
         if (avgVel < 0.1 && avgAngVel < 0.1) {
             break;
@@ -316,19 +319,25 @@ double TankControl::trapezoidalVelocity(double t, double maxVel, double pathLeng
 
     t = std::clamp(t, 0.0, 1.0);
 
+    
+
+    double tMax = (pathLength+2)/pathLength;
+
+    pathLength = pathLength + 2; //to ensure we can decelerate to the point
+
     double physicsPeak = std::sqrt(maxAccel * pathLength);
     double actualMaxVel = std::min(maxVel, physicsPeak);
 
     double accelDist  = (actualMaxVel * actualMaxVel) / (2.0 * maxAccel);
     double decelDist  = (actualMaxVel * actualMaxVel) / (2.0 * maxDecel);
 
-    double rampUpEnd   = std::clamp(accelDist  / pathLength, 0.0, 1.0);
-    double rampDownStart = std::clamp(1.0 - decelDist / pathLength, 0.0, 1.0);
+    double rampUpEnd   = std::clamp(accelDist  / pathLength, 0.0, tMax);
+    double rampDownStart = std::clamp(tMax - decelDist / pathLength, 0.0, tMax);
 
     if (t < rampUpEnd) {
         return actualMaxVel * (t / rampUpEnd);
     } else if (t > rampDownStart) {
-        return actualMaxVel * ((1.0 - t) / (1.0 - rampDownStart));
+        return actualMaxVel * ((tMax - t) / (tMax - rampDownStart));
     } else {
         return actualMaxVel;
     }

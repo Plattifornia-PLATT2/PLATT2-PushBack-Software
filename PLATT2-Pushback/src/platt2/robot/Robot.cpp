@@ -53,7 +53,7 @@ namespace robot{
             subsystems::tankDrive::TankDrive::MovementVector movement;   
 
             movement.v = leftY;
-            movement.w = rightX;    
+            movement.w = rightX/2;    
 
             tankDrive_subsystem->moveVector(movement);
 
