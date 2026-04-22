@@ -23,7 +23,7 @@ void TankControl::moveToPoint(odometry::Position target, bool reverse, double ma
     uint32_t now = pros::millis();
 
     maxVel = maxV;
-    maxAccel = 1.5; //TODO: add as parameter and tune
+    maxAccel = 0.01; //TODO: add as parameter and tune
 
     TankDrive::MovementVector motionVector;
 
@@ -33,7 +33,7 @@ void TankControl::moveToPoint(odometry::Position target, bool reverse, double ma
     std::vector<waypoint> path = generatePath(target, c);
     
     for(const auto& wp : path) {
-        std::cout << "("<<wp.pos.x << ", " << wp.pos.y <<"),"<<std::endl;
+        std::cout << "("<<wp.pos.x << ", " << wp.pos.y <<") V:"<<wp.v<<std::endl;
     }
 
     waypointIndex = 0;
@@ -44,9 +44,9 @@ void TankControl::moveToPoint(odometry::Position target, bool reverse, double ma
     double lookAheadDistance = 4; 
 
 
-    std::vector<double> velArray(40,2);
-    std::vector<double> angArray(40,1);
-    std::vector<double> endArray(40,1);
+    std::vector<double> velArray(30,100);
+    std::vector<double> angArray(30,100);
+    std::vector<double> endArray(30,100);
 
     Eigen::Vector3d error;
     Eigen::Vector2d correction;
@@ -129,6 +129,8 @@ void TankControl::moveToPoint(odometry::Position target, bool reverse, double ma
 
         double avgVel    = rollAverage(std::abs(odometry->getVelocity()),        velArray);
         double avgAngVel = rollAverage(std::abs(odometry->getAngularVelocity()), angArray);
+
+        //std::cout<<"DistToEnd: "<<distToEnd<< "v: "<<v<<std::endl;
 
         if (avgVel < 0.1 && avgAngVel < 0.1) {
             break;
@@ -236,10 +238,6 @@ std::vector<TankControl::waypoint> TankControl::generatePath(odometry::Position 
         vels[i] = std::min(trapezoidalVelocity(t, maxVel, pathLength), maxCornerVel);
     }
 
-    // Prevent the last point from dragging backward pass to zero
-    // PID handles final decel so last point stays at cruise
-    vels[static_cast<int>(n)] = trapezoidalVelocity(1.0, maxVel, pathLength);
-
     // PASS 2: backward — ensure robot can decelerate in time for corners
     for (int i = n - 1; i >= 0; i--) {
         double ds_actual = arcLengths[i + 1];
@@ -314,18 +312,25 @@ double TankControl::arcLength() {
 
 double TankControl::trapezoidalVelocity(double t, double maxVel, double pathLength) {
 
+    double maxDecel = maxAccel; //TODO: add as parameter and tune
+
     t = std::clamp(t, 0.0, 1.0);
 
     double physicsPeak = std::sqrt(maxAccel * pathLength);
     double actualMaxVel = std::min(maxVel, physicsPeak);
 
-    // Only ramp UP — no decel tail. PID approach handles the slowdown.
-    double rampUpEnd = std::clamp(actualMaxVel / maxAccel, 0.0, 1.0);
+    double accelDist  = (actualMaxVel * actualMaxVel) / (2.0 * maxAccel);
+    double decelDist  = (actualMaxVel * actualMaxVel) / (2.0 * maxDecel);
+
+    double rampUpEnd   = std::clamp(accelDist  / pathLength, 0.0, 1.0);
+    double rampDownStart = std::clamp(1.0 - decelDist / pathLength, 0.0, 1.0);
 
     if (t < rampUpEnd) {
-        return actualMaxVel * (t / rampUpEnd);  // ramp up
+        return actualMaxVel * (t / rampUpEnd);
+    } else if (t > rampDownStart) {
+        return actualMaxVel * ((1.0 - t) / (1.0 - rampDownStart));
     } else {
-        return actualMaxVel;                     // cruise at peak until handoff
+        return actualMaxVel;
     }
 }
 
