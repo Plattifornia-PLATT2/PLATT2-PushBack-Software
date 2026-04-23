@@ -23,7 +23,7 @@ void TankControl::moveToPoint(odometry::Position target, bool reverse, double ma
     uint32_t now = pros::millis();
 
     maxVel = maxV;
-    maxAccel = 0.01; //TODO: add as parameter and tune
+    maxAccel = 0.012; //TODO: add as parameter and tune
 
     TankDrive::MovementVector motionVector;
 
@@ -32,9 +32,9 @@ void TankControl::moveToPoint(odometry::Position target, bool reverse, double ma
   
     std::vector<waypoint> path = generatePath(target, c);
     
-    //for(const auto& wp : path) {
-    //    std::cout << "("<<wp.pos.x << ", " << wp.pos.y <<") V:"<<wp.v<<std::endl;
-    //}
+    for(const auto& wp : path) {
+        std::cout << "("<<wp.pos.x << ", " << wp.pos.y <<") V:"<<wp.v<<std::endl;
+    }
 
     waypointIndex = 0;
     finished = false;
@@ -73,15 +73,15 @@ void TankControl::moveToPoint(odometry::Position target, bool reverse, double ma
         double cosRef = std::cos(wp.pos.heading);
         double sinRef = std::sin(wp.pos.heading);
 
-        double dx = wp.pos.x - currentPos.x;
-        double dy = wp.pos.y - currentPos.y;
+        double dx = (wp.pos.x - currentPos.x);
+        double dy = (wp.pos.y - currentPos.y);
 
         
-        error(0) =  cosRef * dx - sinRef * dy;             
+        error(0) =  (reverse ? -1 : 1) *(cosRef * dx - sinRef * dy);             
         error(1) = -sinRef * dx + cosRef * dy;                        // lateral
         error(2) =  wrapHeading(wp.pos.heading - currentPos.heading);
 
-        correction = wp.K * error;//may be wrong
+        correction =  wp.K * error;
 
 ;
         if (std::isnan(correction(0)) || std::isnan(correction(1))) {
@@ -110,7 +110,7 @@ void TankControl::moveToPoint(odometry::Position target, bool reverse, double ma
     positionPID->resetPID();
     headingPID->resetPID();
 
-    maxVel = motionVector.v;
+    maxVel = (reversed ? -1 : 1) *motionVector.v;
 
     while (true) {
 
@@ -127,13 +127,13 @@ void TankControl::moveToPoint(odometry::Position target, bool reverse, double ma
         double headingError = wrapHeading(target.heading - currentPos.heading);
 
        //double v = (reversed ? 1 : -1) * std::clamp(positionPID->calculate(0, distToEnd), -maxV, maxV);
-        double v = (reversed ? -1 : 1) * ((maxVel-0.1)/(lookAheadDistance)) * distToEnd;
+        double v = (reversed ? -1 : 1) *((maxVel)/(lookAheadDistance*3)) * distToEnd * (std::abs(distToEnd)<0.25 ? 0:1);
         double w = std::clamp(headingPID->calculate(0, headingError), -0.15, 0.15);
 
         double avgVel    = rollAverage(std::abs(odometry->getVelocity()),        velArray);
         double avgAngVel = rollAverage(std::abs(odometry->getAngularVelocity()), angArray);
 
-        std::cout<<"DistToEnd: "<<distToEnd<< "v: "<<v<<std::endl;
+        //std::cout<<"DistToEnd: "<<distToEnd<< "v: "<<v<<std::endl;
 
         if (avgVel < 0.1 && avgAngVel < 0.1) {
             break;

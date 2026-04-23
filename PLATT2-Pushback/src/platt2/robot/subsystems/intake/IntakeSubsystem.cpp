@@ -98,8 +98,8 @@ namespace intake{
                 rear_intake_motor->move_velocity(-intake_speed/2);
                 upper_conveyor_motor->move_velocity(-intake_speed/2);   
                 lower_roller_motor->move_velocity(intake_speed);
-                matchload_left_motor->move_velocity(-intake_speed/2);
-                matchload_right_motor->move_velocity(-intake_speed/2);
+                matchload_left_motor->move_velocity(intake_speed);
+                matchload_right_motor->move_velocity(intake_speed);
                 break;
             }
             case STOP:{

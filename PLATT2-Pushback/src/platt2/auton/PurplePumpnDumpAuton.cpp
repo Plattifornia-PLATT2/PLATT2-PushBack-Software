@@ -35,19 +35,41 @@ std::string PurplePumpnDumpAuton::getName() const {
 void PurplePumpnDumpAuton::run() {
 
 
-    tank_subsytem->moveToPoint({117,40,90},false, 0.3, 8);
-
-    tank_subsytem->moveToPoint({117,9.5,90},true, 0.2, 5);
-
-    tank_subsytem->moveToPoint({118,42,90},false, 0.2, 5);
-    //intake_subsystem->move_intake(robot::subsystems::intake::IN);
-    tank_subsytem->moveToPoint({116.5,9.5,90},true, 0.2, 5);
-    tank_subsytem->moveToPoint({118,42,90},false, 0.2, 5);
+    tank_subsytem->moveToPoint({98,40,90},false, 0.4, 15);
+    tank_subsytem->moveToPoint({116.5,11.5,90},true, 0.4, 8);
+    intake_subsystem->toggle_rear_intake_piston();
+    intake_subsystem->move_intake(robot::subsystems::intake::IN);
+    pros::delay(1250);
+    intake_subsystem->toggle_rear_intake_piston();
+    intake_subsystem->toggle_upper_conveyor_height_piston();
+    tank_subsytem->moveToPoint({117,43,90},false, 0.2, 5);
+    intake_subsystem->toggle_conveyor_stopper_piston();
+    pros::delay(1500);
+    intake_subsystem->move_intake(robot::subsystems::intake::STOP);
+    intake_subsystem->toggle_upper_conveyor_height_piston();
+    tank_subsytem->moveToPoint({116.5, 11.5,90},true, 0.2, 5);
+    intake_subsystem->toggle_rear_intake_piston();
+    intake_subsystem->move_intake(robot::subsystems::intake::OUT_LOW_GOAL);
+    pros::delay(2000);
+    intake_subsystem->toggle_conveyor_stopper_piston();
+    intake_subsystem->move_intake(robot::subsystems::intake::IN);
+    pros::delay(2000);
+    intake_subsystem->toggle_rear_intake_piston();
+    intake_subsystem->move_intake(robot::subsystems::intake::IN);
+    intake_subsystem->toggle_upper_conveyor_height_piston();
+    tank_subsytem->moveToPoint({117,43,90},false, 0.2, 5);
+    intake_subsystem->toggle_conveyor_stopper_piston();
+    intake_subsystem->move_intake(robot::subsystems::intake::IN);
+    pros::delay(2500);
+    intake_subsystem->move_intake(robot::subsystems::intake::STOP);
+    intake_subsystem->toggle_conveyor_stopper_piston();
 
     //Descore
-    tank_subsytem->moveToPoint({106.5,24,60},true, 0.2, 8);
-    tank_subsytem->moveToPoint({106.5,44,90},false, 0.2, 5);
-    tank_subsytem->moveToPoint({106.5,62,90},false, 0.2, 5);
+    tank_subsytem->moveToPoint({106.45,24,70},true, 0.2, 8);
+    intake_subsystem->toggle_descore_piston();
+    tank_subsytem->moveToPoint({106.45,47,90},false, 0.4, 5);
+    intake_subsystem->toggle_descore_piston();
+    tank_subsytem->moveToPoint({106.45,62,90},false, 0.25, 5);
 
 }
 

@@ -53,9 +53,9 @@ public:
 struct parameter {
     double qx     = 0.0;   
     double qy     = 5.0;   // Lower pull toward the line
-    double qtheta = 50.0;  // VERY high penalty for heading (Damping)
+    double qtheta = 45.0;  // VERY high penalty for heading (Damping)
     double rV     = 20000.0;  
-    double rW     = 3100.0; // Massive penalty for steering to stop the "snapping"
+    double rW     = 3000.0; // Massive penalty for steering to stop the "snapping"
 };
 //struct parameter {
 //    double qx     = 0;   
