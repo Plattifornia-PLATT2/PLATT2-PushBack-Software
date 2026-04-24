@@ -1,5 +1,6 @@
 #include "platt2/auton/PurplePumpnDumpAuton.hpp"
 #include "platt2/robot/subsystems/holonomicDrive/HolonomicControl.hpp"
+#include "platt2/robot/subsystems/intake/IntakeSubsystem.hpp"
 #include "platt2/robot/subsystems/odometry/OdometryPosition.hpp"
 
 namespace platt2{
@@ -35,29 +36,32 @@ std::string PurplePumpnDumpAuton::getName() const {
 void PurplePumpnDumpAuton::run() {
 
 
-    tank_subsytem->moveToPoint({98,40,90},false, 0.4, 15);
-    tank_subsytem->moveToPoint({116.5,11.5,90},true, 0.4, 8);
+    tank_subsytem->moveToPoint({98,40,90},false, 0.4, 10);
+    tank_subsytem->moveToPoint({115.5,10,90},true, 0.4, 8);
     intake_subsystem->toggle_rear_intake_piston();
     intake_subsystem->move_intake(robot::subsystems::intake::IN);
     pros::delay(1250);
     intake_subsystem->toggle_rear_intake_piston();
     intake_subsystem->toggle_upper_conveyor_height_piston();
-    tank_subsytem->moveToPoint({117,43,90},false, 0.2, 5);
-    intake_subsystem->toggle_conveyor_stopper_piston();
+    tank_subsytem->moveToPoint({117,43.5,90},false, 0.2, 5);
+    intake_subsystem->toggle_conveyor_stopper_piston();   
+     intake_subsystem->move_intake(robot::subsystems::intake::OUT);
+    pros::delay(100);
+    intake_subsystem->move_intake(robot::subsystems::intake::IN);
     pros::delay(1500);
     intake_subsystem->move_intake(robot::subsystems::intake::STOP);
     intake_subsystem->toggle_upper_conveyor_height_piston();
-    tank_subsytem->moveToPoint({116.5, 11.5,90},true, 0.2, 5);
+    tank_subsytem->moveToPoint({117.5, 10,90},true, 0.2, 5);
     intake_subsystem->toggle_rear_intake_piston();
     intake_subsystem->move_intake(robot::subsystems::intake::OUT_LOW_GOAL);
-    pros::delay(2000);
+    pros::delay(1500);
     intake_subsystem->toggle_conveyor_stopper_piston();
     intake_subsystem->move_intake(robot::subsystems::intake::IN);
-    pros::delay(2000);
+    pros::delay(2500);
     intake_subsystem->toggle_rear_intake_piston();
     intake_subsystem->move_intake(robot::subsystems::intake::IN);
     intake_subsystem->toggle_upper_conveyor_height_piston();
-    tank_subsytem->moveToPoint({117,43,90},false, 0.2, 5);
+    tank_subsytem->moveToPoint({117.5,43.5,90},false, 0.2, 5);
     intake_subsystem->toggle_conveyor_stopper_piston();
     intake_subsystem->move_intake(robot::subsystems::intake::IN);
     pros::delay(2500);
@@ -65,11 +69,11 @@ void PurplePumpnDumpAuton::run() {
     intake_subsystem->toggle_conveyor_stopper_piston();
 
     //Descore
-    tank_subsytem->moveToPoint({106.45,24,70},true, 0.2, 8);
+    tank_subsytem->moveToPoint({107.5,24,80},true, 0.2, 8);
     intake_subsystem->toggle_descore_piston();
-    tank_subsytem->moveToPoint({106.45,47,90},false, 0.4, 5);
+    tank_subsytem->moveToPoint({107.1,47,90},false, 0.4, 5);
     intake_subsystem->toggle_descore_piston();
-    tank_subsytem->moveToPoint({106.45,62,90},false, 0.25, 5);
+    tank_subsytem->moveToPoint({107.1,62,90},false, 0.25, 5);
 
 }
 

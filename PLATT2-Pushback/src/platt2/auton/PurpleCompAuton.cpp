@@ -46,28 +46,31 @@ void PurpleCompAuton::run() {
     intake_subsystem->move_intake(robot::subsystems::intake::OUT);
     pros::delay(500);
     intake_subsystem->move_intake(robot::subsystems::intake::STOP);
-    tank_subsytem->moveToPoint({116.5,9.25,90},true, 0.5, 35);
+    tank_subsytem->moveToPoint({115.5,10,90},true, 0.4, 15);
     intake_subsystem->toggle_rear_intake_piston();
     intake_subsystem->move_intake(robot::subsystems::intake::IN);
     pros::delay(1250);
     intake_subsystem->toggle_rear_intake_piston();
     intake_subsystem->toggle_upper_conveyor_height_piston();
-    tank_subsytem->moveToPoint({117,43,90},false, 0.2, 5);
-    intake_subsystem->toggle_conveyor_stopper_piston();
+    tank_subsytem->moveToPoint({117,43.5,90},false, 0.2, 5);
+    intake_subsystem->toggle_conveyor_stopper_piston();   
+     intake_subsystem->move_intake(robot::subsystems::intake::OUT);
+    pros::delay(100);
+    intake_subsystem->move_intake(robot::subsystems::intake::IN);
     pros::delay(1500);
     intake_subsystem->move_intake(robot::subsystems::intake::STOP);
     intake_subsystem->toggle_upper_conveyor_height_piston();
-    tank_subsytem->moveToPoint({116.5,9,90},true, 0.2, 5);
+    tank_subsytem->moveToPoint({117, 10,90},true, 0.2, 5);
     intake_subsystem->toggle_rear_intake_piston();
     intake_subsystem->move_intake(robot::subsystems::intake::OUT_LOW_GOAL);
-    pros::delay(2000);
+    pros::delay(1500);
     intake_subsystem->toggle_conveyor_stopper_piston();
     intake_subsystem->move_intake(robot::subsystems::intake::IN);
-    pros::delay(2000);
+    pros::delay(2500);
     intake_subsystem->toggle_rear_intake_piston();
     intake_subsystem->move_intake(robot::subsystems::intake::IN);
     intake_subsystem->toggle_upper_conveyor_height_piston();
-    tank_subsytem->moveToPoint({117,43,90},false, 0.2, 5);
+    tank_subsytem->moveToPoint({117.5,43.5,90},false, 0.2, 5);
     intake_subsystem->toggle_conveyor_stopper_piston();
     intake_subsystem->move_intake(robot::subsystems::intake::IN);
     pros::delay(2500);
@@ -75,11 +78,11 @@ void PurpleCompAuton::run() {
     intake_subsystem->toggle_conveyor_stopper_piston();
 
     //Descore
-    tank_subsytem->moveToPoint({105.75,24,60},true, 0.2, 8);
+    tank_subsytem->moveToPoint({107.25,24,85},true, 0.2, 5);
     intake_subsystem->toggle_descore_piston();
-    tank_subsytem->moveToPoint({105.75,47,90},false, 0.4, 5);
+    tank_subsytem->moveToPoint({107.35,47,90},false, 0.4, 5);
     intake_subsystem->toggle_descore_piston();
-    tank_subsytem->moveToPoint({105,62,90},false, 0.25, 5);
+    tank_subsytem->moveToPoint({107.35,62,90},false, 0.25, 5);
 
 
 }

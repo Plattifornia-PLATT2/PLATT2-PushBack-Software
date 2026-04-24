@@ -106,7 +106,7 @@ class PurpleConfig : public IConfig {
     static constexpr double heading_dt{0.01}; 
     static constexpr double heading_max{1};
     static constexpr double heading_min{-1};
-    static constexpr double heading_Kp{0.15};
+    static constexpr double heading_Kp{0.17};
     static constexpr double heading_Kd{0.005};
     static constexpr double heading_Ki{0};
 
