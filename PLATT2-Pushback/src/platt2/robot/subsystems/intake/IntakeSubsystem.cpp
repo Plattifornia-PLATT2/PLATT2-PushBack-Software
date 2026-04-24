@@ -92,16 +92,30 @@ namespace intake{
                 matchload_right_motor->move_velocity(-intake_speed);
                 break;   
             }
+
             case OUT_LOW_GOAL:{
-                front_intake_motor->move_velocity(-intake_speed);
-                middle_intake_motor->move_velocity(-intake_speed);
-                rear_intake_motor->move_velocity(-intake_speed/2);
-                upper_conveyor_motor->move_velocity(-intake_speed/2);   
-                lower_roller_motor->move_velocity(intake_speed);
-                matchload_left_motor->move_velocity(-intake_speed/2);
-                matchload_right_motor->move_velocity(-intake_speed/2);
+                if(rear_intake_piston_state){
+                    front_intake_motor->move_velocity(-intake_speed);
+                    middle_intake_motor->move_velocity(-intake_speed);
+                    rear_intake_motor->move_velocity(intake_speed/2);
+                    upper_conveyor_motor->move_velocity(-intake_speed/2);   
+                    lower_roller_motor->move_velocity(intake_speed);
+                    matchload_left_motor->move_velocity(intake_speed);
+                    matchload_right_motor->move_velocity(intake_speed);
+                }
+
+                else{
+                    front_intake_motor->move_velocity(-intake_speed);
+                    middle_intake_motor->move_velocity(-intake_speed);
+                    rear_intake_motor->move_velocity(-intake_speed);
+                    upper_conveyor_motor->move_velocity(-intake_speed);   
+                    lower_roller_motor->move_velocity(intake_speed);
+                    matchload_left_motor->move_velocity(-intake_speed);
+                    matchload_right_motor->move_velocity(-intake_speed);
+                }
                 break;
             }
+
             case STOP:{
                 front_intake_motor->move_velocity(0);
                 middle_intake_motor->move_velocity(0);
@@ -169,6 +183,30 @@ namespace intake{
                 matchload_right_motor->move_velocity(-intake_speed);
                 break;   
             }
+            
+            case OUT_LOW_GOAL:{
+                if(rear_intake_piston_state){
+                    front_intake_motor->move_velocity(-intake_speed);
+                    middle_intake_motor->move_velocity(-intake_speed);
+                    rear_intake_motor->move_velocity(-intake_speed/2);
+                    upper_conveyor_motor->move_velocity(-intake_speed/2);   
+                    lower_roller_motor->move_velocity(intake_speed);
+                    matchload_left_motor->move_velocity(-intake_speed);
+                    matchload_right_motor->move_velocity(-intake_speed);
+                }
+
+                else{
+                    front_intake_motor->move_velocity(-intake_speed);
+                    middle_intake_motor->move_velocity(-intake_speed);
+                    rear_intake_motor->move_velocity(intake_speed);
+                    upper_conveyor_motor->move_velocity(-intake_speed);   
+                    lower_roller_motor->move_velocity(intake_speed);
+                    matchload_left_motor->move_velocity(intake_speed);
+                    matchload_right_motor->move_velocity(intake_speed);
+                }
+                break;
+            }
+
             case STOP:{
                 rear_intake_motor->move_velocity(0);
                 lower_roller_motor->move_velocity(0);

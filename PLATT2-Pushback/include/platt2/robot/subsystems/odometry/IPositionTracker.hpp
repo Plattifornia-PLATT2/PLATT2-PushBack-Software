@@ -40,9 +40,9 @@ namespace odometry{
          * 
          * @return OdometryPosition Struct containing x, y, and heading of the robot.
          */
-        virtual OdometryPosition getPos() = 0;
+        virtual Position getPos() = 0;
 
-        virtual void setPos(OdometryPosition pos) = 0;
+        virtual void setPos(Position pos) = 0;
 
         /**
          * @brief Gets the current x position of the robot.
@@ -64,6 +64,9 @@ namespace odometry{
          * @return double The heading in degrees.
          */
         virtual double getHeading() = 0;
+
+        virtual double getVelocity() = 0;
+        virtual double getAngularVelocity() = 0;
 
         /**
          * @brief Sets the offsets for the position tracker.

@@ -5,8 +5,6 @@
 #include "platt2/config/IConfig.hpp"
 #include "platt2/robot/Robot.hpp"
 #include "platt2/robot/pid/pid.hpp"
-#include "platt2/robot/subsystems/holonomicDrive/XDrive.hpp"
-#include "platt2/robot/subsystems/holonomicDrive/XDriveModule.hpp"
 #include "platt2/robot/subsystems/intake/IntakeSubsystem.hpp"
 #include "platt2/robot/subsystems/odometry/Odometry.hpp"
 #include "platt2/robot/subsystems/colorsort/ColorSort.hpp"
@@ -54,31 +52,29 @@ class PurpleConfig : public IConfig {
 
 
     // ** Drive Ports **
-    static constexpr int LEFT_FRONT_MODULE_TOP_PORT{1};
-    static constexpr int LEFT_FRONT_MODULE_BOTTOM_PORT{-2};
+    static constexpr int RIGHT_1_PORT{-20};
+    static constexpr int RIGHT_2_PORT{19};
+    static constexpr int RIGHT_3_PORT{2};
+    static constexpr int RIGHT_4_PORT{-1};
 
-    static constexpr int RIGHT_FRONT_MODULE_TOP_PORT{-7};
-    static constexpr int RIGHT_FRONT_MODULE_BOTTOM_PORT{8};
-
-    static constexpr int LEFT_REAR_MODULE_TOP_PORT{-11};
-    static constexpr int LEFT_REAR_MODULE_BOTTOM_PORT{12}; 
-
-    static constexpr int RIGHT_REAR_MODULE_TOP_PORT{-9};
-    static constexpr int RIGHT_REAR_MODULE_BOTTOM_PORT{10};
+    static constexpr int LEFT_1_PORT{3};
+    static constexpr int LEFT_2_PORT{-4}; 
+    static constexpr int LEFT_3_PORT{-5};
+    static constexpr int LEFT_4_PORT{6};
 
     // ** Intake Ports **
-    static constexpr int FRONT_INTAKE_MOTOR_PORT{-5};
-    static constexpr int MIDDLE_INTAKE_MOTOR_PORT{4};
-    static constexpr int REAR_INTAKE_MOTOR_PORT{-3};
-    static constexpr int LOWER_ROLLER_MOTOR_PORT{-17};
-    static constexpr int UPPER_CONVEYOR_MOTOR_PORT{20};
-    static constexpr int REAR_INTAKE_LEFT_MOTOR_PORT{19};
-    static constexpr int REAR_INTAKE_RIGHT_MOTOR_PORT{-18};
+    static constexpr int FRONT_INTAKE_MOTOR_PORT{-8};
+    static constexpr int MIDDLE_INTAKE_MOTOR_PORT{12};
+    static constexpr int REAR_INTAKE_MOTOR_PORT{-9};
+    static constexpr int LOWER_ROLLER_MOTOR_PORT{-11};
+    static constexpr int UPPER_CONVEYOR_MOTOR_PORT{15};
+    static constexpr int REAR_INTAKE_LEFT_MOTOR_PORT{13};
+    static constexpr int REAR_INTAKE_RIGHT_MOTOR_PORT{-14};
     //static constexpr int DISTANCE_SENSOR_PORT{14};
     static constexpr pros::MotorGears INTAKE_GEARSET{pros::MotorGears::blue};
 
     // ** Color Sort Ports **
-    static constexpr int OPTICAL_SENSOR_PORT{14};
+    static constexpr int OPTICAL_SENSOR_PORT{10};
 
     // ** Pneumatics **
     static constexpr int ED_MECH_PISTON_PORT{1};
@@ -89,29 +85,29 @@ class PurpleConfig : public IConfig {
     static constexpr int REAR_INTAKE_PISTON_PORT {6};
 
     // ** VEX IMU Port **
-    static constexpr int VEX_IMU_PORT{15};
+    static constexpr int VEX_IMU_PORT{18};
 
     // ** Odometry Offsets **
-    static constexpr int HORIZONTAL_ENCODER_PORT{-16};
-    static constexpr int VERTICAL_ENCODER_PORT{13};
-    static constexpr double TRACKING_WHEEL_DIAMETER{2.2725};
-    static constexpr double HORIZONTAL_TRACKING_WHEEL_OFFSET{.5};
-    static constexpr double VERTICAL_TRACKING_WHEEL_OFFSET{2.45};
+    static constexpr int HORIZONTAL_ENCODER_PORT{20};
+    static constexpr int VERTICAL_ENCODER_PORT{-7};
+    static constexpr double TRACKING_WHEEL_DIAMETER{2};
+    static constexpr double HORIZONTAL_TRACKING_WHEEL_OFFSET{-.5};
+    static constexpr double VERTICAL_TRACKING_WHEEL_OFFSET{-3.15};
 
     // ** Linear PID Tuning Values **
     static constexpr double position_dt{0.01};
     static constexpr double position_max{1};
     static constexpr double position_min{-1};
-    static constexpr double position_Kp{0.25};
-    static constexpr double position_Kd{0.025};
+    static constexpr double position_Kp{0.075};
+    static constexpr double position_Kd{0.0042};
     static constexpr double position_Ki{0};
 
     // ** Angular PID Tuning Values **
-    static constexpr double heading_dt{0.01};
+    static constexpr double heading_dt{0.01}; 
     static constexpr double heading_max{1};
     static constexpr double heading_min{-1};
-    static constexpr double heading_Kp{0.6};
-    static constexpr double heading_Kd{0.01}; 
+    static constexpr double heading_Kp{0.17};
+    static constexpr double heading_Kd{0.005};
     static constexpr double heading_Ki{0};
 
     

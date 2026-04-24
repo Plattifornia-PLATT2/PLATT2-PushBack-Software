@@ -29,9 +29,6 @@ void HolonomicControl::moveToPoint(double x_target, double y_target, double targ
     std::vector<double> rArray(40,1);
     std::vector<double> wArray(40,1);
 
-    avg rAve;
-    avg wAve;
-
     double startTime = pros::millis();
     double startPosX = odometry->getX();
     double startPosY = odometry->getY();
@@ -73,13 +70,11 @@ void HolonomicControl::moveToPoint(double x_target, double y_target, double targ
         motionVector.w = std::clamp(headingPID->calculate(0, angle_error), -wSpeed, wSpeed);
 
         //add current rotational velocity to rolling average for determining if the motion is finished
-        rAve = rollAverage(std::abs(p.r), rArray);
-        wAve = rollAverage(std::abs(motionVector.w), wArray);
-        rArray = rAve.data;
-        wArray = wAve.data;
+        double rAve = rollAverage(std::abs(p.r), rArray);
+        double wAve = rollAverage(std::abs(motionVector.w), wArray);
 
         // if both the linear and rotational velocities have been low for a little while, we can assume we've reached the target and stop the motion
-        if (rAve.average < 0.4 && wAve.average < 00.02){break;}
+        if (rAve < 0.4 && wAve < 00.02){break;}
         if (pros::millis()-startTime>timeout*1000){break;}
         
         // send the movement command to the drivetrain

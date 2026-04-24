@@ -1,5 +1,5 @@
 #include "platt2/robot/Robot.hpp"
-#include <cmath>      // for std::isnan, M_PI
+#include <cmath>    
 #include <math.h>
 #include <memory>
 #include "platt2/helperFunctions.h"
@@ -9,9 +9,9 @@ namespace platt2{
 namespace robot{
 
     Robot::Robot(
-        std::shared_ptr<subsystems::holonomicDrive::XDrive>& xdrive_subsystem,
+        std::shared_ptr<subsystems::tankDrive::TankDrive>& tank_drive_subsystem,
         std::shared_ptr<subsystems::odometry::Odometry>& odometry_subsystem,
-        std::shared_ptr<subsystems::holonomicDrive::HolonomicControl>& holonomic_controller,
+        std::shared_ptr<subsystems::tankDrive::TankControl>& tank_controller,
         std::shared_ptr<subsystems::intake::IntakeSubsystem>& intake_subsystem,
         platt2::robot::AllianceConfig alliance_config,
         platt2::robot::RobotConfig robot_config,
@@ -19,9 +19,9 @@ namespace robot{
         std::unique_ptr<profiles::DriverProfile>& driver_profile,
         std::unique_ptr<auton::IAuton>& auton_routine,
         std::shared_ptr<subsystems::colorsort::ColorSortSubsystem>& color_sort_subsystem
-    ) : holonomicDrive_subsystem{xdrive_subsystem},
+    ) : tankDrive_subsystem{tank_drive_subsystem},
         odom_subsystem{odometry_subsystem},
-        holonomic_controller{holonomic_controller},
+        tank_controller{tank_controller},
         intake_subsystem{intake_subsystem},
         driver_profile{std::move(driver_profile)},
         auton_routine{std::move(auton_routine)},
@@ -38,17 +38,6 @@ namespace robot{
         pros::Controller controller{pros::Controller(pros::E_CONTROLLER_MASTER)};
         controller.print(0, 0, "Sorted Color: %d", color_sort_subsystem->getSortedColor());
 
-        // initialize target heading from the odometry (adjusted if needed)
-        double targetHeading = odom_subsystem->getHeading() - M_PI/2;
-        double angle_error;
-
-        // fetch real heading PID and reset it before entering the loop
-        std::unique_ptr<pid::PID>& headingPID = holonomic_controller->getHeadingPID();
-        headingPID->resetPID();
-
-        // debugging helpers
-        double pid_output = 0;
-
         while(true){
             
             double leftX = double(controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_X))/127;
@@ -61,36 +50,12 @@ namespace robot{
             }
 
             // Create movement vector
-            subsystems::holonomicDrive::MovementVector movement;   
+            subsystems::tankDrive::TankDrive::MovementVector movement;   
 
-            movement.theta = atan2(leftY, leftX)-((odom_subsystem->getHeading())-M_PI/2);
-            movement.r = std::clamp(sqrt(leftX*leftX + leftY*leftY), 0.0,1.0); 
-            movement.w = rightX/2;
-                
-            //targetHeading += (rightX*(2*M_PI)*0.01);
-            //
-            //angle_error = (targetHeading - (odom_subsystem->getHeading()));
-//
-            //if(angle_error > M_PI || angle_error < -M_PI){
-            //    angle_error = -1 * sgn(angle_error) * (2*M_PI - std::abs(angle_error));
-            //}   
-            //
-            //if (std::isnan(angle_error)) { angle_error = 0;}
-            
-            //pid_output = headingPID->calculate(0, angle_error);
-            //if(std::isnan(pid_output)) {
-            //    // something went wrong inside the controller; clamp and reset to recover
-            //    pid_output = 0;
-            //    headingPID->resetPID();
-            //}
-            //movement.w = pid_output;
-//
-            // log both the error and the PID output so we can see what is happening
-            //std::cout << "angle_error=" << angle_error
-            //          << " pid=" << pid_output << std::endl;
-            //
-            // Send to subsystem
-            holonomicDrive_subsystem->moveVector(movement);
+            movement.v = leftY;
+            movement.w = rightX/2;    
+
+            tankDrive_subsystem->moveVector(movement);
 
             if(controller.get_digital(driver_profile->frontIntake_IN)){
                 intake_subsystem->colorSortMode(color_sort_subsystem->isSortActive());
@@ -122,10 +87,6 @@ namespace robot{
             
             if(controller.get_digital_new_press(driver_profile->fieldOriented_toggle)){
 
-            }
-
-            if(controller.get_digital_new_press(driver_profile->heading_reset)){
-                odom_subsystem->resetHeading();
             }
 
             if(controller.get_digital_new_press(driver_profile->colorSort_toggle)){
@@ -170,7 +131,7 @@ namespace robot{
     }
 
     void Robot::init(){
-        odom_subsystem->initVexImu();
+        odom_subsystem->initImu();
     }
 
 }

@@ -18,22 +18,17 @@ static void taskThunk(void *p) {
     reinterpret_cast<Odometry*>(p)->startTracking();
 }
 
-OdometryPosition Odometry::getPos() {
+Position Odometry::getPos() {
   return position_tracker->getPos();
 }
 
 double Odometry::getX() { return position_tracker->getX(); }
 double Odometry::getY() { return position_tracker->getY(); }
 double Odometry::getHeading() { return position_tracker->getHeading(); }
-double Odometry::getVexHeading() {return 0;}
-void Odometry::initVexImu() {position_tracker->init();}
+void Odometry::initImu() {position_tracker->init();}
 
-void Odometry::setPos(OdometryPosition pos){
+void Odometry::setPos(Position pos){
   position_tracker->setPos(pos);
-}
-
-void Odometry::resetHeading() {
-  // TODO
 }
 
 void Odometry::startTracking(){
@@ -42,6 +37,14 @@ void Odometry::startTracking(){
 
 void Odometry::setOffsets(double x, double y){
   position_tracker->setOffsets(x, y);
+}
+
+double Odometry::getVelocity(){
+  return position_tracker->getVelocity();
+}
+
+double Odometry::getAngularVelocity(){
+  return position_tracker->getAngularVelocity();
 }
 
 Odometry::Odometry(std::unique_ptr<IPositionTracker> position_tracker):
