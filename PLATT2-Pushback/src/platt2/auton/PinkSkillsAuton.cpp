@@ -44,19 +44,19 @@ void PinkSkillsAuton::run() {
     tank_subsytem->moveToPoint({37, 45, 90}, true, 0.3, 5);
     intake_subsystem->toggle_ed_mech_piston();
     intake_subsystem->toggle_conveyor_stopper_piston();
-    tank_subsytem->moveToPoint({61, 61, 45}, false, 0.3, 10);
+    tank_subsytem->moveToPoint({61, 60.5, 45}, false, 0.3, 10);
     intake_subsystem->move_intake(robot::subsystems::intake::IN);
     pros::delay(1000);
     intake_subsystem->move_intake(robot::subsystems::intake::STOP);
     intake_subsystem->toggle_conveyor_stopper_piston();
     intake_subsystem->toggle_ed_mech_piston();
-    tank_subsytem->moveToPoint({26,9,90},true, 0.5, 25);
+    tank_subsytem->moveToPoint({25.5,9,90},true, 0.5, 25);
     intake_subsystem->toggle_rear_intake_piston();
     intake_subsystem->move_intake(robot::subsystems::intake::IN);
     pros::delay(900);
     intake_subsystem->toggle_rear_intake_piston();
     intake_subsystem->toggle_upper_conveyor_height_piston();
-    tank_subsytem->moveToPoint({27,43,90},false, 0.2, 5);
+    tank_subsytem->moveToPoint({26.25,43,90},false, 0.2, 5);
     intake_subsystem->toggle_conveyor_stopper_piston();
     pros::delay(1500);
     intake_subsystem->move_intake(robot::subsystems::intake::STOP);
@@ -70,7 +70,7 @@ void PinkSkillsAuton::run() {
     pros::delay(2000);
     intake_subsystem->toggle_rear_intake_piston();
     intake_subsystem->toggle_upper_conveyor_height_piston();
-    tank_subsytem->moveToPoint({27,43,90},false, 0.2, 5);
+    tank_subsytem->moveToPoint({26.25,43,90},false, 0.2, 5);
     intake_subsystem->toggle_conveyor_stopper_piston();
     intake_subsystem->move_intake(robot::subsystems::intake::STOP);
 }

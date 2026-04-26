@@ -36,19 +36,19 @@ std::string PinkPumpnDumpAuton::getName() const {
 
 void PinkPumpnDumpAuton::run() {
     tank_subsytem->moveToPoint({42,40,90},false, 0.3, 8);
-    tank_subsytem->moveToPoint({27,9,90},true, 0.5, 25);
+    tank_subsytem->moveToPoint({25.5,9,90},true, 0.5, 25);
     intake_subsystem->toggle_rear_intake_piston();
     intake_subsystem->move_intake(robot::subsystems::intake::IN);
     pros::delay(900);
     intake_subsystem->toggle_rear_intake_piston();
     intake_subsystem->toggle_upper_conveyor_height_piston();
-    tank_subsytem->moveToPoint({27,42,90},false, 0.2, 5);
+    tank_subsytem->moveToPoint({25.75, 43,90},false, 0.2, 5);
     intake_subsystem->toggle_conveyor_stopper_piston();
     pros::delay(1500);
     intake_subsystem->move_intake(robot::subsystems::intake::STOP);
     intake_subsystem->toggle_conveyor_stopper_piston();
     intake_subsystem->toggle_upper_conveyor_height_piston();
-    tank_subsytem->moveToPoint({27,9,90},true, 0.2, 5);
+    tank_subsytem->moveToPoint({26.5,9,90},true, 0.2, 5);
     intake_subsystem->toggle_rear_intake_piston();
     intake_subsystem->move_intake(robot::subsystems::intake::OUT_LOW_GOAL);
     pros::delay(1500);
@@ -56,16 +56,16 @@ void PinkPumpnDumpAuton::run() {
     pros::delay(2000);
     intake_subsystem->toggle_rear_intake_piston();
     intake_subsystem->toggle_upper_conveyor_height_piston();
-    tank_subsytem->moveToPoint({27,42,90},false, 0.2, 5);
+    tank_subsytem->moveToPoint({26.25,43,90},false, 0.2, 5);
     intake_subsystem->toggle_conveyor_stopper_piston();
     pros::delay(2000);
     intake_subsystem->move_intake(robot::subsystems::intake::STOP);
 
-    tank_subsytem->moveToPoint({15.25,20,85},true, 0.2, 8);
+    tank_subsytem->moveToPoint({14.5,20,87},true, 0.2, 8);
     intake_subsystem->toggle_descore_piston();
-    tank_subsytem->moveToPoint({15.5,47,90},false, 0.5, 5);
+    tank_subsytem->moveToPoint({15,47,90},false, 0.5, 5);
     intake_subsystem->toggle_descore_piston();
-    tank_subsytem->moveToPoint({15.5,62,90},false, 0.25, 5);
+    tank_subsytem->moveToPoint({15,62,90},false, 0.25, 5);
 }
 }
 }

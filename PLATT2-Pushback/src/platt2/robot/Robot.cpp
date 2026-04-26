@@ -2,6 +2,7 @@
 #include <cmath>    
 #include <math.h>
 #include <memory>
+#include "platt2/EDriverConfig.hpp"
 #include "platt2/helperFunctions.h"
 
 namespace platt2{
@@ -45,15 +46,22 @@ namespace robot{
             double rightX = double(controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X))/127;
 
             // right stick deadzone to eliminate stick drift issues with heading
-            if(rightX < 0.05 && rightX > -0.05){
+            if(rightX < 0.03 && rightX > -0.03){
                 rightX = 0;
             }
 
             // Create movement vector
             subsystems::tankDrive::TankDrive::MovementVector movement;   
 
-            movement.v = leftY;
-            movement.w = rightX/2;    
+            if(driver_profile->driverEnum = JON){
+                movement.v = leftY;
+                movement.w = rightX/1.5;
+            }
+            else if(driver_profile->driverEnum = QUINN){
+                movement.v = leftY * 0.90;
+                movement.w = rightX/3;
+            }
+    
 
             tankDrive_subsystem->moveVector(movement);
 
