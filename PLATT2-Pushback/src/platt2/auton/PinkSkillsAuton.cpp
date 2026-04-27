@@ -69,6 +69,8 @@ void PinkSkillsAuton::run() {
     intake_subsystem->toggle_conveyor_stopper_piston();
     intake_subsystem->toggle_ed_mech_piston();
     tank_subsytem->moveToPoint({62, 58.5, 45}, false, 0.5, 5);
+
+    pros::delay(2000);
     intake_subsystem->move_intake(robot::subsystems::intake::IN);
     pros::delay(2200);
     intake_subsystem->move_intake(robot::subsystems::intake::STOP);
