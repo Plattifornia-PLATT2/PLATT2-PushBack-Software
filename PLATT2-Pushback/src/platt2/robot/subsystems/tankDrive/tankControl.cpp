@@ -32,9 +32,9 @@ void TankControl::moveToPoint(odometry::Position target, bool reverse, double ma
   
     std::vector<waypoint> path = generatePath(target, c);
     
-    for(const auto& wp : path) {
-        std::cout << "("<<wp.pos.x << ", " << wp.pos.y <<") V:"<<wp.v<<std::endl;
-    }
+    //for(const auto& wp : path) {
+    //    std::cout << "("<<wp.pos.x << ", " << wp.pos.y <<") V:"<<wp.v<<std::endl;
+    //}
 
     waypointIndex = 0;
     finished = false;

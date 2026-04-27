@@ -4,6 +4,7 @@
 #include "platt2/robot/subsystems/intake/IntakeSubsystem.hpp"
 #include "platt2/robot/subsystems/colorSort/colorSort.hpp"
 #include "pros/rtos.hpp"
+#include <iostream>
 
 namespace platt2{
 namespace auton{
@@ -36,43 +37,52 @@ std::string PinkSkillsAuton::getName() const {
 }
 
 void PinkSkillsAuton::run() {
-    intake_subsystem->move_intake(robot::subsystems::intake::IN);
-    tank_subsytem->moveToPoint({56, 40, 90}, false, 0.3, 5);
-    tank_subsytem->moveToPoint({35, 60.5, 125}, false, 0.3, 10);
-    tank_subsytem->moveToPoint({28, 68.5, 120}, false, 0.1, 5);
-    intake_subsystem->move_intake(robot::subsystems::intake::STOP);
-    tank_subsytem->moveToPoint({37, 45, 90}, true, 0.3, 5);
-    intake_subsystem->toggle_ed_mech_piston();
-    intake_subsystem->toggle_conveyor_stopper_piston();
-    tank_subsytem->moveToPoint({61, 61, 45}, false, 0.3, 10);
-    intake_subsystem->move_intake(robot::subsystems::intake::IN);
-    pros::delay(1000);
-    intake_subsystem->move_intake(robot::subsystems::intake::STOP);
-    intake_subsystem->toggle_conveyor_stopper_piston();
-    intake_subsystem->toggle_ed_mech_piston();
-    tank_subsytem->moveToPoint({26,9,90},true, 0.5, 25);
+
+    
+    uint32_t now = pros::millis();
+
+    tank_subsytem->moveToPoint({42,40,90},false, 0.4, 10);
+    tank_subsytem->moveToPoint({28,9,90},true, 0.4, 10);
     intake_subsystem->toggle_rear_intake_piston();
     intake_subsystem->move_intake(robot::subsystems::intake::IN);
     pros::delay(900);
     intake_subsystem->toggle_rear_intake_piston();
     intake_subsystem->toggle_upper_conveyor_height_piston();
-    tank_subsytem->moveToPoint({27,43,90},false, 0.2, 5);
+    tank_subsytem->moveToPoint({26.5,42,90},false, 0.4, 4);
     intake_subsystem->toggle_conveyor_stopper_piston();
     pros::delay(1500);
     intake_subsystem->move_intake(robot::subsystems::intake::STOP);
     intake_subsystem->toggle_conveyor_stopper_piston();
     intake_subsystem->toggle_upper_conveyor_height_piston();
-    tank_subsytem->moveToPoint({27,9,90},true, 0.2, 5);
+    tank_subsytem->moveToPoint({27,9,90},true, 0.4, 5);
     intake_subsystem->toggle_rear_intake_piston();
     intake_subsystem->move_intake(robot::subsystems::intake::OUT_LOW_GOAL);
     pros::delay(1500);
     intake_subsystem->move_intake(robot::subsystems::intake::IN);
-    pros::delay(2000);
-    intake_subsystem->toggle_rear_intake_piston();
-    intake_subsystem->toggle_upper_conveyor_height_piston();
-    tank_subsytem->moveToPoint({27,43,90},false, 0.2, 5);
-    intake_subsystem->toggle_conveyor_stopper_piston();
+    pros::delay(2700);
+    intake_subsystem->move_intake(robot::subsystems::intake::TOP_REV);
+    pros::delay(250);
     intake_subsystem->move_intake(robot::subsystems::intake::STOP);
+
+    intake_subsystem->toggle_rear_intake_piston();
+
+    intake_subsystem->toggle_conveyor_stopper_piston();
+    intake_subsystem->toggle_ed_mech_piston();
+    tank_subsytem->moveToPoint({62, 58.5, 45}, false, 0.5, 5);
+    intake_subsystem->move_intake(robot::subsystems::intake::IN);
+    pros::delay(2200);
+    intake_subsystem->move_intake(robot::subsystems::intake::STOP);
+
+    intake_subsystem->toggle_upper_conveyor_height_piston();
+
+    intake_subsystem->toggle_conveyor_stopper_piston();
+    intake_subsystem->toggle_ed_mech_piston();
+    pros::delay(250);
+    intake_subsystem->toggle_upper_conveyor_height_piston();
+    
+
+    std::cout << "Time taken: " << (pros::millis() - now) / 1000.0 << " seconds" << std::endl;  
+
 }
 
 }
