@@ -116,6 +116,17 @@ namespace intake{
                 break;
             }
 
+            case TOP_REV:{
+                front_intake_motor->move_velocity(0);
+                middle_intake_motor->move_velocity(0);
+                rear_intake_motor->move_velocity(0);
+                upper_conveyor_motor->move_velocity(intake_speed);
+                lower_roller_motor->move_velocity(0);   
+                matchload_left_motor->move_velocity(0);
+                matchload_right_motor->move_velocity(0);
+                break;
+            }
+
             case STOP:{
                 front_intake_motor->move_velocity(0);
                 middle_intake_motor->move_velocity(0);
