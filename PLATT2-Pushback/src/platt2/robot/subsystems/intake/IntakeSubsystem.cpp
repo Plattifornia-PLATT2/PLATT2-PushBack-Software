@@ -105,14 +105,25 @@ namespace intake{
                 }
 
                 else{
-                    front_intake_motor->move_velocity(-intake_speed);
-                    middle_intake_motor->move_velocity(-intake_speed);
+                    front_intake_motor->move_velocity(-intake_speed/2);
+                    middle_intake_motor->move_velocity(-intake_speed/2);
                     rear_intake_motor->move_velocity(-intake_speed);
                     upper_conveyor_motor->move_velocity(-intake_speed);   
-                    lower_roller_motor->move_velocity(intake_speed);
+                    lower_roller_motor->move_velocity(intake_speed/2);
                     matchload_left_motor->move_velocity(-intake_speed);
                     matchload_right_motor->move_velocity(-intake_speed);
                 }
+                break;
+            }
+
+            case TOP_REV:{
+                front_intake_motor->move_velocity(0);
+                middle_intake_motor->move_velocity(0);
+                rear_intake_motor->move_velocity(0);
+                upper_conveyor_motor->move_velocity(intake_speed);
+                lower_roller_motor->move_velocity(0);   
+                matchload_left_motor->move_velocity(0);
+                matchload_right_motor->move_velocity(0);
                 break;
             }
 

@@ -42,17 +42,17 @@ std::string PurpleCompAuton::getName() const {
 
 void PurpleCompAuton::run() {
 
-    tank_subsytem->moveToPoint({80,62,137},false, 0.5, 15);
+    tank_subsytem->moveToPoint({79.5,61.5,137},false, 0.5, 15);
     intake_subsystem->move_intake(robot::subsystems::intake::OUT);
-    pros::delay(500);
+    pros::delay(750);
     intake_subsystem->move_intake(robot::subsystems::intake::STOP);
     tank_subsytem->moveToPoint({115.5,10,90},true, 0.4, 15);
     intake_subsystem->toggle_rear_intake_piston();
     intake_subsystem->move_intake(robot::subsystems::intake::IN);
-    pros::delay(1250);
+    pros::delay(1100);
     intake_subsystem->toggle_rear_intake_piston();
     intake_subsystem->toggle_upper_conveyor_height_piston();
-    tank_subsytem->moveToPoint({117,43.5,90},false, 0.2, 5);
+    tank_subsytem->moveToPoint({117,44,90},false, 0.2, 5);
     intake_subsystem->toggle_conveyor_stopper_piston();   
      intake_subsystem->move_intake(robot::subsystems::intake::OUT);
     pros::delay(100);
@@ -70,7 +70,7 @@ void PurpleCompAuton::run() {
     intake_subsystem->toggle_rear_intake_piston();
     intake_subsystem->move_intake(robot::subsystems::intake::IN);
     intake_subsystem->toggle_upper_conveyor_height_piston();
-    tank_subsytem->moveToPoint({117.5,43.5,90},false, 0.2, 5);
+    tank_subsytem->moveToPoint({117.5,44,90},false, 0.2, 5);
     intake_subsystem->toggle_conveyor_stopper_piston();
     intake_subsystem->move_intake(robot::subsystems::intake::IN);
     pros::delay(2500);
@@ -78,11 +78,11 @@ void PurpleCompAuton::run() {
     intake_subsystem->toggle_conveyor_stopper_piston();
 
     //Descore
-    tank_subsytem->moveToPoint({107.25,24,85},true, 0.2, 5);
+    tank_subsytem->moveToPoint({106.85,24,85},true, 0.2, 5);
     intake_subsystem->toggle_descore_piston();
-    tank_subsytem->moveToPoint({107.35,47,90},false, 0.4, 5);
+    tank_subsytem->moveToPoint({106.85,47,90},false, 0.4, 5);
     intake_subsystem->toggle_descore_piston();
-    tank_subsytem->moveToPoint({107.35,62,90},false, 0.25, 5);
+    tank_subsytem->moveToPoint({106.85,62,90},false, 0.25, 5);
 
 
 }

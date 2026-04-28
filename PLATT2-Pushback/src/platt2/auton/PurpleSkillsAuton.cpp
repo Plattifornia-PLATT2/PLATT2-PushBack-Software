@@ -35,41 +35,35 @@ std::string PurpleSkillsAuton::getName() const {
 }
 
 void PurpleSkillsAuton::run() {
-    intake_subsystem->move_intake(robot::subsystems::intake::IN);
-    tank_subsytem->moveToPoint({86, 40, 70}, false , .3, 5);
-    tank_subsytem->moveToPoint({105, 55, 60}, false , .3, 5);
-    tank_subsytem->moveToPoint({114, 67.5, 60}, false , .1, 8);
-    tank_subsytem->moveToPoint({96, 45,90}, true, .5, 15);
-    tank_subsytem->moveToPoint({80,62,137},false, 0.5, 10);
-    intake_subsystem->move_intake(robot::subsystems::intake::OUT_LOW_GOAL);
-    pros::delay(2000);
-    intake_subsystem->move_intake(robot::subsystems::intake::STOP);
-    tank_subsytem->moveToPoint({115.5,10,90},true, 0.4,15);
+    tank_subsytem->moveToPoint({98,40,90},false, 0.4, 10);
+    tank_subsytem->moveToPoint({115.5,9,90},true, 0.4, 8);
     intake_subsystem->toggle_rear_intake_piston();
     intake_subsystem->move_intake(robot::subsystems::intake::IN);
-    pros::delay(1250);
+    pros::delay(1500);
     intake_subsystem->toggle_rear_intake_piston();
     intake_subsystem->toggle_upper_conveyor_height_piston();
-    tank_subsytem->moveToPoint({117,43.5,90},false, 0.2, 5);
+    tank_subsytem->moveToPoint({117,45,90},false, 0.2, 5);
     intake_subsystem->toggle_conveyor_stopper_piston();   
      intake_subsystem->move_intake(robot::subsystems::intake::OUT);
     pros::delay(100);
     intake_subsystem->move_intake(robot::subsystems::intake::IN);
-    pros::delay(1500);
+    pros::delay(1600);
     intake_subsystem->move_intake(robot::subsystems::intake::STOP);
     intake_subsystem->toggle_upper_conveyor_height_piston();
-    tank_subsytem->moveToPoint({117, 10,90},true, 0.2, 5);
+    tank_subsytem->moveToPoint({117.5, 9.5,90},true, 0.2, 5);
     intake_subsystem->toggle_rear_intake_piston();
     intake_subsystem->move_intake(robot::subsystems::intake::OUT_LOW_GOAL);
-    pros::delay(1500);
+    pros::delay(1100);
     intake_subsystem->toggle_conveyor_stopper_piston();
     intake_subsystem->move_intake(robot::subsystems::intake::IN);
-    pros::delay(2500);
+    pros::delay(1200);
+    intake_subsystem->move_intake(robot::subsystems::intake::OUT);
+    pros::delay(100);
+    intake_subsystem->move_intake(robot::subsystems::intake::IN);
+    pros::delay(1200);
     intake_subsystem->toggle_rear_intake_piston();
-    intake_subsystem->move_intake(robot::subsystems::intake::STOP);
-    intake_subsystem->toggle_upper_conveyor_height_piston();
-    tank_subsytem->moveToPoint({117.5,43.5,90},false, 0.2, 5);
-    intake_subsystem->toggle_conveyor_stopper_piston();
+    tank_subsytem->moveToPoint({79.5,61.5,130},false, 0.4, 5);
+    intake_subsystem->move_intake(robot::subsystems::intake::OUT_LOW_GOAL);
 }
 
 }

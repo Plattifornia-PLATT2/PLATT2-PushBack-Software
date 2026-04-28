@@ -1,6 +1,7 @@
 #ifndef EDRIVERPROFILE_HPP
 #define EDRIVERPROFILE_HPP
 
+#include "platt2/EDriverConfig.hpp"
 #include "pros/misc.h"
 
 /**
@@ -42,6 +43,8 @@ namespace profiles{
         // Score Macros
         pros::controller_digital_e_t scoreHighMacro;
         pros::controller_digital_e_t scoreMiddleHighMacro;
+
+        robot::DriverProfile driverEnum;
     };
 }
 }

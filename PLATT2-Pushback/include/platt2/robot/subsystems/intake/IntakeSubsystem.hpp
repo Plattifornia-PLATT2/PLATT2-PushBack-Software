@@ -39,7 +39,8 @@ namespace intake{
         IN = 1,
         OUT = 2,
         STOP = 3,
-        OUT_LOW_GOAL=4
+        OUT_LOW_GOAL=4,
+        TOP_REV=5
     };
 
     /**
