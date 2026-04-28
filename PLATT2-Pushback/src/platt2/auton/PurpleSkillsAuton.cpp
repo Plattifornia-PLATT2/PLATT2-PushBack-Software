@@ -62,7 +62,7 @@ void PurpleSkillsAuton::run() {
     intake_subsystem->move_intake(robot::subsystems::intake::IN);
     pros::delay(1200);
     intake_subsystem->toggle_rear_intake_piston();
-    tank_subsytem->moveToPoint({79.5,61.5,130},false, 0.5, 5);
+    tank_subsytem->moveToPoint({79.5,61.5,130},false, 0.4, 5);
     intake_subsystem->move_intake(robot::subsystems::intake::OUT_LOW_GOAL);
 }
 
