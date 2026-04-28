@@ -1,6 +1,7 @@
 #ifndef QUINNPROFILE_HPP
 #define QUINNPROFILE_HPP
 
+#include "platt2/EDriverConfig.hpp"
 #include "platt2/profiles/DriverProfile.hpp"
 #include "pros/misc.h"
 
@@ -36,6 +37,7 @@ namespace profiles{
         scoreHighMacro = pros::E_CONTROLLER_DIGITAL_R1;
         scoreMiddleHighMacro = pros::E_CONTROLLER_DIGITAL_R2;
         rearIntake_toggle = pros::E_CONTROLLER_DIGITAL_DOWN;
+        driverEnum = robot::JON;
         }
     };
 

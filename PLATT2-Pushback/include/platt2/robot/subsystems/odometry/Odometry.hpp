@@ -49,7 +49,12 @@ namespace odometry{
          * 
          * @return OdometryPosition Struct containing x, y, and heading of the robot.
          */
-        OdometryPosition getPos();
+        Position getPos();
+
+        /**
+        * @brief Sets the position of the odometry system.
+        */
+        void setPos(Position pos);
 
         /**
         * @brief Sets the position of the odometry system.
@@ -77,20 +82,26 @@ namespace odometry{
          */
         double getHeading();
 
+        double getVelocity();
+        double getAngularVelocity();
+
         /**
          * @brief Resets the current heading of the robot to zero.
          * 
          */
-        void resetHeading();
 
         /**
          * @brief Gets the heading from the VEX IMU sensor.
          * 
          * @return double Vex IMU heading in radians.
          */
-        double getVexHeading();
 
-        void initVexImu();
+        void initImu();
+
+        void setOffsets(double x, double y);
+
+        void startTracking();
+
 
         void setOffsets(double x, double y);
 
