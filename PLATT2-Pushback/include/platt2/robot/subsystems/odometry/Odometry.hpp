@@ -57,6 +57,11 @@ namespace odometry{
         void setPos(Position pos);
 
         /**
+        * @brief Sets the position of the odometry system.
+        */
+        void setPos(OdometryPosition pos);
+
+        /**
          * @brief Gets the current x position of the robot.
          * 
          * @return double The x position in inches.
@@ -92,6 +97,11 @@ namespace odometry{
          */
 
         void initImu();
+
+        void setOffsets(double x, double y);
+
+        void startTracking();
+
 
         void setOffsets(double x, double y);
 
